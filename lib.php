@@ -169,7 +169,7 @@ function coursecertificate_check_updates_since(cm_info $cm, int $from, array $fi
  */
 function coursecertificate_get_file_areas(stdClass $course, stdClass $cm, stdClass $context): array {
     $areas = [];
-    $areas['package'] = get_string('areapackage', 'mod_coursecertificate');
+    $areas['package'] = get_string('areapackage', 'coursecertificate');
     return $areas;
 }
 

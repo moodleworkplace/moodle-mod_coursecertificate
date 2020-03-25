@@ -25,21 +25,28 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['certificate:addinstance'] = 'Add a new Certificate';
-$string['certificate:view'] = 'View Certificate';
-$string['certificatefieldset'] = 'Certificate Settings';
-$string['certificatename'] = 'Certificate';
-$string['certificatesettings'] = 'Settings';
+$string['coursecertificate:addinstance'] = 'Add a new Course certificate activity';
+$string['coursecertificate:view'] = 'View Course certificate';
+$string['coursecertificate:viewreport'] = 'View Course certificate issues report';
+$string['coursecertificatefieldset'] = 'Certificate Settings';
+$string['certificateissues'] = 'Certificate issues';
+$string['coursecertificatename'] = 'Certificate';
+$string['coursecertificatesettings'] = 'Settings';
+$string['certifiedusers'] = 'Certified users';
+$string['code'] = 'Code';
 $string['emailteachers'] = 'Send notification and PDF to teachers by email';
 $string['includepdf'] = 'Include PDF on the email notification sent to users';
+$string['issueddate'] = 'Date issued';
 $string['modulename'] = 'Course certificate';
 $string['modulename_help'] = 'Course certificate help.'; // TODO.
 $string['modulename_link'] = 'mod/certificate/view';
 $string['modulenameplural'] = 'Course certificate activities';
+$string['nouserscertified'] = 'No users are certified.';
 $string['page-mod-certificate-x'] = 'Any course certificate module page';
 $string['pluginadministration'] = 'Course certificate administration';
 $string['pluginname'] = 'Course certificate';
 $string['privacy:metadata'] = 'The course certificate activity stores personal data.'; // TODO.
+$string['status'] = 'Status';
 $string['template'] = 'Template';
 $string['template_help'] = 'Template help'; // TODO.
 $string['userscanpreview'] = 'Users can preview the certificate';

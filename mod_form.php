@@ -62,15 +62,19 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
 
         $this->standard_intro_elements();
 
+        $mform->addElement('hidden', 'hasissues', $this->has_issues());
+        $mform->setType('hasissues', PARAM_TEXT);
+
         $mform->addElement('select', 'template', 'Template', $this->get_templateselect_options());
         $mform->addHelpButton('template', 'template', 'mod_coursecertificate');
         $mform->addRule('template', get_string('required'), 'required', null);
+        $mform->disabledIf('template', 'hasissues', 'neq', 0);
 
-        $mform->addElement('header', 'whenavailable', get_string('whenavailable', 'mod_coursecertificate'));
-
-        $mform->addElement('advcheckbox', 'userscanpreview', get_string('userscanpreview', 'mod_coursecertificate'));
-        $mform->addElement('advcheckbox', 'includepdf', get_string('includepdf', 'mod_coursecertificate'));
-        $mform->addElement('advcheckbox', 'emailteachers', get_string('emailteachers', 'mod_coursecertificate'));
+        $mform->addElement('header', 'whenavailable', get_string('whenavailable', 'coursecertificate'));
+        $mform->setExpanded('whenavailable');
+        $mform->addElement('advcheckbox', 'userscanpreview', get_string('userscanpreview', 'coursecertificate'));
+        $mform->addElement('advcheckbox', 'includepdf', get_string('includepdf', 'coursecertificate'));
+        $mform->addElement('advcheckbox', 'emailteachers', get_string('emailteachers', 'coursecertificate'));
 
         // Add standard elements.
         $this->standard_coursemodule_elements();
@@ -114,6 +118,12 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         parent::data_postprocessing($data);
     }
 
+
+    /**
+     * Gets array options of available templates for the user.
+     *
+     * @return array
+     */
     private function get_templateselect_options(): array {
         global $DB;
 
@@ -121,7 +131,7 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
             throw new \coding_exception('\\tool_certificate\\permission class does not exists');
         }
         if (!$visiblecategoriescontexts = permission::get_visible_categories_contexts()) {
-            // TODO: Empty select options?
+            // TODO: Empty select options? Show alert?
             return [];
         }
         list($sql, $params) = $DB->get_in_or_equal($visiblecategoriescontexts, SQL_PARAMS_NAMED);
@@ -137,5 +147,24 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
             }
         }
         return $templates;
+    }
+
+    /**
+     * Returns "1" if course certificate has been issued.
+     *
+     * @return string
+     */
+    private function has_issues(): string
+    {
+        global $DB;
+
+        if ($instance = $this->get_instance()) {
+            $certificate = $certificate = $DB->get_record('coursecertificate', ['id' => $instance], '*', MUST_EXIST);
+            $courseissues = \tool_certificate\certificate::count_issues_for_course($certificate->template, $certificate->course);
+            if ($courseissues > 0) {
+                return  "1";
+            }
+        }
+        return "0";
     }
 }

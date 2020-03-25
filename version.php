@@ -30,5 +30,5 @@ $plugin->version      = 2020032000;
 $plugin->requires     = 2019111802.00;
 $plugin->maturity     = MATURITY_STABLE;
 $plugin->dependencies = array(
-    'tool_certificate' => 2020031000   // The Foo activity must be present (any version).
+    'tool_certificate' => 2020032500   // The Foo activity must be present (any version).
 );

@@ -24,6 +24,8 @@
 
 namespace mod_coursecertificate;
 
+use tool_certificate\permission;
+
 defined('MOODLE_INTERNAL') || die;
 
 global $CFG;
@@ -38,6 +40,167 @@ require_once($CFG->libdir . '/tablelib.php');
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class certificate_issues_table extends \table_sql {
+    /**
+     * @var \stdClass $certificate Course certificate
+     */
+    protected $certificate;
 
+    /**
+     * @var \stdClass $cm The course module.
+     */
+    protected $cm;
+
+    /**
+     * @var string
+     */
+    protected $downloadparamname = 'download';
+
+    /**
+     * Sets up the table.
+     *
+     * @param \stdClass $certificate
+     * @param \stdClass $cm the course module
+     */
+    public function __construct($certificate, $cm)
+    {
+        parent::__construct('mod-coursecertificate-issues-' . $cm->instance);
+
+        $context = \context_module::instance($cm->id);
+        $extrafields = get_extra_user_fields($context);
+
+        $columns = [];
+        $columns[] = 'fullname';
+        foreach ($extrafields as $extrafield) {
+            $columns[] = $extrafield;
+        }
+        $columns[] = 'status';
+        $columns[] = 'timecreated';
+        $columns[] = 'code';
+
+        $headers = [];
+        $headers[] = get_string('fullname');
+        foreach ($extrafields as $extrafield) {
+            $headers[] = get_user_field_name($extrafield);
+        }
+        $headers[] = get_string('status', 'coursecertificate');
+        $headers[] = get_string('issueddate', 'coursecertificate');
+        $headers[] = get_string('code', 'coursecertificate');
+
+        $filename = format_string('course-certificate-issues');
+        $this->is_downloading(optional_param($this->downloadparamname, 0, PARAM_ALPHA),
+            $filename, get_string('certificateissues', 'coursecertificate'));
+
+        $this->define_columns($columns);
+        $this->define_headers($headers);
+        $this->collapsible(false);
+        $this->sortable(true);
+        $this->no_sorting('code');
+        $this->no_sorting('status');
+        $this->pagesize = 20;
+        $this->pageable(true);
+        $this->is_downloadable(true);
+        $this->show_download_buttons_at([TABLE_P_BOTTOM]);
+
+        $this->certificate = $certificate;
+        $this->cm = $cm;
+    }
+
+    /**
+     * Generate the fullname column.
+     *
+     * @param \stdClass $certificateissue
+     * @return string
+     */
+    public function col_fullname($certificateissue) {
+        global $OUTPUT;
+
+        if (!$this->is_downloading()) {
+            return $OUTPUT->user_picture($certificateissue) . ' ' . fullname($certificateissue);
+        } else {
+            return fullname($certificateissue);
+        }
+    }
+
+    /**
+     * Generate the certificate time created column.
+     *
+     * @param \stdClass $certificateissue
+     * @return string
+     */
+    public function col_timecreated($certificateissue) {
+        return userdate($certificateissue->timecreated, get_string("strftimedatetime", "langconfig"));
+    }
+
+    /**
+     * Generate the code column.
+     *
+     * @param \stdClass $certificateissue
+     * @return string
+     */
+    public function col_code($certificateissue) {
+        if (!$this->is_downloading() && permission::can_verify()) {
+            return \html_writer::link(new \moodle_url('/admin/tool/certificate/index.php', ['code' => $certificateissue->code]),
+                    $certificateissue->code, ['title' => get_string('verify', 'tool_certificate')]);
+        }
+        return $certificateissue->code;
+    }
+
+    /**
+     * Generate the status column.
+     *
+     * @param \stdClass $certificateissue
+     * @return string
+     */
+     public function col_status($certificateissue) {
+         $expired = ($certificateissue->expires > 0) && ($certificateissue->expires <= time());
+
+         return $expired ? get_string('expired', 'tool_certificate') :
+              get_string('valid', 'tool_certificate');
+     }
+
+    /**
+     * Query the reader.
+     *
+     * @param int $pagesize size of page for paginated displayed table.
+     * @param bool $useinitialsbar do you want to use the initials bar.
+     */
+    public function query_db($pagesize, $useinitialsbar = true) {
+        $total = \tool_certificate\certificate::count_issues_for_course($this->certificate->template, $this->certificate->course);
+        $this->pagesize($pagesize, $total);
+
+        $this->rawdata = \tool_certificate\certificate::get_issues_for_course($this->certificate->template, $this->certificate->course, $this->cm,
+            $this->get_page_start(), $this->get_page_size(), $this->get_sql_sort());
+
+        // Set initial bars.
+        if ($useinitialsbar) {
+            $this->initialbars($total > $pagesize);
+        }
+
+        // Set initial bars.
+        if ($useinitialsbar) {
+            $this->initialbars($total > $pagesize);
+        }
+    }
+
+    /**
+     * Download the data.
+     */
+    public function download() {
+        \core\session\manager::write_close();
+        $total = \tool_certificate\certificate::count_issues_for_course($this->certificate->template, $this->certificate->course);
+        $this->out($total, false);
+        exit;
+    }
+
+    /**
+     * This function is not part of the public api.
+     */
+    function print_nothing_to_display() {
+        // Render button to allow user to reset table preferences.
+        echo $this->render_reset_button();
+
+        $this->print_initials_bar();
+        echo \html_writer::div(get_string('nouserscertified', 'coursecertificate'), 'alert alert-info');
+    }
 }
 

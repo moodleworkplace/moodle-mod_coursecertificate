@@ -43,13 +43,13 @@ $PAGE->set_context($coursecontext);
 
 echo $OUTPUT->header();
 
-$modulenameplural = get_string('modulenameplural', 'mod_coursecertificate');
+$modulenameplural = get_string('modulenameplural', 'coursecertificate');
 echo $OUTPUT->heading($modulenameplural);
 
 $certificates = get_all_instances_in_course('coursecertificate', $course);
 
 if (empty($certificates)) {
-    notice(get_string('thereareno', 'moodle'), new moodle_url('/course/view.php', ['id' => $course->id]));
+    notice(get_string('thereareno', 'moodle', $modulenameplural), new moodle_url('/course/view.php', ['id' => $course->id]));
     exit;
 }
 
@@ -74,7 +74,7 @@ foreach ($certificates as $certificate) {
         $attributes['class'] = 'dimmed';
     }
     $link = html_writer::link(
-        new moodle_url('/mod/certificate/view.php', ['id' => $certificate->coursemodule]),
+        new moodle_url('/mod/coursecertificate/view.php', ['id' => $certificate->coursemodule]),
         format_string($certificate->name, true),
         $attributes);
 
