@@ -23,58 +23,10 @@
  */
 
 require(__DIR__.'/../../config.php');
-require_once(__DIR__.'/lib.php');
-require_once($CFG->libdir.'/completionlib.php');
 
-$id = required_param('id', PARAM_INT);
-$page = optional_param('page', 0, PARAM_INT);
-$perpage = optional_param('perpage', 10, PARAM_INT);
-$pageurl = $url = new moodle_url('/mod/coursecertificate/view.php', array('id' => $id,
-    'page' => $page, 'perpage' => $perpage));
+$outputpage = new \mod_coursecertificate\output\view_page();
+$output = $PAGE->get_renderer('coursecertificate');
 
-list ($course, $cm) = get_course_and_cm_from_cmid($id, 'coursecertificate');
-
-require_login($course, true, $cm);
-
-$certificate = $DB->get_record('coursecertificate', ['id' => $cm->instance], '*', MUST_EXIST);
-
-$context = context_module::instance($cm->id);
-$canviewreport = has_capability('mod/customcert:viewreport', $context);
-
-$event = \mod_coursecertificate\event\course_module_viewed::create([
-    'objectid' => $certificate->id,
-    'context' => $context
-]);
-$event->add_record_snapshot('course', $course);
-$event->add_record_snapshot('coursecertificate', $certificate);
-$event->trigger();
-
-// TODO: Show completion in the right cases.
-$completion = new completion_info($course);
-$completion->set_module_viewed($cm);
-
-if ($canviewreport) {
-    $table = new \mod_coursecertificate\certificate_issues_table($certificate, $cm);
-    $table->define_baseurl($pageurl);
-
-    if ($table->is_downloading()) {
-        $table->download();
-        exit();
-    }
-}
-
-$PAGE->set_url('/mod/certificate/view.php', ['id' => $cm->id]);
-$PAGE->set_title(format_string($certificate->name));
-$PAGE->set_heading(format_string($course->fullname));
-$PAGE->set_context($context);
-
-echo $OUTPUT->header();
-echo $OUTPUT->heading(format_string($certificate->name));
-
-// Print report.
-if (isset($table)) {
-    echo html_writer::tag('h4', get_string('certifiedusers', 'coursecertificate'));
-    $table->out($perpage, false);
-}
-
-echo $OUTPUT->footer();
+echo $output->header();
+echo $output->render($outputpage);
+echo $output->footer();

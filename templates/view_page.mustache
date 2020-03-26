@@ -1,0 +1,45 @@
+{{!
+     This file is part of Moodle - http://moodle.org/
+      Moodle is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+      Moodle is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     GNU General Public License for more details.
+      You should have received a copy of the GNU General Public License
+     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+ }}
+{{!
+    @template mod_coursecertificate/view_page
+
+    Template for showing the view page.
+
+    Example context (json):
+    {
+        "certificateid" : 1,
+        "certificatename" : "Certificate Name",
+        "canmanage" : true,
+        "canviewreport" : true,
+        "automaticsend" : true,
+        "table": "<table></table>"
+    }
+}}
+<h2>{{certificatename}}</h2>
+{{#canmanage}}
+    <div data-region="automaticsend-alert">
+        {{> coursecertificate/automaticsend_alert}}
+    </div>
+{{/canmanage}}
+{{#canviewreport}}
+<div class="mod_coursecertificate_issues_report" data-region="report-coursecertificate-issues">
+    <h3>{{#str}} certifiedusers, coursecertificate {{/str}}</h3>
+    {{{table}}}
+</div>
+{{/canviewreport}}
+{{#js}}
+    require(['mod_coursecertificate/manager'], function(m) {
+    m.init();
+    });
+{{/js}}

@@ -25,22 +25,29 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['automaticsendenabled'] = 'Automatic send is enabled';
+$string['automaticsenddisabled'] = 'Automatic send is disabled';
+$string['chooseatemplate'] = 'Choose a template...';
 $string['coursecertificate:addinstance'] = 'Add a new Course certificate activity';
+$string['coursecertificate:manage'] = 'Manage a Course certificate activity';
 $string['coursecertificate:view'] = 'View Course certificate';
 $string['coursecertificate:viewreport'] = 'View Course certificate issues report';
-$string['coursecertificatefieldset'] = 'Certificate Settings';
+$string['coursecertificatefieldset'] = 'Course certificate Settings';
 $string['certificateissues'] = 'Certificate issues';
 $string['coursecertificatename'] = 'Certificate';
 $string['coursecertificatesettings'] = 'Settings';
 $string['certifiedusers'] = 'Certified users';
 $string['code'] = 'Code';
+$string['disableautomaticsend'] = 'Disable automatic send'; //TODO.
 $string['emailteachers'] = 'Send notification and PDF to teachers by email';
+$string['enableautomaticsend'] = 'By activating the automatic send, all users that match the requirements will receive their certifications on their inboxes';
 $string['includepdf'] = 'Include PDF on the email notification sent to users';
 $string['issueddate'] = 'Date issued';
 $string['modulename'] = 'Course certificate';
 $string['modulename_help'] = 'Course certificate help.'; // TODO.
 $string['modulename_link'] = 'mod/certificate/view';
 $string['modulenameplural'] = 'Course certificate activities';
+$string['notemplateswarning'] = 'There are not available templates'; // TODO.
 $string['nouserscertified'] = 'No users are certified.';
 $string['page-mod-certificate-x'] = 'Any course certificate module page';
 $string['pluginadministration'] = 'Course certificate administration';

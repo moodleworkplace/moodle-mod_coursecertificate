@@ -15,20 +15,36 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Renderer for coursecertificate.
  *
  * @package     mod_coursecertificate
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_coursecertificate\output;
+
+use plugin_renderer_base;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component    = 'mod_coursecertificate';
-$plugin->release      = '3.9';
-$plugin->version      = 2020033000;
-$plugin->requires     = 2019111802.00;
-$plugin->maturity     = MATURITY_STABLE;
-$plugin->dependencies = array(
-    'tool_certificate' => 2020032500   // The Foo activity must be present (any version).
-);
+/**
+ * mod_coursecertificate_renderer class.
+ *
+ * @package     mod_coursecertificate
+ * @copyright   2020 Mikel Martín <mikel@moodle.com>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class renderer extends plugin_renderer_base {
+    /**
+    * Render the view page.
+    *
+    * @param \mod_coursecertificate\output\view_page $page
+    *
+    * @return bool|string
+    */
+    protected function render_view_page(\mod_coursecertificate\output\view_page $page) {
+        $context = $page->export_for_template($this);
+        return $this->render_from_template('mod_coursecertificate/view_page', $context);
+    }
+}

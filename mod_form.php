@@ -44,6 +44,7 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         global $CFG;
 
         $mform = $this->_form;
+        $hasissues = $this->has_issues();
 
         // Adding the "general" fieldset, where all the common settings are shown.
         $mform->addElement('header', 'general', get_string('general', 'form'));
@@ -62,13 +63,24 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
 
         $this->standard_intro_elements();
 
-        $mform->addElement('hidden', 'hasissues', $this->has_issues());
-        $mform->setType('hasissues', PARAM_TEXT);
+        $templates = $this->get_template_select();
 
-        $mform->addElement('select', 'template', 'Template', $this->get_templateselect_options());
+        $options = ['' => get_string('chooseatemplate', 'coursecertificate')] + $templates;
+        $mform->addElement('select', 'template', get_string('template', 'coursecertificate'), $options);
         $mform->addHelpButton('template', 'template', 'mod_coursecertificate');
-        $mform->addRule('template', get_string('required'), 'required', null);
-        $mform->disabledIf('template', 'hasissues', 'neq', 0);
+        if (!$hasissues) {
+            $mform->addRule('template', null, 'required', null, 'client');
+        }
+        if (empty($templates)) {
+            $warningstr = get_string('notemplateswarning', 'coursecertificate');
+            $html = html_writer::tag('div', $warningstr, ['class' => 'alert alert-warning']);
+            $mform->addElement('static', 'notemplateswarning', '', $html);
+        }
+
+        // If Certificate has issues it's not possible to change the template.
+        $mform->addElement('hidden', 'hasissues', $hasissues);
+        $mform->setType('hasissues', PARAM_TEXT);
+        $mform->disabledIf('template', 'hasissues', 'eq', 1);
 
         $mform->addElement('header', 'whenavailable', get_string('whenavailable', 'coursecertificate'));
         $mform->setExpanded('whenavailable');
@@ -124,14 +136,13 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
      *
      * @return array
      */
-    private function get_templateselect_options(): array {
+    private function get_template_select(): array {
         global $DB;
 
         if (!class_exists('\\tool_certificate\\permission')) {
             throw new \coding_exception('\\tool_certificate\\permission class does not exists');
         }
         if (!$visiblecategoriescontexts = permission::get_visible_categories_contexts()) {
-            // TODO: Empty select options? Show alert?
             return [];
         }
         list($sql, $params) = $DB->get_in_or_equal($visiblecategoriescontexts, SQL_PARAMS_NAMED);

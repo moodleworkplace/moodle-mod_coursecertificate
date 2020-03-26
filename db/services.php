@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Coursecertificate module webservice functions.
  *
  * @package     mod_coursecertificate
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
@@ -24,11 +24,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component    = 'mod_coursecertificate';
-$plugin->release      = '3.9';
-$plugin->version      = 2020033000;
-$plugin->requires     = 2019111802.00;
-$plugin->maturity     = MATURITY_STABLE;
-$plugin->dependencies = array(
-    'tool_certificate' => 2020032500   // The Foo activity must be present (any version).
-);
+$functions = [
+    'mod_coursecertificate_update_certificate_automaticsend' => [
+        'classname'    => mod_coursecertificate\external::class,
+        'methodname'   => 'update_certificate_automaticsend',
+        'description'  => 'Update automaticsend setting for a certificate.',
+        'type'         => 'write',
+        'capabilities' => 'mod/coursecertificate:manage',
+        'ajax'         => true,
+    ]
+];

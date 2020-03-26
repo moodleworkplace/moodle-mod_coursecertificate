@@ -15,14 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Report that displays the certificates issued in a course.
+ * Table that displays the certificates issued in a course.
  *
  * @package     mod_coursecertificate
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_coursecertificate;
+namespace mod_coursecertificate\output;
 
 use tool_certificate\permission;
 
@@ -93,10 +93,9 @@ class certificate_issues_table extends \table_sql {
         $this->define_columns($columns);
         $this->define_headers($headers);
         $this->collapsible(false);
-        $this->sortable(true);
+        $this->sortable(true, 'firstname');
         $this->no_sorting('code');
         $this->no_sorting('status');
-        $this->pagesize = 20;
         $this->pageable(true);
         $this->is_downloadable(true);
         $this->show_download_buttons_at([TABLE_P_BOTTOM]);
