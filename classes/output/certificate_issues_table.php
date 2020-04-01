@@ -24,8 +24,6 @@
 
 namespace mod_coursecertificate\output;
 
-use tool_certificate\permission;
-
 defined('MOODLE_INTERNAL') || die;
 
 global $CFG;
@@ -74,6 +72,7 @@ class certificate_issues_table extends \table_sql {
             $columns[] = $extrafield;
         }
         $columns[] = 'status';
+        $columns[] = 'expires';
         $columns[] = 'timecreated';
         $columns[] = 'code';
 
@@ -83,6 +82,7 @@ class certificate_issues_table extends \table_sql {
             $headers[] = get_user_field_name($extrafield);
         }
         $headers[] = get_string('status', 'coursecertificate');
+        $headers[] = get_string('expirydate', 'coursecertificate');
         $headers[] = get_string('issueddate', 'coursecertificate');
         $headers[] = get_string('code', 'coursecertificate');
 
@@ -137,7 +137,8 @@ class certificate_issues_table extends \table_sql {
      * @return string
      */
     public function col_code($certificateissue) {
-        if (!$this->is_downloading() && permission::can_verify()) {
+        // TODO: check tool certificate permission class
+        if (!$this->is_downloading() && \tool_certificate\permission::can_verify()) {
             return \html_writer::link(new \moodle_url('/admin/tool/certificate/index.php', ['code' => $certificateissue->code]),
                     $certificateissue->code, ['title' => get_string('verify', 'tool_certificate')]);
         }
@@ -156,6 +157,18 @@ class certificate_issues_table extends \table_sql {
          return $expired ? get_string('expired', 'tool_certificate') :
               get_string('valid', 'tool_certificate');
      }
+
+    /**
+     * Generate the status column.
+     *
+     * @param \stdClass $certificateissue
+     * @return string
+     */
+    public function col_expires($certificateissue) {
+        return $certificateissue->expires > 0 ?
+            userdate($certificateissue->expires, get_string('strftimedatetime', 'langconfig'))
+            : get_string('never');
+    }
 
     /**
      * Query the reader.

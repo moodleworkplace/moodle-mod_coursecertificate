@@ -63,10 +63,10 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
 
         $this->standard_intro_elements();
 
+        // Adding the template selector.
         $templates = $this->get_template_select();
-
-        $options = ['' => get_string('chooseatemplate', 'coursecertificate')] + $templates;
-        $mform->addElement('select', 'template', get_string('template', 'coursecertificate'), $options);
+        $templateoptions = ['' => get_string('chooseatemplate', 'coursecertificate')] + $templates;
+        $mform->addElement('select', 'template', get_string('template', 'coursecertificate'), $templateoptions);
         $mform->addHelpButton('template', 'template', 'mod_coursecertificate');
         if (!$hasissues) {
             $mform->addRule('template', null, 'required', null, 'client');
@@ -76,12 +76,31 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
             $html = html_writer::tag('div', $warningstr, ['class' => 'alert alert-warning']);
             $mform->addElement('static', 'notemplateswarning', '', $html);
         }
-
         // If Certificate has issues it's not possible to change the template.
         $mform->addElement('hidden', 'hasissues', $hasissues);
         $mform->setType('hasissues', PARAM_TEXT);
         $mform->disabledIf('template', 'hasissues', 'eq', 1);
 
+        // Adding the expirydate selector.
+        $selectdatestr = get_string('selectdate', 'coursecertificate');
+        $neverstr = get_string('never');
+        $expirydatestr = get_string('expirydate', 'coursecertificate');
+        $expirydateoptions = [
+            0 => $neverstr,
+            1 => $selectdatestr,
+        ];
+        $group = [];
+        $expirydatetype = $mform->createElement('select', 'expirydatetype', '', $expirydateoptions,
+            ['class' => 'calendar-fix-selector-width']);
+        $group[] =& $expirydatetype;
+        $expirydate = $mform->createElement('date_selector', 'expires', '');
+        $group[] =& $expirydate;
+        $mform->addGroup($group, 'expirydategroup', $expirydatestr, ' ', false);
+        $mform->hideIf('expires', 'expirydatetype', 'noteq', 1);
+        $mform->disabledIf('expires', 'expirydatetype', 'noteq',1);
+        $mform->addHelpButton('expirydategroup', 'expirydate', 'coursecertificate');
+
+        // Adding aditional coursecertificate settings
         $mform->addElement('header', 'whenavailable', get_string('whenavailable', 'coursecertificate'));
         $mform->setExpanded('whenavailable');
         $mform->addElement('advcheckbox', 'userscanpreview', get_string('userscanpreview', 'coursecertificate'));
@@ -128,8 +147,8 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
      */
     public function data_postprocessing($data) {
         parent::data_postprocessing($data);
+        $data->expirydate = $data->expirydatetype == 0 ? 0 : $data->expirydate;
     }
-
 
     /**
      * Gets array options of available templates for the user.
