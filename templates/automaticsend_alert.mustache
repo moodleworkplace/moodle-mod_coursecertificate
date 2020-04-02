@@ -22,19 +22,20 @@
         "automaticsend" : true,
     }
 }}
+{{> coursecertificate/loading}}
 {{#automaticsend}}
-    <div class="alert alert-success p-3 clearfix">
-        <div class="p-2 float-left">{{#str}} automaticsendenabled, coursecertificate {{/str}}</div>
-        <button class="btn btn-light float-right" data-certificateid="{{certificateid}}" data-automaticsend="1" data-action="toggle-automaticsend">
-                {{#str}} disable {{/str}}
-        </button>
-    </div>
+<div class="alert alert-success p-3 clearfix">
+    <div class="p-2 float-left">{{#str}} automaticsendenabled, coursecertificate {{/str}}</div>
+    <button class="btn btn-light float-right" data-certificateid="{{certificateid}}" data-automaticsend="1" data-action="toggle-automaticsend">
+            {{#str}} disable {{/str}}
+    </button>
+</div>
 {{/automaticsend}}
 {{^automaticsend}}
-    <div class="alert alert-danger p-3 clearfix">
-        <div class="p-2 float-left">{{#str}} automaticsenddisabled, coursecertificate {{/str}}</div>
-        <button class="btn btn-light float-right" data-certificateid="{{certificateid}}" data-automaticsend="0" data-action="toggle-automaticsend">
-            {{#str}} enable {{/str}}
-        </button>
-    </div>
+<div class="alert alert-danger p-3 clearfix">
+    <div class="p-2 float-left">{{#str}} automaticsenddisabled, coursecertificate {{/str}}</div>
+    <button class="btn btn-light float-right" data-certificateid="{{certificateid}}" data-automaticsend="0" data-action="toggle-automaticsend">
+        {{#str}} enable {{/str}}
+    </button>
+</div>
 {{/automaticsend}}

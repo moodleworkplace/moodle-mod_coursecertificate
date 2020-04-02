@@ -14,33 +14,13 @@
 {{!
     @template mod_coursecertificate/view_page
 
-    Template for showing the view page.
+    Template for showing the loading overlay.
 
     Example context (json):
     {
-        "certificateid" : 1,
-        "certificatename" : "Certificate Name",
-        "canmanage" : true,
-        "canviewreport" : true,
-        "automaticsend" : true,
-        "table": "<table></table>"
     }
 }}
-<h2>{{certificatename}}</h2>
-{{#canmanage}}
-    <div data-region="automaticsend-alert" class="position-relative w-100 h-100">
-        {{> coursecertificate/automaticsend_alert}}
-    </div>
-{{/canmanage}}
-{{#canviewreport}}
-    <h3>{{#str}} certifiedusers, coursecertificate {{/str}}</h3>
-    <div data-region="issues-report" class="position-relative w-100 h-100">
-        {{> coursecertificate/issues_report}}
-    </div>
-{{/canviewreport}}
-
-{{#js}}
-    require(['mod_coursecertificate/manager'], function(m) {
-    m.init();
-    });
-{{/js}}
+<div class="loading-overlay d-flex position-absolute text-center w-100 h-100 justify-content-center align-items-center invisible"
+        style="z-index: 9999; background-color: rgba(255,255,255,0.5);">
+    {{> core/loading }}
+</div>

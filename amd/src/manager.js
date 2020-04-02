@@ -37,11 +37,11 @@ define([
     /** @type {Object} The list of selectors for the coursecertificate module. */
     const SELECTORS = {
         AUTOMATICSENDREGION: "[data-region='automaticsend-alert']",
-        TOGGLEAUTOMATICSEND: "[data-action='toggle-automaticsend']"
+        TOGGLEAUTOMATICSEND: "[data-action='toggle-automaticsend']",
+        LOADING: ".loading-overlay"
     },
     /** @type {Object} The list of templates for the coursecertificate module. */
     TEMPLATES = {
-        LOADING: 'core/loading',
         AUTOMATICSENDALERT: 'mod_coursecertificate/automaticsend_alert'
     },
     /** @type {Object} The list of services for the coursecertificate module. */
@@ -50,7 +50,21 @@ define([
     };
 
     /**
-     * Toggle the automaticsend setting for coursecertificate.
+     * Show/Hide loading overlay.
+     *
+     * @param {Element} element
+     * @param {boolean} visibility
+     */
+    function displayLoading(element, visibility) {
+        if (visibility) {
+            element.querySelector(SELECTORS.LOADING).classList.remove('invisible');
+        } else {
+            element.querySelector(SELECTORS.LOADING).classList.add('invisible');
+        }
+    }
+
+    /**
+     * Toggle the automaticsend setting on/off for coursecertificate.
      *
      * @param {Element} automaticsendregion
      */
@@ -59,6 +73,7 @@ define([
         const {certificateid, automaticsend} = automaticsendregion.querySelector(SELECTORS.TOGGLEAUTOMATICSEND).dataset;
         const newstatus = automaticsend === '0';
         const strings = newstatus
+        // Load strings depending on newstatus.
         ? [{'key': 'confirmation', component: 'admin'},
             {'key': 'enableautomaticsend', component: 'coursecertificate'},
             {'key': 'confirm'},
@@ -67,20 +82,15 @@ define([
             {'key': 'disableautomaticsend', component: 'coursecertificate'},
             {'key': 'confirm'},
             {'key': 'cancel'}];
-        // Get strings.
         Str.get_strings(strings).then((s) => {
             // Show confirm notification.
             Notification.confirm(s[0], s[1], s[2], s[3], () => {
-                // Show loading temaplte.
-                Templates.render(TEMPLATES.LOADING, {visible: true}, '')
-                .then((html) => {
-                    automaticsendregion.innerHTML = html;
-                    // Call external API to update automaticsend setting.
-                    return Ajax.call([{
-                        methodname: SERVICES.UPDATEAUTOMATICSEND,
-                        args: {certificateid: certificateid, automaticsend: newstatus}
-                    }])[0];
-                })
+                // Show loading template.
+                displayLoading(automaticsendregion, true);
+                Ajax.call([{
+                    methodname: SERVICES.UPDATEAUTOMATICSEND,
+                    args: {certificateid: certificateid, automaticsend: newstatus}
+                }])[0]
                 .then(() => {
                     // Reload automatic send alert template.
                     return  Templates.render(
@@ -93,8 +103,8 @@ define([
                     automaticsendregion.innerHTML = html;
                     M.util.js_complete('mod_coursecertificate_toggle_automaticsend');
                     return null;
-
-                });
+                })
+                .fail(Notification.exception);
             });
             return null;
         }).fail(Notification.exception);
