@@ -57,6 +57,7 @@ class external extends \external_api {
      */
     public static function update_certificate_automaticsend(int $certificateid, bool $automaticsend) {
         global $DB;
+
         $params = self::validate_parameters(self::update_certificate_automaticsend_parameters(),
             ['certificateid' => $certificateid, 'automaticsend' => $automaticsend]);
 
@@ -64,6 +65,8 @@ class external extends \external_api {
         $cm = get_coursemodule_from_instance('coursecertificate', $certificate->id);
         $context = \context_module::instance($cm->id);
         self::validate_context($context);
+
+        // TODO: check capabilities.
 
         $certificate->automaticsend = $automaticsend;
         if ($DB->update_record('coursecertificate', $certificate)) {

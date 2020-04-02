@@ -24,6 +24,10 @@
 
 namespace mod_coursecertificate\output;
 
+use context_course;
+use context_module;
+use context_system;
+
 defined('MOODLE_INTERNAL') || die;
 
 global $CFG;
@@ -86,6 +90,11 @@ class certificate_issues_table extends \table_sql {
         $headers[] = get_string('issueddate', 'coursecertificate');
         $headers[] = get_string('code', 'coursecertificate');
 
+        if (!$this->is_downloading()) {
+            $columns[] = 'actions';
+            $headers[] = get_string('actions');
+        }
+
         $filename = format_string('course-certificate-issues');
         $this->is_downloading(optional_param($this->downloadparamname, 0, PARAM_ALPHA),
             $filename, get_string('certificateissues', 'coursecertificate'));
@@ -96,9 +105,11 @@ class certificate_issues_table extends \table_sql {
         $this->sortable(true, 'firstname');
         $this->no_sorting('code');
         $this->no_sorting('status');
+        $this->no_sorting('actions');
         $this->pageable(true);
         $this->is_downloadable(true);
         $this->show_download_buttons_at([TABLE_P_BOTTOM]);
+        $this->useridfield = 'userid';
 
         $this->certificate = $certificate;
         $this->cm = $cm;
@@ -168,6 +179,43 @@ class certificate_issues_table extends \table_sql {
         return $certificateissue->expires > 0 ?
             userdate($certificateissue->expires, get_string('strftimedatetime', 'langconfig'))
             : get_string('never');
+    }
+
+    /**
+     * Generate the actions column.
+     *
+     * @param \stdClass $certificateissue
+     * @return string
+     */
+    public function col_actions($certificateissue) {
+        global $OUTPUT;
+
+        $actions = '';
+        // TODO: Use another capability?
+        if (\tool_certificate\permission::can_verify()) {
+            $previewicon = new \pix_icon('i/search', get_string('view'));
+            $previewlink = new \moodle_url('/admin/tool/certificate/view.php',
+                ['code' => $certificateissue->code]);
+            $previewattributes = [
+                'class' => 'action-icon delete-icon',
+                'data-action' => 'preview-issue',
+                'data-issueid' => $certificateissue->issueid
+            ];
+            $actions .= $OUTPUT->action_icon($previewlink, $previewicon, null, $previewattributes);
+        }
+
+        $context = context_course::instance($certificateissue->courseid);
+        if (\tool_certificate\permission::can_manage($context)) {
+            $rekoveicon = new \pix_icon('i/delete', get_string('revoke', 'coursecertificate'));
+            $revokeattributes = [
+                'class' => 'action-icon revoke-icon',
+                'data-action' => 'revoke-issue',
+                'data-issueid' => $certificateissue->issueid
+            ];
+            $actions .= $OUTPUT->action_icon('#', $rekoveicon, null, $revokeattributes);
+        }
+
+        return $actions;
     }
 
     /**

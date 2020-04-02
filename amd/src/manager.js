@@ -37,16 +37,20 @@ define([
     /** @type {Object} The list of selectors for the coursecertificate module. */
     const SELECTORS = {
         AUTOMATICSENDREGION: "[data-region='automaticsend-alert']",
+        REPORTREGION: "[data-region='issues-report']",
         TOGGLEAUTOMATICSEND: "[data-action='toggle-automaticsend']",
+        REVOKEISSUE: "[data-action='revoke-issue']",
         LOADING: ".loading-overlay"
     },
     /** @type {Object} The list of templates for the coursecertificate module. */
     TEMPLATES = {
-        AUTOMATICSENDALERT: 'mod_coursecertificate/automaticsend_alert'
+        AUTOMATICSENDALERT: 'mod_coursecertificate/automaticsend_alert',
+        ISSUESREPORT: 'mod_coursecertificate/issues_report'
     },
     /** @type {Object} The list of services for the coursecertificate module. */
     SERVICES = {
-        UPDATEAUTOMATICSEND: 'mod_coursecertificate_update_certificate_automaticsend'
+        UPDATEAUTOMATICSEND: 'mod_coursecertificate_update_certificate_automaticsend',
+        REVOKEISSUE: 'tool_certificate_revoke_issue'
     };
 
     /**
@@ -87,17 +91,13 @@ define([
             Notification.confirm(s[0], s[1], s[2], s[3], () => {
                 // Show loading template.
                 displayLoading(automaticsendregion, true);
-                Ajax.call([{
-                    methodname: SERVICES.UPDATEAUTOMATICSEND,
-                    args: {certificateid: certificateid, automaticsend: newstatus}
-                }])[0]
+                // Call to webservice.
+                Ajax.call([{methodname: SERVICES.UPDATEAUTOMATICSEND,
+                    args: {certificateid: certificateid, automaticsend: newstatus}}])[0]
+                // Reload automatic send alert template.
                 .then(() => {
-                    // Reload automatic send alert template.
-                    return  Templates.render(
-                        TEMPLATES.AUTOMATICSENDALERT,
-                        {certificateid: certificateid, automaticsend: newstatus},
-                        ''
-                    );
+                    return  Templates.render(TEMPLATES.AUTOMATICSENDALERT,
+                        {certificateid: certificateid, automaticsend: newstatus}, '');
                 })
                 .then((html) => {
                     automaticsendregion.innerHTML = html;
@@ -110,12 +110,44 @@ define([
         }).fail(Notification.exception);
     }
 
+    function revokeIssue(issueid) {
+        M.util.js_pending('mod_coursecertificate_revoke_issue');
+        const strings = [{'key': 'confirmation', component: 'admin'},
+            {'key': 'revokeissue', component: 'coursecertificate'},
+            {'key': 'confirm'},
+            {'key': 'cancel'}];
+        Str.get_strings(strings).then((s) => {
+            // Show confirm notification.
+            Notification.confirm(s[0], s[1], s[2], s[3], () => {
+                // Call to webservice to revoke issue.
+                Ajax.call([{methodname: SERVICES.REVOKEISSUE, args: {id: issueid}}])[0]
+                // Call to webservice to get updated table.
+                .then(() => {
+                    window.location.reload();
+                    return null;
+                })
+                .fail(Notification.exception);
+            });
+            return null;
+        }).fail(Notification.exception);
+    }
+
     return {
         init: function() {
             const automaticsendregion = document.querySelector(SELECTORS.AUTOMATICSENDREGION);
+            const reportregion = document.querySelector(SELECTORS.REPORTREGION);
             automaticsendregion.addEventListener('click', (e) => {
-                if (e.target && e.target.matches(SELECTORS.TOGGLEAUTOMATICSEND)) {
+                if (e.target && e.target.closest(SELECTORS.TOGGLEAUTOMATICSEND)) {
+                    e.preventDefault();
                     toggleAutomaticSend(automaticsendregion);
+                }
+            });
+            reportregion.addEventListener('click', (e) => {
+                const target = e.target && e.target.closest(SELECTORS.REVOKEISSUE);
+                if (target) {
+                    e.preventDefault();
+                    const {issueid} = target.dataset;
+                    revokeIssue(issueid);
                 }
             });
         }
