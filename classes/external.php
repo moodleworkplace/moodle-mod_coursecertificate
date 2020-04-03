@@ -66,13 +66,14 @@ class external extends \external_api {
         $context = \context_module::instance($cm->id);
         self::validate_context($context);
 
-        // TODO: check capabilities.
-
-        $certificate->automaticsend = $automaticsend;
-        if ($DB->update_record('coursecertificate', $certificate)) {
-            // TODO: Event module updated.
-            return true;
+        if (permission::can_manage($context)) {
+            $certificate->automaticsend = $automaticsend;
+            if ($DB->update_record('coursecertificate', $certificate)) {
+                // TODO: Event module updated.
+                return true;
+            }
         }
+
         return false;
     }
 

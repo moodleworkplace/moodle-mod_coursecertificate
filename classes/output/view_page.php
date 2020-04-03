@@ -26,6 +26,7 @@ namespace mod_coursecertificate\output;
 
 use completion_info;
 use context_module;
+use mod_coursecertificate\permission;
 use moodle_url;
 use templatable;
 use renderable;
@@ -79,8 +80,8 @@ class view_page implements templatable, renderable {
         require_login($course, true, $cm);
 
         $context = context_module::instance($cm->id);
-        $this->canviewreport = has_capability('mod/customcert:viewreport', $context);
-        $this->canmanage = has_capability('mod/customcert:manage', $context);
+        $this->canviewreport = permission::can_view_report($context);
+        $this->canmanage = permission::can_manage($context);
 
         $event = \mod_coursecertificate\event\course_module_viewed::create([
             'objectid' => $this->certificate->id,

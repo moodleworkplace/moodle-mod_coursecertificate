@@ -27,6 +27,7 @@ namespace mod_coursecertificate\output;
 use context_course;
 use context_module;
 use context_system;
+use mod_coursecertificate\permission;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -58,10 +59,26 @@ class certificate_issues_table extends \table_sql {
     protected $downloadparamname = 'download';
 
     /**
+     * @var bool
+     */
+    protected $canmanage;
+
+    /**
+     * @var bool
+     */
+    protected $canviewall;
+
+    /**
+     * @var bool
+     */
+    protected $canverify;
+
+    /**
      * Sets up the table.
      *
      * @param \stdClass $certificate
      * @param \stdClass $cm the course module
+     * @uses \tool_certificate\permission
      */
     public function __construct($certificate, $cm)
     {
@@ -69,6 +86,13 @@ class certificate_issues_table extends \table_sql {
 
         $context = \context_module::instance($cm->id);
         $extrafields = get_extra_user_fields($context);
+
+        $this->certificate = $certificate;
+        $this->cm = $cm;
+
+        $this->canverify = permission::can_verify_issues();
+        $this->canmanage = permission::can_manage_templates($context);
+        $this->canviewall = permission::can_view_templates($this->certificate->course);
 
         $columns = [];
         $columns[] = 'fullname';
@@ -90,14 +114,14 @@ class certificate_issues_table extends \table_sql {
         $headers[] = get_string('issueddate', 'coursecertificate');
         $headers[] = get_string('code', 'coursecertificate');
 
-        if (!$this->is_downloading()) {
-            $columns[] = 'actions';
-            $headers[] = get_string('actions');
-        }
-
         $filename = format_string('course-certificate-issues');
         $this->is_downloading(optional_param($this->downloadparamname, 0, PARAM_ALPHA),
             $filename, get_string('certificateissues', 'coursecertificate'));
+
+        if (!$this->is_downloading() && ($this->canmanage || $this->canviewall)) {
+            $columns[] = 'actions';
+            $headers[] = get_string('actions');
+        }
 
         $this->define_columns($columns);
         $this->define_headers($headers);
@@ -110,9 +134,6 @@ class certificate_issues_table extends \table_sql {
         $this->is_downloadable(true);
         $this->show_download_buttons_at([TABLE_P_BOTTOM]);
         $this->useridfield = 'userid';
-
-        $this->certificate = $certificate;
-        $this->cm = $cm;
     }
 
     /**
@@ -148,8 +169,7 @@ class certificate_issues_table extends \table_sql {
      * @return string
      */
     public function col_code($certificateissue) {
-        // TODO: check tool certificate permission class
-        if (!$this->is_downloading() && \tool_certificate\permission::can_verify()) {
+        if (!$this->is_downloading() && $this->canverify) {
             return \html_writer::link(new \moodle_url('/admin/tool/certificate/index.php', ['code' => $certificateissue->code]),
                     $certificateissue->code, ['title' => get_string('verify', 'tool_certificate')]);
         }
@@ -189,10 +209,8 @@ class certificate_issues_table extends \table_sql {
      */
     public function col_actions($certificateissue) {
         global $OUTPUT;
-
         $actions = '';
-        // TODO: Use another capability?
-        if (\tool_certificate\permission::can_verify()) {
+        if ($this->canviewall) {
             $previewicon = new \pix_icon('i/search', get_string('view'));
             $previewlink = new \moodle_url('/admin/tool/certificate/view.php',
                 ['code' => $certificateissue->code]);
@@ -203,9 +221,7 @@ class certificate_issues_table extends \table_sql {
             ];
             $actions .= $OUTPUT->action_icon($previewlink, $previewicon, null, $previewattributes);
         }
-
-        $context = context_course::instance($certificateissue->courseid);
-        if (\tool_certificate\permission::can_manage($context)) {
+        if ($this->canmanage) {
             $rekoveicon = new \pix_icon('i/delete', get_string('revoke', 'coursecertificate'));
             $revokeattributes = [
                 'class' => 'action-icon revoke-icon',
@@ -214,7 +230,6 @@ class certificate_issues_table extends \table_sql {
             ];
             $actions .= $OUTPUT->action_icon('#', $rekoveicon, null, $revokeattributes);
         }
-
         return $actions;
     }
 
@@ -223,6 +238,7 @@ class certificate_issues_table extends \table_sql {
      *
      * @param int $pagesize size of page for paginated displayed table.
      * @param bool $useinitialsbar do you want to use the initials bar.
+     * @uses \tool_certificate\certificate
      */
     public function query_db($pagesize, $useinitialsbar = true) {
         $total = \tool_certificate\certificate::count_issues_for_course($this->certificate->template, $this->certificate->course);
@@ -244,6 +260,8 @@ class certificate_issues_table extends \table_sql {
 
     /**
      * Download the data.
+     *
+     * @uses \tool_certificate\certificate
      */
     public function download() {
         \core\session\manager::write_close();

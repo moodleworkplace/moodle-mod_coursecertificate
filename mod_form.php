@@ -22,8 +22,6 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use tool_certificate\permission;
-
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
@@ -161,7 +159,7 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         if (!class_exists('\\tool_certificate\\permission')) {
             throw new \coding_exception('\\tool_certificate\\permission class does not exists');
         }
-        if (!$visiblecategoriescontexts = permission::get_visible_categories_contexts()) {
+        if (!$visiblecategoriescontexts = tool_certificate\permission::get_visible_categories_contexts()) {
             return [];
         }
         list($sql, $params) = $DB->get_in_or_equal($visiblecategoriescontexts, SQL_PARAMS_NAMED);
