@@ -125,7 +125,9 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
      * @return void
      **/
     public function data_preprocessing(&$defaultvalues) {
-
+        if (isset($defaultvalues['expires']) && ($defaultvalues['expires'] != 0)) {
+            $defaultvalues['expirydatetype'] = 1;
+        }
     }
 
     /**
