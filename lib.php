@@ -83,7 +83,6 @@ function coursecertificate_add_instance(stdClass $data, mod_coursecertificate_mo
 
     // We need to use context now, so we need to make sure all needed info is already in db.
     $DB->set_field('course_modules', 'instance', $data->id, ['id' => $cmid]);
-    coursecertificate_set_mainfile($data);
 
     return $data->id;
 }
@@ -103,8 +102,6 @@ function coursecertificate_update_instance(stdClass $data, mod_coursecertificate
 
     $data->timemodified = time();
     $data->id = $data->instance;
-
-    coursecertificate_set_mainfile($data);
 
     return $DB->update_record('coursecertificate', $data);
 }
@@ -142,4 +139,3 @@ function coursecertificate_page_type_list(string $pagetype, stdClass $parentcont
     ];
     return $modulepagetype;
 }
-

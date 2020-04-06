@@ -181,6 +181,7 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
      * Returns "1" if course certificate has been issued.
      *
      * @return string
+     * @uses \tool_certificate\certificate
      */
     private function has_issues(): string
     {
@@ -188,6 +189,9 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
 
         if ($instance = $this->get_instance()) {
             $certificate = $certificate = $DB->get_record('coursecertificate', ['id' => $instance], '*', MUST_EXIST);
+            if (!class_exists('\\tool_certificate\\certificate')) {
+                throw new \coding_exception('\\tool_certificate\\certificate class does not exists');
+            }
             $courseissues = \tool_certificate\certificate::count_issues_for_course($certificate->template, $certificate->course);
             if ($courseissues > 0) {
                 return  "1";

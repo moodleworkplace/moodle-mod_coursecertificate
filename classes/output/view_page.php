@@ -91,7 +91,6 @@ class view_page implements templatable, renderable {
         $event->add_record_snapshot('coursecertificate', $this->certificate);
         $event->trigger();
 
-        // TODO: Set completion in the right cases.
         $completion = new completion_info($course);
         $completion->set_module_viewed($cm);
 

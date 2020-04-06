@@ -85,7 +85,6 @@ class certificate_issues_table extends \table_sql {
         parent::__construct('mod-coursecertificate-issues-' . $cm->instance);
 
         $context = \context_module::instance($cm->id);
-        $extrafields = get_extra_user_fields($context);
 
         $this->certificate = $certificate;
         $this->cm = $cm;
@@ -94,37 +93,29 @@ class certificate_issues_table extends \table_sql {
         $this->canmanage = permission::can_manage_templates($context);
         $this->canviewall = permission::can_view_templates($this->certificate->course);
 
-        $columns = [];
-        $columns[] = 'fullname';
+        $extrafields = get_extra_user_fields($context);
+        
+        $columnsheaders = ['fullname' => get_string('fullname')];
         foreach ($extrafields as $extrafield) {
-            $columns[] = $extrafield;
+            $columnsheaders += [$extrafield => get_user_field_name($extrafield)];
         }
-        $columns[] = 'status';
-        $columns[] = 'expires';
-        $columns[] = 'timecreated';
-        $columns[] = 'code';
-
-        $headers = [];
-        $headers[] = get_string('fullname');
-        foreach ($extrafields as $extrafield) {
-            $headers[] = get_user_field_name($extrafield);
-        }
-        $headers[] = get_string('status', 'coursecertificate');
-        $headers[] = get_string('expirydate', 'coursecertificate');
-        $headers[] = get_string('issueddate', 'coursecertificate');
-        $headers[] = get_string('code', 'coursecertificate');
+        $columnsheaders += [
+            'status' => get_string('status', 'coursecertificate'),
+            'expires' => get_string('expirydate', 'coursecertificate'),
+            'timecreated' => get_string('issueddate', 'coursecertificate'),
+            'code' => get_string('code', 'coursecertificate')
+        ];
 
         $filename = format_string('course-certificate-issues');
         $this->is_downloading(optional_param($this->downloadparamname, 0, PARAM_ALPHA),
             $filename, get_string('certificateissues', 'coursecertificate'));
 
         if (!$this->is_downloading() && ($this->canmanage || $this->canviewall)) {
-            $columns[] = 'actions';
-            $headers[] = get_string('actions');
+            $columnsheaders += ['actions' => get_string('actions')];
         }
 
-        $this->define_columns($columns);
-        $this->define_headers($headers);
+        $this->define_columns(array_keys($columnsheaders));
+        $this->define_headers(array_values($columnsheaders));
         $this->collapsible(false);
         $this->sortable(true, 'firstname');
         $this->no_sorting('code');
@@ -241,6 +232,9 @@ class certificate_issues_table extends \table_sql {
      * @uses \tool_certificate\certificate
      */
     public function query_db($pagesize, $useinitialsbar = true) {
+        if (!class_exists('\\tool_certificate\\certificate')) {
+            throw new \coding_exception('\\tool_certificate\\certificate class does not exists');
+        }
         $total = \tool_certificate\certificate::count_issues_for_course($this->certificate->template, $this->certificate->course);
         $this->pagesize($pagesize, $total);
 
