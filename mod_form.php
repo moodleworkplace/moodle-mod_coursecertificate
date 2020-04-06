@@ -98,13 +98,6 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         $mform->disabledIf('expires', 'expirydatetype', 'noteq',1);
         $mform->addHelpButton('expirydategroup', 'expirydate', 'coursecertificate');
 
-        // Adding aditional coursecertificate settings
-        $mform->addElement('header', 'whenavailable', get_string('whenavailable', 'coursecertificate'));
-        $mform->setExpanded('whenavailable');
-        $mform->addElement('advcheckbox', 'userscanpreview', get_string('userscanpreview', 'coursecertificate'));
-        $mform->addElement('advcheckbox', 'includepdf', get_string('includepdf', 'coursecertificate'));
-        $mform->addElement('advcheckbox', 'emailteachers', get_string('emailteachers', 'coursecertificate'));
-
         // Add standard elements.
         $this->standard_coursemodule_elements();
 
@@ -145,7 +138,7 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
      */
     public function data_postprocessing($data) {
         parent::data_postprocessing($data);
-        $data->expirydate = $data->expirydatetype == 0 ? 0 : $data->expirydate;
+        $data->expires = $data->expirydatetype == 0 ? 0 : $data->expires;
     }
 
     /**
