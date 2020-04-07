@@ -61,7 +61,7 @@ class external extends \external_api {
         $params = self::validate_parameters(self::update_certificate_automaticsend_parameters(),
             ['certificateid' => $certificateid, 'automaticsend' => $automaticsend]);
 
-        $certificate = $DB->get_record('coursecertificate', array('id' => $params['certificateid']), '*', MUST_EXIST);
+        $certificate = $DB->get_record('coursecertificate', ['id' => $params['certificateid']], '*', MUST_EXIST);
         $cm = get_coursemodule_from_instance('coursecertificate', $certificate->id);
         $context = \context_module::instance($cm->id);
         self::validate_context($context);

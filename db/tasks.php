@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Coursecertificate scheduled tasks.
  *
  * @package     mod_coursecertificate
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
@@ -24,11 +24,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component    = 'mod_coursecertificate';
-$plugin->release      = '3.9';
-$plugin->version      = 2020040701;
-$plugin->requires     = 2019111802.00;
-$plugin->maturity     = MATURITY_STABLE;
-$plugin->dependencies = [
-    'tool_certificate' => 2020033100
+$tasks = [
+    [
+        'classname' => 'mod_coursecertificate\task\issue_certificates_task',
+        'blocking' => 0,
+        'minute' => '*',
+        'hour' => '*',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*'
+    ]
 ];

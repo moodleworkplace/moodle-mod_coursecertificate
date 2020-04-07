@@ -71,10 +71,10 @@ class view_page implements templatable, renderable {
         $page = optional_param('page', 0, PARAM_INT);
         $perpage = optional_param('perpage', 10, PARAM_INT);
 
-        $pageurl = $url = new moodle_url('/mod/coursecertificate/view.php', array('id' => $id,
-            'page' => $page, 'perpage' => $perpage));
+        $pageurl = $url = new moodle_url('/mod/coursecertificate/view.php', ['id' => $id,
+            'page' => $page, 'perpage' => $perpage]);
 
-        list ($course, $cm) = get_course_and_cm_from_cmid($id, 'coursecertificate');
+        [$course, $cm] = get_course_and_cm_from_cmid($id, 'coursecertificate');
         $this->certificate = $DB->get_record('coursecertificate', ['id' => $cm->instance], '*', MUST_EXIST);
         $this->perpage = $perpage;
         require_login($course, true, $cm);

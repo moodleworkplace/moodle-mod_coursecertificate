@@ -59,6 +59,7 @@ $string['revoke'] = 'Revoke';
 $string['revokeissue'] = 'Revoke issue?'; // TODO.
 $string['selectdate'] = 'Select date';
 $string['status'] = 'Status';
+$string['taskissuecertificates'] = 'Issue course certificates';
 $string['template'] = 'Template';
 $string['template_help'] = 'Template help'; // TODO.
 $string['userscanpreview'] = 'Users can preview the certificate';
