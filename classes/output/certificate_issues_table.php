@@ -54,6 +54,11 @@ class certificate_issues_table extends \table_sql {
     protected $cm;
 
     /**
+     * @var bool
+     */
+    protected $groupmode;
+
+    /**
      * @var string
      */
     protected $downloadparamname = 'download';
@@ -78,9 +83,9 @@ class certificate_issues_table extends \table_sql {
      *
      * @param \stdClass $certificate
      * @param \stdClass $cm the course module
-     * @uses \tool_certificate\permission
+     * @param $groupmode
      */
-    public function __construct($certificate, $cm)
+    public function __construct($certificate, $cm, $groupmode)
     {
         parent::__construct('mod-coursecertificate-issues-' . $cm->instance);
 
@@ -88,6 +93,7 @@ class certificate_issues_table extends \table_sql {
 
         $this->certificate = $certificate;
         $this->cm = $cm;
+        $this->groupmode = $groupmode;
 
         $this->canverify = permission::can_verify_issues();
         $this->canmanage = permission::can_manage_templates($context);
@@ -235,10 +241,10 @@ class certificate_issues_table extends \table_sql {
         if (!class_exists('\\tool_certificate\\certificate')) {
             throw new \coding_exception('\\tool_certificate\\certificate class does not exists');
         }
-        $total = \tool_certificate\certificate::count_issues_for_course($this->certificate->template, $this->certificate->course);
+        $total = \tool_certificate\certificate::count_issues_for_course($this->certificate->template, $this->certificate->course, $this->groupmode, $this->cm);
         $this->pagesize($pagesize, $total);
 
-        $this->rawdata = \tool_certificate\certificate::get_issues_for_course($this->certificate->template, $this->certificate->course, $this->cm,
+        $this->rawdata = \tool_certificate\certificate::get_issues_for_course($this->certificate->template, $this->certificate->course, $this->groupmode, $this->cm,
             $this->get_page_start(), $this->get_page_size(), $this->get_sql_sort());
 
         // Set initial bars.
@@ -259,7 +265,7 @@ class certificate_issues_table extends \table_sql {
      */
     public function download() {
         \core\session\manager::write_close();
-        $total = \tool_certificate\certificate::count_issues_for_course($this->certificate->template, $this->certificate->course);
+        $total = \tool_certificate\certificate::count_issues_for_course($this->certificate->template, $this->certificate->course, $this->groupmode, $this->cm);
         $this->out($total, false);
         exit;
     }

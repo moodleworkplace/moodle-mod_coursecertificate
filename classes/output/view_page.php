@@ -24,6 +24,7 @@
 
 namespace mod_coursecertificate\output;
 
+use cm_info;
 use completion_info;
 use context_module;
 use mod_coursecertificate\permission;
@@ -58,11 +59,14 @@ class view_page implements templatable, renderable {
     /** @var bool $canviewreport */
     protected $canviewreport;
 
+    /** @var moodle_url $pageurl */
+    protected $pageurl;
+
+    /** @var cm_info $cm */
+    protected $cm;
+
     /**
      * Constructor.
-     * @param $id
-     * @param $page
-     * @param $perpage
      */
     public function __construct() {
         global $DB, $PAGE;
@@ -71,18 +75,19 @@ class view_page implements templatable, renderable {
         $page = optional_param('page', 0, PARAM_INT);
         $perpage = optional_param('perpage', 10, PARAM_INT);
 
-        $pageurl = $url = new moodle_url('/mod/coursecertificate/view.php', ['id' => $id,
+        $this->pageurl = new moodle_url('/mod/coursecertificate/view.php', ['id' => $id,
             'page' => $page, 'perpage' => $perpage]);
 
-        [$course, $cm] = get_course_and_cm_from_cmid($id, 'coursecertificate');
-        $this->certificate = $DB->get_record('coursecertificate', ['id' => $cm->instance], '*', MUST_EXIST);
+        [$course, $this->cm] = get_course_and_cm_from_cmid($id, 'coursecertificate');
+        $this->certificate = $DB->get_record('coursecertificate', ['id' => $this->cm->instance], '*', MUST_EXIST);
         $this->perpage = $perpage;
-        require_login($course, true, $cm);
+        require_login($course, true, $this->cm);
 
-        $context = context_module::instance($cm->id);
+        $context = context_module::instance($this->cm->id);
         $this->canviewreport = permission::can_view_report($context);
         $this->canmanage = permission::can_manage($context);
 
+        // Trigger the event.
         $event = \mod_coursecertificate\event\course_module_viewed::create([
             'objectid' => $this->certificate->id,
             'context' => $context
@@ -91,12 +96,19 @@ class view_page implements templatable, renderable {
         $event->add_record_snapshot('coursecertificate', $this->certificate);
         $event->trigger();
 
+        // Update the completion.
         $completion = new completion_info($course);
-        $completion->set_module_viewed($cm);
+        $completion->set_module_viewed($this->cm);
 
+        // Get the current groups mode.
+        if ($groupmode = groups_get_activity_groupmode($this->cm)) {
+            groups_get_activity_group($this->cm, true);
+        }
+
+        // Show issues table.
         if ($this->canviewreport) {
-            $this->table = new certificate_issues_table($this->certificate, $cm);
-            $this->table->define_baseurl($pageurl);
+            $this->table = new certificate_issues_table($this->certificate, $this->cm, $groupmode);
+            $this->table->define_baseurl($this->pageurl);
 
             if ($this->table->is_downloading()) {
                 $this->table->download();
@@ -104,7 +116,7 @@ class view_page implements templatable, renderable {
             }
         }
 
-        $PAGE->set_url('/mod/certificate/view.php', ['id' => $cm->id]);
+        $PAGE->set_url('/mod/certificate/view.php', ['id' => $this->cm->id]);
         $PAGE->set_title(format_string($this->certificate->name));
         $PAGE->set_heading(format_string($course->fullname));
         $PAGE->set_context($context);
@@ -136,8 +148,8 @@ class view_page implements templatable, renderable {
      * @return string HTML
      */
     private function render_table(\table_sql $table) {
-
         ob_start();
+        groups_print_activity_menu($this->cm, $this->pageurl);
         $table->out($this->perpage, false);
         $output = ob_get_contents();
         ob_end_clean();
