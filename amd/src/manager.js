@@ -40,6 +40,7 @@ define([
         REPORTREGION: "[data-region='issues-report']",
         TOGGLEAUTOMATICSEND: "[data-action='toggle-automaticsend']",
         REVOKEISSUE: "[data-action='revoke-issue']",
+        RECEIVEISSUE: "[data-action='receive-issue']",
         LOADING: ".loading-overlay"
     },
     /** @type {Object} The list of templates for the coursecertificate module. */
@@ -49,8 +50,9 @@ define([
     },
     /** @type {Object} The list of services for the coursecertificate module. */
     SERVICES = {
-        UPDATEAUTOMATICSEND: 'mod_coursecertificate_update_certificate_automaticsend',
-        REVOKEISSUE: 'tool_certificate_revoke_issue'
+        UPDATEAUTOMATICSEND: 'mod_coursecertificate_update_automaticsend',
+        REVOKEISSUE: 'tool_certificate_revoke_issue',
+        RECEIVEISSUE: 'mod_coursecertificate_receive_issue'
     };
 
     /**
@@ -93,7 +95,7 @@ define([
                 displayLoading(automaticsendregion, true);
                 // Call to webservice.
                 Ajax.call([{methodname: SERVICES.UPDATEAUTOMATICSEND,
-                    args: {certificateid: certificateid, automaticsend: newstatus}}])[0]
+                    args: {id: certificateid, automaticsend: newstatus}}])[0]
                 // Reload automatic send alert template.
                 .then(() => {
                     return  Templates.render(TEMPLATES.AUTOMATICSENDALERT,
@@ -110,6 +112,11 @@ define([
         }).fail(Notification.exception);
     }
 
+    /**
+     * Revoke the issue.
+     *
+     * @param {int} issueid
+     */
     function revokeIssue(issueid) {
         M.util.js_pending('mod_coursecertificate_revoke_issue');
         const strings = [{'key': 'confirmation', component: 'admin'},
@@ -123,6 +130,7 @@ define([
                 Ajax.call([{methodname: SERVICES.REVOKEISSUE, args: {id: issueid}}])[0]
                 // Call to webservice to get updated table.
                 .then(() => {
+                    M.util.js_complete('mod_coursecertificate_revoke_issue');
                     window.location.reload();
                     return null;
                 })
@@ -132,24 +140,64 @@ define([
         }).fail(Notification.exception);
     }
 
+    /**
+     * Receive certificate issue.
+     *
+     * @param {int} certificateid
+     */
+    function receiveIssue(certificateid) {
+        M.util.js_pending('mod_coursecertificate_receive_issue');
+        const strings = [{'key': 'confirmation', component: 'admin'},
+            {'key': 'receivecertificatenotification', component: 'coursecertificate'},
+            {'key': 'confirm'},
+            {'key': 'cancel'}];
+        Str.get_strings(strings).then((s) => {
+            // Show confirm notification.
+            Notification.confirm(s[0], s[1], s[2], s[3], () => {
+                // Call to webservice to revoke issue.
+                Ajax.call([{methodname: SERVICES.RECEIVEISSUE, args: {id: certificateid}}])[0]
+                    // Call to webservice to get updated table.
+                    .then(() => {
+                        M.util.js_complete('mod_coursecertificate_receive_issue');
+                        window.location.reload();
+                        return null;
+                    })
+                    .fail(Notification.exception);
+            });
+            return null;
+        }).fail(Notification.exception);
+    }
+
     return {
         init: function() {
             const automaticsendregion = document.querySelector(SELECTORS.AUTOMATICSENDREGION);
+            if (automaticsendregion) {
+                automaticsendregion.addEventListener('click', (e) => {
+                    if (e.target && e.target.closest(SELECTORS.TOGGLEAUTOMATICSEND)) {
+                        e.preventDefault();
+                        toggleAutomaticSend(automaticsendregion);
+                    }
+                });
+            }
             const reportregion = document.querySelector(SELECTORS.REPORTREGION);
-            automaticsendregion.addEventListener('click', (e) => {
-                if (e.target && e.target.closest(SELECTORS.TOGGLEAUTOMATICSEND)) {
+            if (reportregion) {
+                reportregion.addEventListener('click', (e) => {
+                    const target = e.target && e.target.closest(SELECTORS.REVOKEISSUE);
+                    if (target) {
+                        e.preventDefault();
+                        const {issueid} = target.dataset;
+                        revokeIssue(issueid);
+                    }
+                });
+            }
+            const receiveissuebutton = document.querySelector(SELECTORS.RECEIVEISSUE);
+            if (receiveissuebutton) {
+                receiveissuebutton.addEventListener('click', (e) => {
                     e.preventDefault();
-                    toggleAutomaticSend(automaticsendregion);
-                }
-            });
-            reportregion.addEventListener('click', (e) => {
-                const target = e.target && e.target.closest(SELECTORS.REVOKEISSUE);
-                if (target) {
-                    e.preventDefault();
-                    const {issueid} = target.dataset;
-                    revokeIssue(issueid);
-                }
-            });
+                    const {certificateid} = e.target.dataset;
+                    receiveIssue(certificateid);
+                });
+            }
         }
     };
 });

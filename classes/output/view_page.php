@@ -31,6 +31,7 @@ use mod_coursecertificate\permission;
 use moodle_url;
 use templatable;
 use renderable;
+use tool_certificate\template;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -59,17 +60,23 @@ class view_page implements templatable, renderable {
     /** @var bool $canviewreport */
     protected $canviewreport;
 
+    /** @var bool $canreceiveissues */
+    protected $canreceiveissues;
+
     /** @var moodle_url $pageurl */
     protected $pageurl;
 
     /** @var cm_info $cm */
     protected $cm;
 
+    /** @var \stdClass $userissue */
+    protected $userissue;
+
     /**
      * Constructor.
      */
     public function __construct() {
-        global $DB, $PAGE;
+        global $DB, $PAGE, $USER;
 
         $id = required_param('id', PARAM_INT);
         $page = optional_param('page', 0, PARAM_INT);
@@ -86,6 +93,15 @@ class view_page implements templatable, renderable {
         $context = context_module::instance($this->cm->id);
         $this->canviewreport = permission::can_view_report($context);
         $this->canmanage = permission::can_manage($context);
+        $this->canreceiveissues = permission::can_receive_issues($context);
+
+        $conditions = [
+            'userid' => $USER->id,
+            'templateid' => $this->certificate->template,
+            'courseid' => $course->id,
+            'component' => 'mod_coursecertificate'
+        ];
+        $this->userissue = $DB->get_record('tool_certificate_issues', $conditions,'*', IGNORE_MISSING);
 
         // Trigger the event.
         $event = \mod_coursecertificate\event\course_module_viewed::create([
@@ -136,8 +152,10 @@ class view_page implements templatable, renderable {
         if (isset($this->table)) {
             $data['table'] = $this->render_table($this->table);
         }
-        $data['canmanage'] = $this->canmanage;
-        $data['canviewreport'] = $this->canviewreport;
+        $data['showautomaticsend'] = $this->canmanage;
+        $data['showreport'] = $this->canviewreport;
+        $data['showreceiveissue'] = $this->canreceiveissues && !$this->userissue;
+
         return $data;
     }
 

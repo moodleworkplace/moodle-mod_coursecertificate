@@ -25,12 +25,20 @@
 defined('MOODLE_INTERNAL') || die();
 
 $functions = [
-    'mod_coursecertificate_update_certificate_automaticsend' => [
+    'mod_coursecertificate_update_automaticsend' => [
         'classname'    => mod_coursecertificate\external::class,
-        'methodname'   => 'update_certificate_automaticsend',
+        'methodname'   => 'update_automaticsend',
         'description'  => 'Update automaticsend setting for a certificate.',
         'type'         => 'write',
         'capabilities' => 'mod/coursecertificate:manage',
+        'ajax'         => true,
+    ],
+    'mod_coursecertificate_receive_issue' => [
+        'classname'    => mod_coursecertificate\external::class,
+        'methodname'   => 'receive_issue',
+        'description'  => 'Create coursecertificate issue for current user.',
+        'type'         => 'write',
+        'capabilities' => 'mod/coursecertificate:receiveissue',
         'ajax'         => true,
     ]
 ];

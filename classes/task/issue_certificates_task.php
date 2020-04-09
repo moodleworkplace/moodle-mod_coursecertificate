@@ -54,7 +54,6 @@ class issue_certificates_task extends \core\task\scheduled_task {
         // Get all the coursecertificates.
         $coursecertificates = $DB->get_records('coursecertificate');
         foreach ($coursecertificates as $coursecertificate) {
-
             if (!$coursecertificate->automaticsend) {
                 // Skip coursecertificates with automaticsend disabled.
                 continue;
@@ -83,7 +82,7 @@ class issue_certificates_task extends \core\task\scheduled_task {
             $context = context_module::instance($coursecertificate->id);
             $potentialusers = get_enrolled_users($context, 'mod/coursecertificate:receiveissue', 0, 'u.*', null,
                 0, 0, true);
-            // Filter only users with access to the activity.
+            // Filter only users with access to the activity (Does not filter mod visibility).
             $info = new \core_availability\info_module($cm);
             $users = $info->filter_user_list($potentialusers);
             // Issue the certificate.

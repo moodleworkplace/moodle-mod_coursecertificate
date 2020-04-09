@@ -95,4 +95,14 @@ class permission {
         $context = context_course::instance($courseid);
         return \tool_certificate\permission::can_view_templates_in_context($context);
     }
+
+    /**
+     * If a user can receive issues.
+     *
+     * @param \context $context
+     * @return bool
+     */
+    public static function can_receive_issues(\context $context): bool {
+        return has_capability('mod/coursecertificate:receiveissue', $context);
+    }
 }
