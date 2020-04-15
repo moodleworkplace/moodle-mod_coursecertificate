@@ -66,13 +66,20 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         $templateoptions = ['' => get_string('chooseatemplate', 'coursecertificate')] + $templates;
         $mform->addElement('select', 'template', get_string('template', 'coursecertificate'), $templateoptions);
         $mform->addHelpButton('template', 'template', 'mod_coursecertificate');
-        if (!$hasissues) {
-            $mform->addRule('template', null, 'required', null, 'client');
-        }
+
         if (empty($templates)) {
-            $warningstr = get_string('notemplateswarning', 'coursecertificate');
+            // Adding warning text if there are not templates available.
+            if (\tool_certificate\permission::can_manage_anywhere()) {
+                $linkurl = $CFG->wwwroot . "/admin/tool/certificate/manage_templates.php";
+                $warningstr = get_string('notemplateswarningwithlink', 'coursecertificate', $linkurl);
+            } else {
+                $warningstr = get_string('notemplateswarning', 'coursecertificate');
+            }
             $html = html_writer::tag('div', $warningstr, ['class' => 'alert alert-warning']);
             $mform->addElement('static', 'notemplateswarning', '', $html);
+        }
+        if (!$hasissues) {
+            $mform->addRule('template', null, 'required', null, 'client');
         }
         // If Certificate has issues it's not possible to change the template.
         $mform->addElement('hidden', 'hasissues', $hasissues);
@@ -154,7 +161,7 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         if (!class_exists('\\tool_certificate\\permission')) {
             throw new \coding_exception('\\tool_certificate\\permission class does not exists');
         }
-        if (!$visiblecategoriescontexts = tool_certificate\permission::get_visible_categories_contexts()) {
+        if (!$visiblecategoriescontexts = tool_certificate\permission::get_visible_categories_contexts(false)) {
             return [];
         }
         list($sql, $params) = $DB->get_in_or_equal($visiblecategoriescontexts, SQL_PARAMS_NAMED);

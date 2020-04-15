@@ -278,7 +278,7 @@ class certificate_issues_table extends \table_sql {
         echo $this->render_reset_button();
 
         $this->print_initials_bar();
-        echo \html_writer::div(get_string('nouserscertified', 'coursecertificate'), 'alert alert-info');
+        echo \html_writer::div(get_string('nouserscertified', 'coursecertificate'), 'alert alert-info mt-3');
     }
 }
 

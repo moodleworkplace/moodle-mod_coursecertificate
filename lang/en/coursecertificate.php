@@ -49,7 +49,8 @@ $string['modulename'] = 'Course certificate';
 $string['modulename_help'] = 'Course certificate help.'; // TODO.
 $string['modulename_link'] = 'mod/certificate/view';
 $string['modulenameplural'] = 'Course certificate activities';
-$string['notemplateswarning'] = 'There are not available templates'; // TODO.
+$string['notemplateswarning'] = 'There are no available templates. Please contact the site administrator.';
+$string['notemplateswarningwithlink'] = 'There are no available templates. Please go to <a href="{$a}">Certificate</a> and create a new one.';
 $string['nouserscertified'] = 'No users are certified.';
 $string['page-mod-certificate-x'] = 'Any course certificate module page';
 $string['pluginadministration'] = 'Course certificate administration';

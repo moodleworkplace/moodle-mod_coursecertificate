@@ -84,13 +84,13 @@ class view_page implements templatable, renderable {
 
         $this->pageurl = new moodle_url('/mod/coursecertificate/view.php', ['id' => $id,
             'page' => $page, 'perpage' => $perpage]);
-
-        [$course, $this->cm] = get_course_and_cm_from_cmid($id, 'coursecertificate');
-        $this->certificate = $DB->get_record('coursecertificate', ['id' => $this->cm->instance], '*', MUST_EXIST);
         $this->perpage = $perpage;
+        [$course, $this->cm] = get_course_and_cm_from_cmid($id, 'coursecertificate');
+
         require_login($course, true, $this->cm);
 
         $context = context_module::instance($this->cm->id);
+        $this->certificate = $DB->get_record('coursecertificate', ['id' => $this->cm->instance], '*', MUST_EXIST);
         $this->canviewreport = permission::can_view_report($context);
         $this->canmanage = permission::can_manage($context);
         $this->canreceiveissues = permission::can_receive_issues($context);
@@ -145,6 +145,8 @@ class view_page implements templatable, renderable {
      * @return \stdClass|array
      */
     public function export_for_template(\renderer_base $output) {
+        global $DB;
+
         $data = [];
         $data['certificateid'] = $this->certificate->id;
         $data['certificatename'] = $this->certificate->name;
@@ -154,7 +156,8 @@ class view_page implements templatable, renderable {
         }
         $data['showautomaticsend'] = $this->canmanage;
         $data['showreport'] = $this->canviewreport;
-        $data['showreceiveissue'] = $this->canreceiveissues && !$this->userissue;
+        $templaterecord = $DB->get_record('tool_certificate_templates', ['id' => $this->certificate->template], '*');
+        $data['showreceiveissue'] = $this->canreceiveissues && !$this->userissue && $templaterecord;
 
         return $data;
     }

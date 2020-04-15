@@ -105,4 +105,17 @@ class permission {
     public static function can_receive_issues(\context $context): bool {
         return has_capability('mod/coursecertificate:receiveissue', $context);
     }
+
+    /**
+     * Require user can receive issues.
+     *
+     * @param \context $context
+     * @return bool
+     */
+    public static function require_can_receive_issues(\context $context): void {
+        if (!self::can_receive_issues($context)) {
+            throw new \required_capability_exception($context,
+                'mod/coursecertificate:receiveissue', 'nopermissions', 'error');
+        }
+    }
 }

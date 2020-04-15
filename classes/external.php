@@ -113,10 +113,12 @@ class external extends \external_api {
         [$course, $cm] = get_course_and_cm_from_instance($coursecertificate->id, 'coursecertificate', );
         $context = \context_module::instance($cm->id);
         self::validate_context($context);
+        // Require receiveissue capabilities
+        permission::require_can_receive_issues($context);
 
-        // Check receiveissue capabilities and module visibility for user.
-        if (permission::can_receive_issues($context) && \core_availability\info_module::is_user_visible($cm)) {
-            if ($templaterecord = $DB->get_record('tool_certificate_templates', ['id' => $coursecertificate->template])) {
+        // Check module visibility for user.
+        if (\core_availability\info_module::is_user_visible($cm)) {
+            if (!$templaterecord = $DB->get_record('tool_certificate_templates', ['id' => $coursecertificate->template], '*', MUST_EXIST)) {
                 $issueid = \tool_certificate\template::instance($templaterecord->id)->issue_certificate(
                     $USER->id,
                     $coursecertificate->expires,
@@ -129,7 +131,6 @@ class external extends \external_api {
                 }
             }
         }
-
         return false;
     }
 
