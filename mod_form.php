@@ -77,6 +77,9 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
             }
             $html = html_writer::tag('div', $warningstr, ['class' => 'alert alert-warning']);
             $mform->addElement('static', 'notemplateswarning', '', $html);
+        } else {
+            $warningstr = get_string('selecttemplatewarning', 'mod_coursecertificate');
+            $mform->addElement('static', 'selecttemplatewarning', '', html_writer::span($warningstr));
         }
         if (!$hasissues) {
             $mform->addRule('template', null, 'required', null, 'client');

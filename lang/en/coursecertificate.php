@@ -61,6 +61,7 @@ $string['receivecertificatenotification'] = 'Receive certificate?';
 $string['revoke'] = 'Revoke';
 $string['revokeissue'] = 'Revoke issue?'; // TODO.
 $string['selectdate'] = 'Select date';
+$string['selecttemplatewarning'] = 'Once this activity issues at least one certificate, this field will be locked and will no longer be editable.';
 $string['status'] = 'Status';
 $string['taskissuecertificates'] = 'Issue course certificates';
 $string['template'] = 'Template';

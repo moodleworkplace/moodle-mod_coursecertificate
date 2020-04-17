@@ -62,13 +62,13 @@ class issue_certificates_task extends \core\task\scheduled_task {
             if ($templaterecord = $DB->get_record('tool_certificate_templates', ['id' => $coursecertificate->template])) {
                 $template = \tool_certificate\template::instance($templaterecord->id);
             } else {
-                mtrace("Warning: Skipping coursecertificate $coursecertificate->id (invalid templateid: " .
+                mtrace("... Warning: Skipping coursecertificate $coursecertificate->id (invalid templateid: " .
                     "$coursecertificate->template)");
                 continue;
             }
             [$course, $cm] = get_course_and_cm_from_instance($coursecertificate->id, 'coursecertificate');
             if (!$cm->visible) {
-                // Skip coursecertificates not visible.
+                // Skip coursecertificate modules not visible.
                 continue;
             }
             // Get all the users already issued.
