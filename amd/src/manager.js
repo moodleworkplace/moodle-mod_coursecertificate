@@ -40,7 +40,6 @@ define([
         REPORTREGION: "[data-region='issues-report']",
         TOGGLEAUTOMATICSEND: "[data-action='toggle-automaticsend']",
         REVOKEISSUE: "[data-action='revoke-issue']",
-        RECEIVEISSUE: "[data-action='receive-issue']",
         LOADING: ".loading-overlay"
     },
     /** @type {Object} The list of templates for the coursecertificate module. */
@@ -52,7 +51,6 @@ define([
     SERVICES = {
         UPDATEAUTOMATICSEND: 'mod_coursecertificate_update_automaticsend',
         REVOKEISSUE: 'tool_certificate_revoke_issue',
-        RECEIVEISSUE: 'mod_coursecertificate_receive_issue'
     };
 
     /**
@@ -140,34 +138,6 @@ define([
         }).fail(Notification.exception);
     }
 
-    /**
-     * Receive certificate issue.
-     *
-     * @param {int} certificateid
-     */
-    function receiveIssue(certificateid) {
-        M.util.js_pending('mod_coursecertificate_receive_issue');
-        const strings = [{'key': 'confirmation', component: 'admin'},
-            {'key': 'receivecertificatenotification', component: 'coursecertificate'},
-            {'key': 'confirm'},
-            {'key': 'cancel'}];
-        Str.get_strings(strings).then((s) => {
-            // Show confirm notification.
-            Notification.confirm(s[0], s[1], s[2], s[3], () => {
-                // Call to webservice to revoke issue.
-                Ajax.call([{methodname: SERVICES.RECEIVEISSUE, args: {id: certificateid}}])[0]
-                    // Call to webservice to get updated table.
-                    .then(() => {
-                        M.util.js_complete('mod_coursecertificate_receive_issue');
-                        window.location.reload();
-                        return null;
-                    })
-                    .fail(Notification.exception);
-            });
-            return null;
-        }).fail(Notification.exception);
-    }
-
     return {
         init: function() {
             const automaticsendregion = document.querySelector(SELECTORS.AUTOMATICSENDREGION);
@@ -188,14 +158,6 @@ define([
                         const {issueid} = target.dataset;
                         revokeIssue(issueid);
                     }
-                });
-            }
-            const receiveissuebutton = document.querySelector(SELECTORS.RECEIVEISSUE);
-            if (receiveissuebutton) {
-                receiveissuebutton.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const {certificateid} = e.target.dataset;
-                    receiveIssue(certificateid);
                 });
             }
         }

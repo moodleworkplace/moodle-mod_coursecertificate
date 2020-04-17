@@ -70,16 +70,17 @@ class permission {
     }
 
     /**
-     * If a user can manage templates.
+     * If a user can revoke.
      *
-     * @param \context $context
+     * @param int $templateid
      * @return bool
      */
-    public static function can_manage_templates(\context $context): bool {
+    public static function can_revoke_issues(int $templateid): bool {
         if (!class_exists('\\tool_certificate\\permission')) {
             throw new \coding_exception('\\tool_certificate\\permission class does not exists');
         }
-        return \tool_certificate\permission::can_manage($context);
+        $template = \tool_certificate\template::instance($templateid);
+        return $template && $template->can_issue_to_anybody();
     }
 
     /**

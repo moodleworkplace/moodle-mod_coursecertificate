@@ -22,18 +22,12 @@
         "certificatename" : "Certificate Name",
         "showautomaticsend" : true,
         "showreport" : true,
-        "showreceiveissue" : true,
         "automaticsend" : true,
         "table": "<table></table>"
     }
 }}
 <div data-region="mod_coursecertificate_view">
     <h2>{{certificatename}}</h2>
-    {{#showreceiveissue}}
-        <button class="btn btn-primary mb-3" data-certificateid="{{certificateid}}" data-action="receive-issue">
-            {{#str}} receivecertificate, coursecertificate {{/str}}
-        </button>
-    {{/showreceiveissue}}
     {{#showautomaticsend}}
         <div data-region="automaticsend-alert" class="position-relative w-100 h-100">
             {{> coursecertificate/automaticsend_alert}}

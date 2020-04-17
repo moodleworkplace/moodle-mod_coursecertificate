@@ -66,7 +66,7 @@ class certificate_issues_table extends \table_sql {
     /**
      * @var bool
      */
-    protected $canmanage;
+    protected $canrevoke;
 
     /**
      * @var bool
@@ -96,8 +96,8 @@ class certificate_issues_table extends \table_sql {
         $this->groupmode = $groupmode;
 
         $this->canverify = permission::can_verify_issues();
-        $this->canmanage = permission::can_manage_templates($context);
-        $this->canviewall = permission::can_view_templates($this->certificate->course);
+        $this->canrevoke = permission::can_revoke_issues($this->certificate->template);
+        $this->canviewall = permission::can_view_all_issues($this->certificate->course);
 
         $extrafields = get_extra_user_fields($context);
         
@@ -116,7 +116,7 @@ class certificate_issues_table extends \table_sql {
         $this->is_downloading(optional_param($this->downloadparamname, 0, PARAM_ALPHA),
             $filename, get_string('certificateissues', 'coursecertificate'));
 
-        if (!$this->is_downloading() && ($this->canmanage || $this->canviewall)) {
+        if (!$this->is_downloading() && ($this->canrevoke || $this->canviewall)) {
             $columnsheaders += ['actions' => get_string('actions')];
         }
 
@@ -218,7 +218,7 @@ class certificate_issues_table extends \table_sql {
             ];
             $actions .= $OUTPUT->action_icon($previewlink, $previewicon, null, $previewattributes);
         }
-        if ($this->canmanage) {
+        if ($this->canrevoke) {
             $rekoveicon = new \pix_icon('i/delete', get_string('revoke', 'coursecertificate'));
             $revokeattributes = [
                 'class' => 'action-icon revoke-icon',

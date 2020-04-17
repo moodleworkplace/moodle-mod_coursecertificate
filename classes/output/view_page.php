@@ -69,9 +69,6 @@ class view_page implements templatable, renderable {
     /** @var cm_info $cm */
     protected $cm;
 
-    /** @var \stdClass $userissue */
-    protected $userissue;
-
     /**
      * Constructor.
      */
@@ -95,14 +92,6 @@ class view_page implements templatable, renderable {
         $this->canmanage = permission::can_manage($context);
         $this->canreceiveissues = permission::can_receive_issues($context);
 
-        $conditions = [
-            'userid' => $USER->id,
-            'templateid' => $this->certificate->template,
-            'courseid' => $course->id,
-            'component' => 'mod_coursecertificate'
-        ];
-        $this->userissue = $DB->get_record('tool_certificate_issues', $conditions,'*', IGNORE_MISSING);
-
         // Trigger the event.
         $event = \mod_coursecertificate\event\course_module_viewed::create([
             'objectid' => $this->certificate->id,
@@ -119,6 +108,35 @@ class view_page implements templatable, renderable {
         // Get the current groups mode.
         if ($groupmode = groups_get_activity_groupmode($this->cm)) {
             groups_get_activity_group($this->cm, true);
+        }
+
+        // View certificate issue if user can not manage and can receive issues
+        if (!$this->canmanage && $this->canreceiveissues) {
+            // Course certificate template must exist.
+            if ($templaterecord = $DB->get_record('tool_certificate_templates', ['id' => $this->certificate->template], '*', MUST_EXIST)) {
+                $issuesqlconditions = [
+                    'userid' => $USER->id,
+                    'templateid' => $templaterecord->id,
+                    'courseid' => $course->id,
+                    'component' => 'mod_coursecertificate'
+                ];
+                // If user does not have an issue yet, create it first.
+                if (!$DB->record_exists('tool_certificate_issues', $issuesqlconditions)) {
+                    \tool_certificate\template::instance($templaterecord->id)->issue_certificate(
+                        $USER->id,
+                        $this->certificate->expires,
+                        [],
+                        'mod_coursecertificate',
+                        $course->id
+                    );
+                }
+                // Redirect to view issue page.
+                if ($issue = $DB->get_record('tool_certificate_issues', $issuesqlconditions,'*', MUST_EXIST)) {
+                    $showissueurl = new \moodle_url('/admin/tool/certificate/view.php',
+                        ['code' => $issue->code]);
+                    redirect($showissueurl);
+                }
+            }
         }
 
         // Show issues table.
@@ -156,8 +174,6 @@ class view_page implements templatable, renderable {
         }
         $data['showautomaticsend'] = $this->canmanage;
         $data['showreport'] = $this->canviewreport;
-        $templaterecord = $DB->get_record('tool_certificate_templates', ['id' => $this->certificate->template], '*');
-        $data['showreceiveissue'] = $this->canreceiveissues && !$this->userissue && $templaterecord;
 
         return $data;
     }
