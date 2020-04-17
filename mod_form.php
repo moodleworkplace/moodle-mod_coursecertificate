@@ -161,7 +161,7 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         if (!class_exists('\\tool_certificate\\permission')) {
             throw new \coding_exception('\\tool_certificate\\permission class does not exists');
         }
-        if (!$visiblecategoriescontexts = tool_certificate\permission::get_visible_categories_contexts(false)) {
+        if (!$visiblecategoriescontexts = tool_certificate\permission::get_visible_categories_contexts(false, context_course::instance($this->current->course))) {
             return [];
         }
         list($sql, $params) = $DB->get_in_or_equal($visiblecategoriescontexts, SQL_PARAMS_NAMED);

@@ -118,7 +118,7 @@ class external extends \external_api {
 
         // Check module visibility for user.
         if (\core_availability\info_module::is_user_visible($cm)) {
-            if (!$templaterecord = $DB->get_record('tool_certificate_templates', ['id' => $coursecertificate->template], '*', MUST_EXIST)) {
+            if ($templaterecord = $DB->get_record('tool_certificate_templates', ['id' => $coursecertificate->template], '*', MUST_EXIST)) {
                 $issueid = \tool_certificate\template::instance($templaterecord->id)->issue_certificate(
                     $USER->id,
                     $coursecertificate->expires,
