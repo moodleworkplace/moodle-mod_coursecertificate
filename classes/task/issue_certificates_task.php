@@ -87,7 +87,7 @@ class issue_certificates_task extends \core\task\scheduled_task {
             $users = $info->filter_user_list($potentialusers);
             // Issue the certificate.
             foreach ($users as $user) {
-                if (!in_array($user->id, $usersissued)){
+                if (!in_array($user->id, $usersissued)) {
                     $template->issue_certificate(
                         $user->id,
                         $coursecertificate->expires,

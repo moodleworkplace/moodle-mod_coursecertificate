@@ -30,6 +30,6 @@ defined('MOODLE_INTERNAL') || die();
  * @param int $oldversion
  * @return bool
  */
-function xmldb_coursecertificate_upgrade($oldversion){
+function xmldb_coursecertificate_upgrade($oldversion) {
     return true;
 }

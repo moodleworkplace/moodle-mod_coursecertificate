@@ -96,7 +96,7 @@ define([
                     args: {id: certificateid, automaticsend: newstatus}}])[0]
                 // Reload automatic send alert template.
                 .then(() => {
-                    return  Templates.render(TEMPLATES.AUTOMATICSENDALERT,
+                    return Templates.render(TEMPLATES.AUTOMATICSENDALERT,
                         {certificateid: certificateid, automaticsend: newstatus}, '');
                 })
                 .then((html) => {

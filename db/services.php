@@ -32,13 +32,5 @@ $functions = [
         'type'         => 'write',
         'capabilities' => 'mod/coursecertificate:manage',
         'ajax'         => true,
-    ],
-    'mod_coursecertificate_receive_issue' => [
-        'classname'    => mod_coursecertificate\external::class,
-        'methodname'   => 'receive_issue',
-        'description'  => 'Create coursecertificate issue for current user.',
-        'type'         => 'write',
-        'capabilities' => 'mod/coursecertificate:receiveissue',
-        'ajax'         => true,
     ]
 ];

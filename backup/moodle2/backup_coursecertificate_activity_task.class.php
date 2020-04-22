@@ -47,7 +47,10 @@ class backup_coursecertificate_activity_task extends backup_activity_task {
      * Defines particular steps for the backup process.
      */
     protected function define_my_steps() {
-        $this->add_step(new backup_coursecertificate_activity_structure_step('coursecertificate_structure', 'coursecertificate.xml'));
+        $this->add_step(new backup_coursecertificate_activity_structure_step(
+            'coursecertificate_structure',
+            'coursecertificate.xml')
+        );
     }
 
     /**

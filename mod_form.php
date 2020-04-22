@@ -105,7 +105,7 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         $group[] =& $expirydate;
         $mform->addGroup($group, 'expirydategroup', $expirydatestr, ' ', false);
         $mform->hideIf('expires', 'expirydatetype', 'noteq', 1);
-        $mform->disabledIf('expires', 'expirydatetype', 'noteq',1);
+        $mform->disabledIf('expires', 'expirydatetype', 'noteq', 1);
         $mform->addHelpButton('expirydategroup', 'expirydate', 'coursecertificate');
 
         // Add standard elements.
@@ -164,13 +164,12 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         if (!class_exists('\\tool_certificate\\permission')) {
             throw new \coding_exception('\\tool_certificate\\permission class does not exists');
         }
-        if (!$visiblecategoriescontexts = tool_certificate\permission::get_visible_categories_contexts(false, context_course::instance($this->current->course))) {
+        $context = context_course::instance($this->current->course);
+        if (!$visiblecatctxs = tool_certificate\permission::get_visible_categories_contexts(false, $context)) {
             return [];
         }
-        list($sql, $params) = $DB->get_in_or_equal($visiblecategoriescontexts, SQL_PARAMS_NAMED);
-        $query = "SELECT *
-            FROM {tool_certificate_templates}
-           WHERE contextid " . $sql;
+        list($sql, $params) = $DB->get_in_or_equal($visiblecatctxs, SQL_PARAMS_NAMED);
+        $query = "SELECT * FROM {tool_certificate_templates} WHERE contextid " . $sql;
         $records = $DB->get_records_sql($query, $params);
         $templates = [];
         if (!empty($records)) {
@@ -188,8 +187,7 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
      * @return string
      * @uses \tool_certificate\certificate
      */
-    private function has_issues(): string
-    {
+    private function has_issues(): string {
         global $DB;
 
         if ($instance = $this->get_instance()) {

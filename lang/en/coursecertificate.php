@@ -25,19 +25,19 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['automaticsendenabled'] = 'Automatic send is enabled';
 $string['automaticsenddisabled'] = 'Automatic send is disabled';
+$string['automaticsendenabled'] = 'Automatic send is enabled';
+$string['certificateissues'] = 'Certificate issues';
+$string['certifiedusers'] = 'Certified users';
 $string['chooseatemplate'] = 'Choose a template...';
+$string['code'] = 'Code';
 $string['coursecertificate:addinstance'] = 'Add a new Course certificate activity';
 $string['coursecertificate:manage'] = 'Manage a Course certificate activity';
 $string['coursecertificate:view'] = 'View Course certificate';
 $string['coursecertificate:viewreport'] = 'View Course certificate issues report';
 $string['coursecertificatefieldset'] = 'Course certificate Settings';
-$string['certificateissues'] = 'Certificate issues';
 $string['coursecertificatename'] = 'Certificate';
 $string['coursecertificatesettings'] = 'Settings';
-$string['certifiedusers'] = 'Certified users';
-$string['code'] = 'Code';
 $string['disableautomaticsend'] = 'Disable automatic send'; // TODO.
 $string['emailteachers'] = 'Send notification and PDF to teachers by email';
 $string['enableautomaticsend'] = 'By activating the automatic send, all users that match the requirements will receive their certifications on their inboxes';

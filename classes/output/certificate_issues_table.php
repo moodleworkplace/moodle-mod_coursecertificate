@@ -85,8 +85,7 @@ class certificate_issues_table extends \table_sql {
      * @param \stdClass $cm the course module
      * @param $groupmode
      */
-    public function __construct($certificate, $cm, $groupmode)
-    {
+    public function __construct($certificate, $cm, $groupmode) {
         parent::__construct('mod-coursecertificate-issues-' . $cm->instance);
 
         $context = \context_module::instance($cm->id);
@@ -97,10 +96,9 @@ class certificate_issues_table extends \table_sql {
 
         $this->canverify = permission::can_verify_issues();
         $this->canrevoke = permission::can_revoke_issues($this->certificate->template);
-        $this->canviewall = permission::can_view_all_issues($this->certificate->course);
+        $this->canviewall = permission::can_view_templates($this->certificate->course);
 
         $extrafields = get_extra_user_fields($context);
-        
         $columnsheaders = ['fullname' => get_string('fullname')];
         foreach ($extrafields as $extrafield) {
             $columnsheaders += [$extrafield => get_user_field_name($extrafield)];
@@ -179,23 +177,26 @@ class certificate_issues_table extends \table_sql {
      * @param \stdClass $certificateissue
      * @return string
      */
-     public function col_status($certificateissue) {
-         $expired = ($certificateissue->expires > 0) && ($certificateissue->expires <= time());
+    public function col_status($certificateissue) {
+     $expired = ($certificateissue->expires > 0) && ($certificateissue->expires <= time());
+     $expiredstr = get_string('expired', 'tool_certificate');
+     $validstr = get_string('valid', 'tool_certificate');
 
-         return $expired ? get_string('expired', 'tool_certificate') :
-              get_string('valid', 'tool_certificate');
-     }
+     return $expired ? $expiredstr : $validstr;
+    }
 
     /**
-     * Generate the status column.
+     * Generate the expires column.
      *
      * @param \stdClass $certificateissue
      * @return string
      */
     public function col_expires($certificateissue) {
-        return $certificateissue->expires > 0 ?
-            userdate($certificateissue->expires, get_string('strftimedatetime', 'langconfig'))
-            : get_string('never');
+        if ($certificateissue->expires > 0) {
+            return userdate($certificateissue->expires, get_string('strftimedatetime', 'langconfig'));
+        } else {
+            return get_string('never');
+        }
     }
 
     /**
@@ -241,16 +242,23 @@ class certificate_issues_table extends \table_sql {
         if (!class_exists('\\tool_certificate\\certificate')) {
             throw new \coding_exception('\\tool_certificate\\certificate class does not exists');
         }
-        $total = \tool_certificate\certificate::count_issues_for_course($this->certificate->template, $this->certificate->course, $this->groupmode, $this->cm);
+        $total = \tool_certificate\certificate::count_issues_for_course(
+            $this->certificate->template,
+            $this->certificate->course,
+            $this->groupmode,
+            $this->cm
+        );
         $this->pagesize($pagesize, $total);
 
-        $this->rawdata = \tool_certificate\certificate::get_issues_for_course($this->certificate->template, $this->certificate->course, $this->groupmode, $this->cm,
-            $this->get_page_start(), $this->get_page_size(), $this->get_sql_sort());
-
-        // Set initial bars.
-        if ($useinitialsbar) {
-            $this->initialbars($total > $pagesize);
-        }
+        $this->rawdata = \tool_certificate\certificate::get_issues_for_course(
+            $this->certificate->template,
+            $this->certificate->course,
+            $this->groupmode,
+            $this->cm,
+            $this->get_page_start(),
+            $this->get_page_size(),
+            $this->get_sql_sort()
+        );
 
         // Set initial bars.
         if ($useinitialsbar) {
@@ -273,7 +281,7 @@ class certificate_issues_table extends \table_sql {
     /**
      * This function is not part of the public api.
      */
-    function print_nothing_to_display() {
+    public function print_nothing_to_display() {
         // Render button to allow user to reset table preferences.
         echo $this->render_reset_button();
 

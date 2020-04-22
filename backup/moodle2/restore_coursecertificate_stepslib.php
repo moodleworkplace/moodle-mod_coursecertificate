@@ -31,7 +31,6 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 class restore_coursecertificate_activity_structure_step extends restore_activity_structure_step {
 
     /**
@@ -41,7 +40,6 @@ class restore_coursecertificate_activity_structure_step extends restore_activity
      */
     protected function define_structure(): array {
         $paths = [];
-        $userinfo = $this->get_setting_value('userinfo');
         $paths[] = new restore_path_element('coursecertificate', '/activity/coursecertificate');
         return $this->prepare_activity_structure($paths);
     }

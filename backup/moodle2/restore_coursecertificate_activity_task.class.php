@@ -48,7 +48,10 @@ class restore_coursecertificate_activity_task extends restore_activity_task {
      * @return base_step.
      */
     protected function define_my_steps(): void {
-        $this->add_step(new restore_coursecertificate_activity_structure_step('coursecertificate_structure', 'coursecertificate.xml'));
+        $this->add_step(new restore_coursecertificate_activity_structure_step(
+            'coursecertificate_structure',
+            'coursecertificate.xml')
+        );
     }
 
     /**

@@ -37,12 +37,12 @@ defined('MOODLE_INTERNAL') || die();
  */
 class renderer extends plugin_renderer_base {
     /**
-    * Render the view page.
-    *
-    * @param \mod_coursecertificate\output\view_page $page
-    *
-    * @return bool|string
-    */
+     * Render the view page.
+     *
+     * @param \mod_coursecertificate\output\view_page $page
+     *
+     * @return bool|string
+     */
     protected function render_view_page(\mod_coursecertificate\output\view_page $page) {
         $context = $page->export_for_template($this);
         return $this->render_from_template('mod_coursecertificate/view_page', $context);

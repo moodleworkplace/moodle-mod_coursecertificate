@@ -31,7 +31,6 @@ use mod_coursecertificate\permission;
 use moodle_url;
 use templatable;
 use renderable;
-use tool_certificate\template;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -42,7 +41,6 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 class view_page implements templatable, renderable {
 
     /** @var \stdClass $certificate */
@@ -71,20 +69,19 @@ class view_page implements templatable, renderable {
 
     /**
      * Constructor.
+     * @param $id
+     * @param $page
+     * @param $perpage
+     * @param $course
+     * @param $cm
      */
-    public function __construct() {
+    public function __construct($id, $page, $perpage, $course, $cm) {
         global $DB, $PAGE, $USER;
 
-        $id = required_param('id', PARAM_INT);
-        $page = optional_param('page', 0, PARAM_INT);
-        $perpage = optional_param('perpage', 10, PARAM_INT);
-
+        $this->perpage = $perpage;
+        $this->cm = $cm;
         $this->pageurl = new moodle_url('/mod/coursecertificate/view.php', ['id' => $id,
             'page' => $page, 'perpage' => $perpage]);
-        $this->perpage = $perpage;
-        [$course, $this->cm] = get_course_and_cm_from_cmid($id, 'coursecertificate');
-
-        require_login($course, true, $this->cm);
 
         $context = context_module::instance($this->cm->id);
         $this->certificate = $DB->get_record('coursecertificate', ['id' => $this->cm->instance], '*', MUST_EXIST);
@@ -110,10 +107,12 @@ class view_page implements templatable, renderable {
             groups_get_activity_group($this->cm, true);
         }
 
-        // View certificate issue if user can not manage and can receive issues
+        // View certificate issue if user can not manage and can receive issues.
         if (!$this->canmanage && $this->canreceiveissues) {
             // Course certificate template must exist.
-            if ($templaterecord = $DB->get_record('tool_certificate_templates', ['id' => $this->certificate->template], '*', MUST_EXIST)) {
+            $params = ['id' => $this->certificate->template];
+            $templaterecord = $DB->get_record('tool_certificate_templates', $params, '*', MUST_EXIST);
+            if ($templaterecord) {
                 $issuesqlconditions = [
                     'userid' => $USER->id,
                     'templateid' => $templaterecord->id,
@@ -131,7 +130,7 @@ class view_page implements templatable, renderable {
                     );
                 }
                 // Redirect to view issue page.
-                if ($issue = $DB->get_record('tool_certificate_issues', $issuesqlconditions,'*', MUST_EXIST)) {
+                if ($issue = $DB->get_record('tool_certificate_issues', $issuesqlconditions, '*', MUST_EXIST)) {
                     $showissueurl = new \moodle_url('/admin/tool/certificate/view.php',
                         ['code' => $issue->code]);
                     redirect($showissueurl);
@@ -163,8 +162,6 @@ class view_page implements templatable, renderable {
      * @return \stdClass|array
      */
     public function export_for_template(\renderer_base $output) {
-        global $DB;
-
         $data = [];
         $data['certificateid'] = $this->certificate->id;
         $data['certificatename'] = $this->certificate->name;

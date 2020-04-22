@@ -24,7 +24,15 @@
 
 require(__DIR__.'/../../config.php');
 
-$outputpage = new \mod_coursecertificate\output\view_page();
+$id = required_param('id', PARAM_INT);
+$page = optional_param('page', 0, PARAM_INT);
+$perpage = optional_param('perpage', 10, PARAM_INT);
+
+[$course, $cm] = get_course_and_cm_from_cmid($id, 'coursecertificate');
+
+require_course_login($course, true, $cm);
+
+$outputpage = new \mod_coursecertificate\output\view_page($id, $page, $perpage, $course, $cm);
 $output = $PAGE->get_renderer('coursecertificate');
 
 echo $output->header();

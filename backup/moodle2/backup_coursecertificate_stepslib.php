@@ -40,8 +40,6 @@ class backup_coursecertificate_activity_structure_step extends backup_activity_s
      * @return backup_nested_element The structure wrapped by the common 'activity' element.
      */
     protected function define_structure() {
-        $userinfo = $this->get_setting_value('userinfo');
-
         // Replace with the attributes and final elements that the element will handle.
         $attributes = ['id'];
         $finalelements = ['name', 'timecreated', 'timemodified', 'intro',
