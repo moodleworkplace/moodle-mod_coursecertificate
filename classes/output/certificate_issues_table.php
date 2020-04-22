@@ -29,6 +29,7 @@ use context_course;
 use context_module;
 use context_system;
 use mod_coursecertificate\permission;
+use tool_certificate\template;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -96,8 +97,8 @@ class certificate_issues_table extends \table_sql {
         $this->groupmode = $groupmode;
 
         $this->canverify = permission::can_verify_issues();
-        $this->canrevoke = permission::can_revoke_issues($this->certificate->template);
-        $this->canviewall = permission::can_view_templates($this->certificate->course);
+        $this->canrevoke = permission::can_revoke_issues($this->certificate->course);
+        $this->canviewall = permission::can_view_all_issues($this->certificate->course);
 
         $extrafields = get_extra_user_fields($context);
         $columnsheaders = ['fullname' => get_string('fullname')];
@@ -211,8 +212,7 @@ class certificate_issues_table extends \table_sql {
         $actions = '';
         if ($this->canviewall) {
             $previewicon = new \pix_icon('i/search', get_string('view'));
-            $previewlink = new \moodle_url('/admin/tool/certificate/view.php',
-                ['code' => $certificateissue->code]);
+            $previewlink = template::view_url($certificateissue->code);
             $previewattributes = [
                 'class' => 'action-icon delete-icon',
                 'data-action' => 'preview-issue',

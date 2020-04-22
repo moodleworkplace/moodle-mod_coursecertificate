@@ -72,29 +72,39 @@ class permission {
     /**
      * If a user can revoke.
      *
-     * @param int $templateid
+     * @param int $courseid
      * @return bool
      */
-    public static function can_revoke_issues(int $templateid): bool {
+    public static function can_revoke_issues(int $courseid): bool {
+        global $DB;
+
         if (!class_exists('\\tool_certificate\\permission')) {
             throw new \coding_exception('\\tool_certificate\\permission class does not exists');
         }
-        $template = \tool_certificate\template::instance($templateid);
-        return $template && $template->can_issue_to_anybody();
+        if (!$DB->record_exists('course', ['id' => $courseid])) {
+            // Invalid course.
+            return false;
+        }
+        return \tool_certificate\permission::can_issue_to_anybody(context_course::instance($courseid));
     }
 
     /**
-     * If a user can view templates in course.
+     * If a user can preview issues.
      *
      * @param int $courseid
      * @return bool
      */
-    public static function can_view_templates(int $courseid): bool {
+    public static function can_view_all_issues(int $courseid): bool {
+        global $DB;
+
         if (!class_exists('\\tool_certificate\\permission')) {
             throw new \coding_exception('\\tool_certificate\\permission class does not exists');
         }
-        $context = context_course::instance($courseid);
-        return \tool_certificate\permission::can_view_templates_in_context($context);
+        if (!$DB->record_exists('course', ['id' => $courseid])) {
+            // Invalid course.
+            return false;
+        }
+        return \tool_certificate\permission::can_view_all_certificates(context_course::instance($courseid));
     }
 
     /**
@@ -105,18 +115,5 @@ class permission {
      */
     public static function can_receive_issues(\context $context): bool {
         return has_capability('tool/certificate:receiveissue', $context);
-    }
-
-    /**
-     * Require user can receive issues.
-     *
-     * @param \context $context
-     * @return bool
-     */
-    public static function require_can_receive_issues(\context $context): void {
-        if (!self::can_receive_issues($context)) {
-            throw new \required_capability_exception($context,
-                'tool/certificate:receiveissue', 'nopermissions', 'error');
-        }
     }
 }
