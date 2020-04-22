@@ -24,6 +24,7 @@
 
 namespace mod_coursecertificate\output;
 
+use cm_info;
 use context_course;
 use context_module;
 use context_system;
@@ -82,10 +83,10 @@ class certificate_issues_table extends \table_sql {
      * Sets up the table.
      *
      * @param \stdClass $certificate
-     * @param \stdClass $cm the course module
-     * @param $groupmode
+     * @param cm_info $cm the course module
+     * @param int $groupmode
      */
-    public function __construct($certificate, $cm, $groupmode) {
+    public function __construct(\stdClass $certificate, cm_info $cm, int $groupmode) {
         parent::__construct('mod-coursecertificate-issues-' . $cm->instance);
 
         $context = \context_module::instance($cm->id);
@@ -178,11 +179,11 @@ class certificate_issues_table extends \table_sql {
      * @return string
      */
     public function col_status($certificateissue) {
-     $expired = ($certificateissue->expires > 0) && ($certificateissue->expires <= time());
-     $expiredstr = get_string('expired', 'tool_certificate');
-     $validstr = get_string('valid', 'tool_certificate');
+        $expired = ($certificateissue->expires > 0) && ($certificateissue->expires <= time());
+        $expiredstr = get_string('expired', 'tool_certificate');
+        $validstr = get_string('valid', 'tool_certificate');
 
-     return $expired ? $expiredstr : $validstr;
+        return $expired ? $expiredstr : $validstr;
     }
 
     /**
@@ -273,7 +274,12 @@ class certificate_issues_table extends \table_sql {
      */
     public function download() {
         \core\session\manager::write_close();
-        $total = \tool_certificate\certificate::count_issues_for_course($this->certificate->template, $this->certificate->course, $this->groupmode, $this->cm);
+        $total = \tool_certificate\certificate::count_issues_for_course(
+            $this->certificate->template,
+            $this->certificate->course,
+            $this->groupmode,
+            $this->cm
+        );
         $this->out($total, false);
         exit;
     }

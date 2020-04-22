@@ -69,13 +69,14 @@ class view_page implements templatable, renderable {
 
     /**
      * Constructor.
-     * @param $id
-     * @param $page
-     * @param $perpage
-     * @param $course
-     * @param $cm
+     *
+     * @param int $id
+     * @param int $page
+     * @param int $perpage
+     * @param \stdClass $course
+     * @param cm_info $cm
      */
-    public function __construct($id, $page, $perpage, $course, $cm) {
+    public function __construct(int $id, int $page, int $perpage, \stdClass $course, cm_info $cm) {
         global $DB, $PAGE, $USER;
 
         $this->perpage = $perpage;
