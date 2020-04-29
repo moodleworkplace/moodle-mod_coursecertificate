@@ -1,4 +1,4 @@
-@mod @mod_coursecertificate @javascript
+@mod @mod_coursecertificate @javascript @testing
 Feature: Basic functionality of course certificate module
   In order to issue certificates in a course
   As a teacher
@@ -39,7 +39,9 @@ Feature: Basic functionality of course certificate module
       | Name     | Your awesome certificate     |
       | Template | Certificate of participation |
     And I follow "Your awesome certificate"
-    # TODO assert something here
+    And I should see "Your awesome certificate"
+    And I should see "Automatic send is disabled"
+    And I should see "No users are certified."
     And I log out
 
   Scenario: Manager can create an instance of course certificate module with hidden templates
@@ -49,5 +51,11 @@ Feature: Basic functionality of course certificate module
       | Name     | Your awesome certificate  |
       | Template | Certificate of completion |
     And I follow "Your awesome certificate"
-    # TODO assert something here
+    And I should see "Your awesome certificate"
+    And I should see "Automatic send is disabled"
+    And I should see "No users are certified."
     And I log out
+
+  Scenario: Teacher can not change course certificate template if it has been issued
+
+  Scenario: Teacher can only select templates in course category or parent contexts

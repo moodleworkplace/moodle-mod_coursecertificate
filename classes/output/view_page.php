@@ -105,7 +105,7 @@ class view_page implements templatable, renderable {
 
         // Get the current groups mode.
         if ($groupmode = groups_get_activity_groupmode($this->cm)) {
-            groups_get_activity_group($this->cm, true);
+            $groupid = groups_get_activity_group($this->cm, true);
         }
 
         // View certificate issue if user can not manage and can receive issues.
@@ -141,7 +141,7 @@ class view_page implements templatable, renderable {
 
         // Show issues table.
         if ($this->canviewreport) {
-            $this->table = new certificate_issues_table($this->certificate, $this->cm, $groupmode);
+            $this->table = new certificate_issues_table($this->certificate, $this->cm, $groupmode, $groupid ?? null);
             $this->table->define_baseurl($this->pageurl);
 
             if ($this->table->is_downloading()) {
