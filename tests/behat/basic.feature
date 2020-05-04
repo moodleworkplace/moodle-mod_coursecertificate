@@ -1,4 +1,4 @@
-@mod @mod_coursecertificate @javascript @testing
+@mod @mod_coursecertificate @javascript
 Feature: Basic functionality of course certificate module
   In order to issue certificates in a course
   As a teacher
@@ -57,5 +57,7 @@ Feature: Basic functionality of course certificate module
     And I log out
 
   Scenario: Teacher can not change course certificate template if it has been issued
+  # TODO.
 
   Scenario: Teacher can only select templates in course category or parent contexts
+  # TODO.
