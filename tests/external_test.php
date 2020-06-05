@@ -23,6 +23,8 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_coursecertificate\external;
+
 defined('MOODLE_INTERNAL') || die;
 
 /**
@@ -35,11 +37,74 @@ defined('MOODLE_INTERNAL') || die;
  */
 class mod_coursecertificate_external_test_testcase extends advanced_testcase
 {
+    /**
+     * Set up
+     */
+    public function setUp() {
+        $this->resetAfterTest();
+    }
 
     /**
-     * Test update automaticsend.
+     * Get certificate generator
+     * @return tool_certificate_generator
+     */
+    protected function get_certificate_generator() : tool_certificate_generator {
+        return $this->getDataGenerator()->get_plugin_generator('tool_certificate');
+    }
+
+    /**
+     * Test update automaticsend as editingteacher.
      */
     public function test_update_automaticsend() {
-        // TODO.
+        global $DB;
+
+        // Create course and user enrolled as 'editingteacher'.
+        $course = $this->getDataGenerator()->create_course();
+        $user = $this->getDataGenerator()->create_and_enrol($course, 'editingteacher');
+        $this->setUser($user->id);
+
+        // Create certificate template.
+        $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
+
+        // Create coursecertificate module.
+        $mod = $this->getDataGenerator()->create_module('coursecertificate',
+            ['course' => $course->id, 'template' => $certificate1->get_id()]);
+
+        // Sanity check.
+        $this->assertTrue($DB->record_exists('coursecertificate', ['course' => $course->id, 'id' => $mod->id]));
+        $this->assertEquals(0, $mod->automaticsend);
+
+        // Update automaticsend.
+        external::update_automaticsend($mod->id, true);
+        $this->assertEquals(1, $DB->get_field('coursecertificate', 'automaticsend', ['id' => $mod->id]));
+    }
+
+    /**
+     * Test update automaticsend as teacher (no capabilities).
+     */
+    public function test_update_automaticsend_without_capabilities() {
+        global $DB;
+
+        // Create course and user enrolled as 'teacher'.
+        $course = $this->getDataGenerator()->create_course();
+        $user = $this->getDataGenerator()->create_and_enrol($course, 'teacher');
+        $this->setUser($user->id);
+
+        // Create certificate template.
+        $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
+
+        // Create coursecertificate module.
+        $mod = $this->getDataGenerator()->create_module('coursecertificate',
+            ['course' => $course->id, 'template' => $certificate1->get_id()]);
+
+        // Sanity check.
+        $this->assertTrue($DB->record_exists('coursecertificate', ['course' => $course->id, 'id' => $mod->id]));
+        $this->assertEquals(0, $mod->automaticsend);
+
+        // Try to create an existing issue file.
+        $result = external::update_automaticsend($mod->id, true);
+        $result = external::clean_returnvalue(external::update_automaticsend_returns(), $result);
+        $this->assertFalse($result);
+        $this->assertEquals(0, $DB->get_field('coursecertificate', 'automaticsend', ['id' => $mod->id]));
     }
 }

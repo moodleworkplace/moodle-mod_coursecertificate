@@ -34,7 +34,71 @@ defined('MOODLE_INTERNAL') || die;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_coursecertificate_task_test_testcase extends advanced_testcase {
-    public function test_issue_certificates_task() {
-        // TODO.
+    /**
+     * Set up
+     */
+    public function setUp() {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+    }
+
+    /**
+     * Get certificate generator
+     * @return tool_certificate_generator
+     */
+    protected function get_certificate_generator() : tool_certificate_generator {
+        return $this->getDataGenerator()->get_plugin_generator('tool_certificate');
+    }
+
+    public function test_issue_certificates_task_automaticsend_enabled() {
+        global $DB;
+
+        // Create course, certificate tempalte and coursecertificate module.
+        $course = $this->getDataGenerator()->create_course();
+        $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
+        $mod = $this->getDataGenerator()->create_module('coursecertificate',
+            ['course' => $course->id, 'template' => $certificate1->get_id()]);
+        $this->assertTrue($DB->record_exists('coursecertificate', ['course' => $course->id, 'id' => $mod->id]));
+
+        // Create user with 'student' role.
+        $user1 = $this->getDataGenerator()->create_and_enrol($course);
+
+        $mod->automaticsend = 1;
+        $DB->update_record('coursecertificate', $mod);
+
+        $task = new mod_coursecertificate\task\issue_certificates_task();
+        $task->execute();
+
+        $issues = $DB->get_records('tool_certificate_issues', ['templateid' => $certificate1->get_id(),
+            'courseid' => $course->id]);
+
+        // Check certificate issue was created for the user.
+        $this->assertEquals($user1->id, reset($issues)->userid);
+    }
+
+    public function test_issue_certificates_task_automaticsend_disabled() {
+        global $DB;
+
+        // Create course, certificate tempalte and coursecertificate module.
+        $course = $this->getDataGenerator()->create_course();
+        $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
+        $mod = $this->getDataGenerator()->create_module('coursecertificate',
+            ['course' => $course->id, 'template' => $certificate1->get_id()]);
+
+        // Create user with 'student' role.
+        $user1 = $this->getDataGenerator()->create_and_enrol($course);
+
+        // Sanity check.
+        $this->assertTrue($DB->record_exists('coursecertificate', ['course' => $course->id, 'id' => $mod->id]));
+        $this->assertEquals(0, $mod->automaticsend);
+
+        // Run the task.
+        $task = new mod_coursecertificate\task\issue_certificates_task();
+        $task->execute();
+
+        // Check no issues were created.
+        $issues = $DB->get_records('tool_certificate_issues', ['templateid' => $certificate1->get_id(),
+            'courseid' => $course->id]);
+        $this->assertEmpty($issues);
     }
 }

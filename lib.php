@@ -39,7 +39,6 @@ defined('MOODLE_INTERNAL') || die();
  * @return mixed True if module supports feature, false if not, null if doesn't know
  */
 function coursecertificate_supports(string $feature): ?bool {
-    // TODO: Check supports needed.
     switch($feature) {
         case FEATURE_GROUPS:
             return true;

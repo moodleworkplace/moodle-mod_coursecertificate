@@ -169,13 +169,12 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
             return [];
         }
         list($sql, $params) = $DB->get_in_or_equal($visiblecatctxs, SQL_PARAMS_NAMED);
-        $query = "SELECT * FROM {tool_certificate_templates} WHERE contextid " . $sql;
+        $query = "SELECT * FROM {tool_certificate_templates} WHERE shared = 1 AND contextid " . $sql;
         $records = $DB->get_records_sql($query, $params);
         $templates = [];
         if (!empty($records)) {
             foreach ($records as $record) {
-                $templates[$record->id] = format_string($record->name, true, ['context' => \context_system::instance(),
-                    'escape' => false]);;
+                $templates[$record->id] = format_string($record->name);;
             }
         }
         return $templates;
