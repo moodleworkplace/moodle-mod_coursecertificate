@@ -73,7 +73,6 @@ define([
      * @param {Element} automaticsendregion
      */
     function toggleAutomaticSend(automaticsendregion) {
-        M.util.js_pending('mod_coursecertificate_toggle_automaticsend');
         const {certificateid, automaticsend} = automaticsendregion.querySelector(SELECTORS.TOGGLEAUTOMATICSEND).dataset;
         const newstatus = automaticsend === '0';
         const strings = newstatus
@@ -89,6 +88,7 @@ define([
         Str.get_strings(strings).then((s) => {
             // Show confirm notification.
             Notification.confirm(s[0], s[1], s[2], s[3], () => {
+                M.util.js_pending('mod_coursecertificate_toggle_automaticsend');
                 // Show loading template.
                 displayLoading(automaticsendregion, true);
                 // Call to webservice.
@@ -116,7 +116,6 @@ define([
      * @param {int} issueid
      */
     function revokeIssue(issueid) {
-        M.util.js_pending('mod_coursecertificate_revoke_issue');
         const strings = [{'key': 'confirmation', component: 'admin'},
             {'key': 'revokeissue', component: 'coursecertificate'},
             {'key': 'confirm'},
@@ -124,6 +123,7 @@ define([
         Str.get_strings(strings).then((s) => {
             // Show confirm notification.
             Notification.confirm(s[0], s[1], s[2], s[3], () => {
+                M.util.js_pending('mod_coursecertificate_revoke_issue');
                 // Call to webservice to revoke issue.
                 Ajax.call([{methodname: SERVICES.REVOKEISSUE, args: {id: issueid}}])[0]
                 // Call to webservice to get updated table.
