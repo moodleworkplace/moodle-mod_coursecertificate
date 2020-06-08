@@ -86,7 +86,7 @@ class mod_coursecertificate_task_test_testcase extends advanced_testcase {
             ['course' => $course->id, 'template' => $certificate1->get_id()]);
 
         // Create user with 'student' role.
-        $user1 = $this->getDataGenerator()->create_and_enrol($course);
+        $this->getDataGenerator()->create_and_enrol($course);
 
         // Sanity check.
         $this->assertTrue($DB->record_exists('coursecertificate', ['course' => $course->id, 'id' => $mod->id]));

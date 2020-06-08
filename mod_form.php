@@ -165,14 +165,8 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
             throw new \coding_exception('\\tool_certificate\\permission class does not exists');
         }
         $context = context_course::instance($this->current->course);
-        if (!$visiblecatctxs = tool_certificate\permission::get_visible_categories_contexts(false, $context)) {
-            return [];
-        }
-        list($sql, $params) = $DB->get_in_or_equal($visiblecatctxs, SQL_PARAMS_NAMED);
-        $query = "SELECT * FROM {tool_certificate_templates} WHERE shared = 1 AND contextid " . $sql;
-        $records = $DB->get_records_sql($query, $params);
         $templates = [];
-        if (!empty($records)) {
+        if (!empty($records = \tool_certificate\permission::get_visible_templates($context))) {
             foreach ($records as $record) {
                 $templates[$record->id] = format_string($record->name);;
             }
