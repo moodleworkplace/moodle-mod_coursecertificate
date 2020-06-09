@@ -51,6 +51,19 @@ class mod_coursecertificate_generator extends testing_module_generator {
     }
 
     /**
+     * Looks up template id from it's name or id
+     *
+     * @param string $nameorid
+     * @return int
+     */
+    protected function get_template_id(string $nameorid): int {
+        /** @var tool_certificate_generator $certificategenerator */
+        $certificategenerator = behat_util::get_data_generator()->get_plugin_generator('tool_certificate');
+        return $certificategenerator->lookup_template($nameorid);
+    }
+
+
+    /**
      * Creates an instance of the module for testing purposes.
      *
      * Module type will be taken from the class name. Each module type may overwrite
@@ -68,6 +81,7 @@ class mod_coursecertificate_generator extends testing_module_generator {
         if (empty($record['template'])) {
             throw new coding_exception('Certificate template is required to create an instance of mod_coursecertificate');
         }
+        $record['template'] = $this->get_template_id($record['template']);
 
         $defaultsettings = [
             'automaticsend' => 0,
