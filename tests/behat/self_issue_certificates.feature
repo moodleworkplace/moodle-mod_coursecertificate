@@ -31,5 +31,6 @@ Feature: Self issue certificate for coursecertificate template
       | name                         | shared  |
       | Certificate of participation | 1       |
       | Certificate of completion    | 0       |
+
   Scenario: Get certificate having the activity requirements
   # TODO.

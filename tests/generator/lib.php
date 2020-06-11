@@ -58,7 +58,7 @@ class mod_coursecertificate_generator extends testing_module_generator {
      */
     protected function get_template_id(string $nameorid): int {
         /** @var tool_certificate_generator $certificategenerator */
-        $certificategenerator = behat_util::get_data_generator()->get_plugin_generator('tool_certificate');
+        $certificategenerator = \testing_util::get_data_generator()->get_plugin_generator('tool_certificate');
         return $certificategenerator->lookup_template($nameorid);
     }
 
