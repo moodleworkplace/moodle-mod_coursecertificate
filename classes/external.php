@@ -69,11 +69,10 @@ class external extends \external_api {
         if (permission::can_manage($context)) {
             $certificate->automaticsend = $params['automaticsend'];
             if ($DB->update_record('coursecertificate', $certificate)) {
-                // TODO: Event module updated.
+                \core\event\course_module_updated::create_from_cm($cm, $context)->trigger();
                 return true;
             }
         }
-
         return false;
     }
 
