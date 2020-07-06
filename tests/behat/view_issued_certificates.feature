@@ -88,9 +88,9 @@ Feature: View the certificates that have been issued
     And I set the field "Separate groups" to "Group 1"
     And I should not see "student3@example.com"
     And I set the field "Separate groups" to "All participants"
+    And I should see "student3@example.com"
     And I click on "Surname" "link" in the "generaltable" "table"
     And I should not see "student9@example.com"
-    And I should see "student11@example.com"
     And I click on "2" "link" in the ".pagination" "css_element"
     And I should see "student9@example.com"
 
