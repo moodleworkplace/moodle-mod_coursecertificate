@@ -80,7 +80,7 @@ Feature: View the certificates that have been issued
       | activity          | name        | intro             | course | idnumber           | template    | groupmode  |
       | coursecertificate | Certificate | Certificate intro | C1     | coursecertificate1 | Template 01 | 1          |
 
-  Scenario: View the issued certificates
+  Scenario: View the issued certificates list
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "Certificate"
@@ -94,7 +94,7 @@ Feature: View the certificates that have been issued
     And I click on "2" "link" in the ".pagination" "css_element"
     And I should see "student9@example.com"
 
-  Scenario: Preview issued certificates
+  Scenario: View issued certificates
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "Certificate"
@@ -104,13 +104,13 @@ Feature: View the certificates that have been issued
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "Certificate"
-    And I should see "student1@example.com"
-    And I click on "Revoke" "link" in the "student1@example.com" "table_row"
+    And I should see "student9@example.com"
+    And I click on "Revoke" "link" in the "student9@example.com" "table_row"
     And I press "Confirm"
-    And I should not see "student1@example.com"
+    And I should not see "student9@example.com"
 
   Scenario: Verify issued certificates
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "Certificate"
-    And I click on "Verify" "link" in the "student1@example.com" "table_row"
+    And I click on "Verify" "link" in the "student9@example.com" "table_row"
