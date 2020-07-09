@@ -66,35 +66,39 @@ class restore_coursecertificate_activity_structure_step extends restore_activity
     }
 
     /**
-     * Handles restoring a tool certificate issue.
+     * Handles restoring a tool_certificate issue.
      *
-     * @param stdClass $data the tool certificate data
+     * @param stdClass $data Parsed element data.
      */
     protected function process_tool_certificate_issue($data) {
         global $DB;
 
-        $data = (object) $data;
-        $oldid = $data->id;
-
-        $data->courseid = $this->get_courseid();
-        if (!class_exists('\\tool_certificate\\certificate')) {
-            throw new \coding_exception('\\tool_certificate\\certificate class does not exists');
-        }
-        $data->code = \tool_certificate\certificate::generate_code();
-        $data->timecreated = $this->apply_date_offset($data->timecreated);
-
         if (!$DB->get_manager()->table_exists('tool_certificate_issues')) {
             throw new \dml_exception('tool_certificate_issues table does not exists');
         }
-        $newitemid = $DB->insert_record('tool_certificate_issues', $data);
-        $this->set_mapping('tool_certificate_issue', $oldid, $newitemid);
+        if (!$DB->get_manager()->table_exists('tool_certificate_templates')) {
+            throw new \dml_exception('tool_certificate_templates table does not exists');
+        }
+        $data = (object) $data;
+
+        $codefound = $DB->record_exists('tool_certificate_issues', ['code' => $data->code]);
+        $templatefound = $DB->record_exists('tool_certificate_templates', ['id' => $data->templateid]);
+
+        // TODO WP-1997 For now, we only restore issues if is same site, template exists and same issue code does not exist.
+        if ($this->task->is_samesite() && $templatefound && !$codefound) {
+            $oldid = $data->id;
+            $data->courseid = $this->get_courseid();
+            $data->userid = $this->get_mappingid('user', $data->userid);
+            $newitemid = $DB->insert_record('tool_certificate_issues', $data);
+            $this->set_mapping('tool_certificate_issue', $oldid, $newitemid, true, $this->task->get_old_system_contextid());
+        }
     }
 
     /**
      * Defines post-execution actions.
      */
     protected function after_execute(): void {
-        // Add related files, no need to match by itemname (just internally handled context).
         $this->add_related_files('mod_coursecertificate', 'intro', null);
+        $this->add_related_files('tool_certificate', 'issues', 'tool_certificate_issue', $this->task->get_old_system_contextid());
     }
 }
