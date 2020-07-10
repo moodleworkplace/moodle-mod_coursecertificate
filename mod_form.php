@@ -65,7 +65,6 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         $templates = $this->get_template_select();
         $templateoptions = ['' => get_string('chooseatemplate', 'coursecertificate')] + $templates;
         $mform->addElement('select', 'template', get_string('template', 'coursecertificate'), $templateoptions);
-        $mform->addHelpButton('template', 'template', 'mod_coursecertificate');
 
         if (empty($templates)) {
             // Adding warning text if there are not templates available.
@@ -106,7 +105,6 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         $mform->addGroup($group, 'expirydategroup', $expirydatestr, ' ', false);
         $mform->hideIf('expires', 'expirydatetype', 'noteq', 1);
         $mform->disabledIf('expires', 'expirydatetype', 'noteq', 1);
-        $mform->addHelpButton('expirydategroup', 'expirydate', 'coursecertificate');
 
         // Add standard elements.
         $this->standard_coursemodule_elements();

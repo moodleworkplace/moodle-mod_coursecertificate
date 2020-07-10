@@ -25,8 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['automaticsenddisabled'] = 'Automatic send is disabled';
-$string['automaticsendenabled'] = 'Automatic send is enabled';
+$string['automaticsenddisabled'] = 'The automatic sending of this certificate is disabled.';
+$string['automaticsendenabled'] = 'The automatic sending of this certificate is enabled.';
 $string['certificateissues'] = 'Certificate issues';
 $string['certifiedusers'] = 'Certified users';
 $string['chooseatemplate'] = 'Choose a template...';
@@ -38,15 +38,21 @@ $string['coursecertificate:viewreport'] = 'View Course certificate issues report
 $string['coursecertificatefieldset'] = 'Course certificate Settings';
 $string['coursecertificatename'] = 'Certificate';
 $string['coursecertificatesettings'] = 'Settings';
-$string['disableautomaticsend'] = 'Disable automatic send'; // TODO.
+$string['disableautomaticsend'] = 'Users will no longer receive a PDF copy of the certificate in their inboxes as soon as they have
+ access to this activity, although they still will be able to download it manually.';
 $string['emailteachers'] = 'Send notification and PDF to teachers by email';
-$string['enableautomaticsend'] = 'By activating the automatic send, all users that match the requirements will receive their certifications on their inboxes';
+$string['enableautomaticsend'] = 'All users will receive a PDF copy of the certificate in their inboxes as soon as they have access 
+to this activity. This also includes users that already have access to this activity but didn\'t do so yet. <br>Users who accessed 
+this activity in the past will be ignored.';
 $string['expirydate'] = 'Expiry date';
-$string['expirydate_help'] = 'Expiry date help'; // TODO.
 $string['includepdf'] = 'Include PDF on the email notification sent to users';
 $string['issueddate'] = 'Date issued';
 $string['modulename'] = 'Course certificate';
-$string['modulename_help'] = 'Course certificate help.'; // TODO.
+$string['modulename_help'] = 'The course certificate module provides an opportunity for learners to celebrate achievements by 
+obtaining certificates.<br><br> It allows you to choose from different certificate templates which will automatically display user data 
+such as full name, course, etc. <br><br> Users will be able to download a PDF copy of the certificate themselves by accessing this 
+activity, and there are options to send a PDF copy to them by email automatically.<br><br>If the template used on this activity contains
+ a QR code, users will be able to scan it to validate their certificates.';
 $string['modulename_link'] = 'mod/certificate/view';
 $string['modulenameplural'] = 'Course certificate activities';
 $string['notemplateswarning'] = 'There are no available templates. Please contact the site administrator.';
@@ -59,12 +65,11 @@ $string['privacy:metadata'] = 'The course certificate activity does not store pe
 $string['receivecertificate'] = 'Receive certificate';
 $string['receivecertificatenotification'] = 'Receive certificate?';
 $string['revoke'] = 'Revoke';
-$string['revokeissue'] = 'Revoke issue?'; // TODO.
+$string['revokeissue'] = 'Are you sure you want to revoke this certificate issue from this user?';
 $string['selectdate'] = 'Select date';
 $string['selecttemplatewarning'] = 'Once this activity issues at least one certificate, this field will be locked and will no longer be editable.';
 $string['status'] = 'Status';
 $string['taskissuecertificates'] = 'Issue course certificates';
 $string['template'] = 'Template';
-$string['template_help'] = 'Template help'; // TODO.
 $string['userscanpreview'] = 'Users can preview the certificate';
 $string['whenavailable'] = 'When available';
