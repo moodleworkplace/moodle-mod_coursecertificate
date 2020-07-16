@@ -80,7 +80,7 @@ class issue_certificates_task extends \core\task\scheduled_task {
             );
             // Get active users in course context with receiveissue capability.
             $context = \context_course::instance($coursecertificate->course);
-            $potentialusers = get_enrolled_users($context, 'tool/certificate:receiveissue', 0, 'u.*', null,
+            $potentialusers = get_enrolled_users($context, 'mod/coursecertificate:receive', 0, 'u.*', null,
                 0, 0, true);
             // Filter only users with access to the activity (Does not filter mod visibility).
             $info = new \core_availability\info_module($cm);

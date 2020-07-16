@@ -255,7 +255,6 @@ class certificate_issues_table extends \table_sql {
             $this->certificate->course,
             $this->groupmode,
             $this->groupid,
-            $this->cm
         );
         $this->pagesize($pagesize, $total);
 
@@ -264,7 +263,6 @@ class certificate_issues_table extends \table_sql {
             $this->certificate->course,
             $this->groupmode,
             $this->groupid,
-            $this->cm,
             $this->get_page_start(),
             $this->get_page_size(),
             $this->get_sql_sort()

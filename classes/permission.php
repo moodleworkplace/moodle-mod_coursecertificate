@@ -114,6 +114,6 @@ class permission {
      * @return bool
      */
     public static function can_receive_issues(\context $context): bool {
-        return has_capability('tool/certificate:receiveissue', $context);
+        return has_capability('mod/coursecertificate:receive', $context);
     }
 }

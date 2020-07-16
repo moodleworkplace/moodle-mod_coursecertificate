@@ -33,6 +33,7 @@ $string['chooseatemplate'] = 'Choose a template...';
 $string['code'] = 'Code';
 $string['coursecertificate:addinstance'] = 'Add a new Course certificate activity';
 $string['coursecertificate:manage'] = 'Manage a Course certificate activity';
+$string['coursecertificate:receive'] = 'Receive issued certificates';
 $string['coursecertificate:view'] = 'View Course certificate';
 $string['coursecertificate:viewreport'] = 'View Course certificate issues report';
 $string['coursecertificatefieldset'] = 'Course certificate Settings';

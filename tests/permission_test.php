@@ -119,9 +119,6 @@ class mod_coursecertificate_permission_test_testcase extends advanced_testcase {
         $this->getDataGenerator()->enrol_user($user->id, $course->id, 'teacher');
         $this->assertTrue(has_capability('tool/certificate:issue', context_course::instance($course->id)));
         $this->assertTrue(\mod_coursecertificate\permission::can_revoke_issues($course->id));
-
-        delete_course($course);
-        $this->assertFalse(\mod_coursecertificate\permission::can_revoke_issues($course->id));
     }
 
     /**
@@ -145,9 +142,6 @@ class mod_coursecertificate_permission_test_testcase extends advanced_testcase {
         $this->getDataGenerator()->enrol_user($user->id, $course->id, 'teacher');
         $this->assertTrue(has_capability('tool/certificate:viewallcertificates', context_course::instance($course->id)));
         $this->assertTrue(\mod_coursecertificate\permission::can_view_all_issues($course->id));
-
-        delete_course($course);
-        $this->assertFalse(\mod_coursecertificate\permission::can_view_all_issues($course->id));
     }
 
     /**
@@ -158,17 +152,17 @@ class mod_coursecertificate_permission_test_testcase extends advanced_testcase {
         $user = $this->getDataGenerator()->create_user();
         $this->setUser($user);
 
-        $this->assertFalse(has_capability('tool/certificate:receiveissue', context_course::instance($course->id)));
+        $this->assertFalse(has_capability('mod/coursecertificate:receive', context_course::instance($course->id)));
         $this->assertFalse(\mod_coursecertificate\permission::can_receive_issues(context_course::instance($course->id)));
 
         // Enrol user as editingteacher (without receive issue capabilities).
         $this->getDataGenerator()->enrol_user($user->id, $course->id, 'editingteacher');
-        $this->assertFalse(has_capability('tool/certificate:receiveissue', context_course::instance($course->id)));
+        $this->assertFalse(has_capability('mod/coursecertificate:receive', context_course::instance($course->id)));
         $this->assertFalse(\mod_coursecertificate\permission::can_receive_issues(context_course::instance($course->id)));
 
         // Enrol user as student (with receive issue capabilities).
         $this->getDataGenerator()->enrol_user($user->id, $course->id, 'student');
-        $this->assertTrue(has_capability('tool/certificate:receiveissue', context_course::instance($course->id)));
+        $this->assertTrue(has_capability('mod/coursecertificate:receive', context_course::instance($course->id)));
         $this->assertTrue(\mod_coursecertificate\permission::can_receive_issues(context_course::instance($course->id)));
     }
 }
