@@ -103,8 +103,8 @@ class view_page implements templatable, renderable {
         $completion = new completion_info($course);
         $completion->set_module_viewed($this->cm);
 
-        // Get the current groups mode.
-        if ($groupmode = groups_get_activity_groupmode($this->cm)) {
+        // Get the current group.
+        if (groups_get_activity_groupmode($this->cm)) {
             $groupid = groups_get_activity_group($this->cm, true);
         }
 
@@ -141,7 +141,7 @@ class view_page implements templatable, renderable {
 
         // Show issues table.
         if ($this->canviewreport) {
-            $this->table = new certificate_issues_table($this->certificate, $this->cm, $groupmode, $groupid ?? null);
+            $this->table = new certificate_issues_table($this->certificate, $this->cm, $groupid ?? null);
             $this->table->define_baseurl($this->pageurl);
 
             if ($this->table->is_downloading()) {

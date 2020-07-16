@@ -56,11 +56,6 @@ class certificate_issues_table extends \table_sql {
     protected $cm;
 
     /**
-     * @var bool
-     */
-    protected $groupmode;
-
-    /**
      * @var int
      */
     protected $groupid;
@@ -90,17 +85,15 @@ class certificate_issues_table extends \table_sql {
      *
      * @param \stdClass $certificate
      * @param cm_info $cm the course module
-     * @param int $groupmode
      * @param int|null $groupid
      */
-    public function __construct(\stdClass $certificate, cm_info $cm, int $groupmode, int $groupid = null) {
+    public function __construct(\stdClass $certificate, cm_info $cm, int $groupid = null) {
         parent::__construct('mod-coursecertificate-issues-' . $cm->instance);
 
         $context = \context_module::instance($cm->id);
 
         $this->certificate = $certificate;
         $this->cm = $cm;
-        $this->groupmode = $groupmode;
         $this->groupid = $groupid;
 
         $this->canverify = permission::can_verify_issues();
@@ -253,7 +246,7 @@ class certificate_issues_table extends \table_sql {
         $total = \tool_certificate\certificate::count_issues_for_course(
             $this->certificate->template,
             $this->certificate->course,
-            $this->groupmode,
+            $this->cm->effectivegroupmode,
             $this->groupid,
         );
         $this->pagesize($pagesize, $total);
@@ -261,7 +254,7 @@ class certificate_issues_table extends \table_sql {
         $this->rawdata = \tool_certificate\certificate::get_issues_for_course(
             $this->certificate->template,
             $this->certificate->course,
-            $this->groupmode,
+            $this->cm->effectivegroupmode,
             $this->groupid,
             $this->get_page_start(),
             $this->get_page_size(),
