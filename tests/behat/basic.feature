@@ -43,11 +43,11 @@ Feature: Basic functionality of course certificate module
       | Template  | Certificate of participation |
     And I press "Save and display"
     And I should see "Your awesome certificate"
-    And I should see "Automatic send is disabled"
+    And I should see "The automatic sending of this certificate is disabled"
     And I should see "No users are certified."
     And I press "Enable"
     And I press "Confirm"
-    And I should see "Automatic send is enabled"
+    And I should see "The automatic sending of this certificate is enabled"
     And I log out
 
   Scenario: Manager can create an instance of course certificate module with non shared templates
@@ -58,7 +58,7 @@ Feature: Basic functionality of course certificate module
       | Template | Certificate of completion |
     And I follow "Your awesome certificate"
     And I should see "Your awesome certificate"
-    And I should see "Automatic send is disabled"
+    And I should see "The automatic sending of this certificate is disabled"
     And I should see "No users are certified."
     And I log out
 

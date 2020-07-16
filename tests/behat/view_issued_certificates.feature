@@ -1,4 +1,4 @@
-@mod @mod_coursecertificate @javascript @testing
+@mod @mod_coursecertificate @javascript
 Feature: View the certificates that have been issued
   In order to view the certificates that have been issued
   As a teacher
