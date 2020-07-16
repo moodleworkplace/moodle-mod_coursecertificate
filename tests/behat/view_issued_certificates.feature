@@ -1,4 +1,4 @@
-@mod @mod_coursecertificate @javascript
+@mod @mod_coursecertificate @javascript @testing
 Feature: View the certificates that have been issued
   In order to view the certificates that have been issued
   As a teacher
@@ -90,9 +90,9 @@ Feature: View the certificates that have been issued
     And I set the field "Separate groups" to "All participants"
     And I should see "student3@example.com"
     And I click on "Surname" "link" in the "generaltable" "table"
-    And I should not see "student9@example.com"
+    And I should not see "student1@example.com"
     And I click on "2" "link" in the ".pagination" "css_element"
-    And I should see "student9@example.com"
+    And I should see "student1@example.com"
 
   Scenario: View issued certificates
     And I log in as "teacher1"
@@ -104,10 +104,10 @@ Feature: View the certificates that have been issued
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "Certificate"
-    And I should see "student9@example.com"
-    And I click on "Revoke" "link" in the "student9@example.com" "table_row"
+    And I should see "student1@example.com"
+    And I click on "Revoke" "link" in the "student1@example.com" "table_row"
     And I press "Confirm"
-    And I should not see "student9@example.com"
+    And I should not see "student1@example.com"
 
   Scenario: Verify issued certificates
     And I log in as "teacher1"

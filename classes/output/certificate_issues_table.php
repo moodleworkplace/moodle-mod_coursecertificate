@@ -130,7 +130,7 @@ class certificate_issues_table extends \table_sql {
         $this->define_columns(array_keys($columnsheaders));
         $this->define_headers(array_values($columnsheaders));
         $this->collapsible(false);
-        $this->sortable(true, 'firstname');
+        $this->sortable(true, 'firstname', SORT_DESC);
         $this->no_sorting('code');
         $this->no_sorting('status');
         $this->no_sorting('actions');
@@ -255,7 +255,6 @@ class certificate_issues_table extends \table_sql {
             $this->certificate->course,
             $this->groupmode,
             $this->groupid,
-            $this->cm
         );
         $this->pagesize($pagesize, $total);
 
@@ -264,7 +263,6 @@ class certificate_issues_table extends \table_sql {
             $this->certificate->course,
             $this->groupmode,
             $this->groupid,
-            $this->cm,
             $this->get_page_start(),
             $this->get_page_size(),
             $this->get_sql_sort()
