@@ -247,7 +247,7 @@ class certificate_issues_table extends \table_sql {
             $this->certificate->template,
             $this->certificate->course,
             $this->cm->effectivegroupmode,
-            $this->groupid,
+            $this->groupid
         );
         $this->pagesize($pagesize, $total);
 

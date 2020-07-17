@@ -42,17 +42,17 @@ $string['coursecertificatesettings'] = 'Settings';
 $string['disableautomaticsend'] = 'Users will no longer receive a PDF copy of the certificate in their inboxes as soon as they have
  access to this activity, although they still will be able to download it manually.';
 $string['emailteachers'] = 'Send notification and PDF to teachers by email';
-$string['enableautomaticsend'] = 'All users will receive a PDF copy of the certificate in their inboxes as soon as they have access 
-to this activity. This also includes users that already have access to this activity but didn\'t do so yet. <br>Users who accessed 
-this activity in the past will be ignored.';
+$string['enableautomaticsend'] = 'All users will receive a PDF copy of the certificate in their inboxes as soon as they have access
+ to this activity. This also includes users that already have access to this activity but didn\'t do so yet. <br>Users who accessed
+ this activity in the past will be ignored.';
 $string['expirydate'] = 'Expiry date';
 $string['includepdf'] = 'Include PDF on the email notification sent to users';
 $string['issueddate'] = 'Date issued';
 $string['modulename'] = 'Course certificate';
-$string['modulename_help'] = 'The course certificate module provides an opportunity for learners to celebrate achievements by 
-obtaining certificates.<br><br> It allows you to choose from different certificate templates which will automatically display user data 
-such as full name, course, etc. <br><br> Users will be able to download a PDF copy of the certificate themselves by accessing this 
-activity, and there are options to send a PDF copy to them by email automatically.<br><br>If the template used on this activity contains
+$string['modulename_help'] = 'The course certificate module provides an opportunity for learners to celebrate achievements by
+ obtaining certificates.<br><br> It allows you to choose from different certificate templates which will automatically display user data
+ such as full name, course, etc. <br><br> Users will be able to download a PDF copy of the certificate themselves by accessing this
+ activity, and there are options to send a PDF copy to them by email automatically.<br><br>If the template used on this activity contains
  a QR code, users will be able to scan it to validate their certificates.';
 $string['modulename_link'] = 'mod/certificate/view';
 $string['modulenameplural'] = 'Course certificate activities';
