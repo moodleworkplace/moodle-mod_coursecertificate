@@ -28,7 +28,7 @@ $tasks = [
     [
         'classname' => 'mod_coursecertificate\task\issue_certificates_task',
         'blocking' => 0,
-        'minute' => '*',
+        'minute' => 'R',
         'hour' => '*',
         'day' => '*',
         'month' => '*',
