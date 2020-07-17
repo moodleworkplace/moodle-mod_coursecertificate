@@ -64,8 +64,8 @@ Feature: Basic functionality of course certificate module
 
   Scenario: Teacher can not change course certificate template if it has been issued
     And the following certificate issues exist:
-      | template                      | user      | course |
-      | Certificate of participation  | student1  | C1     |
+      | template                      | user      | course | component             |
+      | Certificate of participation  | student1  | C1     | mod_coursecertificate |
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I add a "Course certificate" to section "1" and I fill the form with:
@@ -79,8 +79,8 @@ Feature: Basic functionality of course certificate module
 
   Scenario: Teacher can revoke a certificate
     And the following certificate issues exist:
-      | template                      | user      | course |
-      | Certificate of participation  | student1  | C1     |
+      | template                      | user      | course | component             |
+      | Certificate of participation  | student1  | C1     | mod_coursecertificate |
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I add a "Course certificate" to section "1" and I fill the form with:

@@ -185,7 +185,7 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
                 throw new \coding_exception('\\tool_certificate\\certificate class does not exists');
             }
             $courseissues = \tool_certificate\certificate::count_issues_for_course($certificate->template, $certificate->course,
-                null, null);
+                'mod_coursecertificate', null, null);
             if ($courseissues > 0) {
                 return  "1";
             }

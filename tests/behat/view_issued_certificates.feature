@@ -64,18 +64,18 @@ Feature: View the certificates that have been issued
       | name        | shared  |
       | Template 01 | 1       |
     And the following certificate issues exist:
-      | template                      | user      | course |
-      | Template 01  | student1  | C1     |
-      | Template 01  | student2  | C1     |
-      | Template 01  | student3  | C1     |
-      | Template 01  | student4  | C1     |
-      | Template 01  | student5  | C1     |
-      | Template 01  | student6  | C1     |
-      | Template 01  | student7  | C1     |
-      | Template 01  | student8  | C1     |
-      | Template 01  | student9  | C1     |
-      | Template 01  | student10  | C1     |
-      | Template 01  | student11  | C1     |
+      | template                      | user      | course | component             |
+      | Template 01                   | student1  | C1     | mod_coursecertificate |
+      | Template 01                   | student2  | C1     | mod_coursecertificate |
+      | Template 01                   | student3  | C1     | mod_coursecertificate |
+      | Template 01                   | student4  | C1     | mod_coursecertificate |
+      | Template 01                   | student5  | C1     | mod_coursecertificate |
+      | Template 01                   | student6  | C1     | mod_coursecertificate |
+      | Template 01                   | student7  | C1     | mod_coursecertificate |
+      | Template 01                   | student8  | C1     | mod_coursecertificate |
+      | Template 01                   | student9  | C1     | mod_coursecertificate |
+      | Template 01                   | student10  | C1     | mod_coursecertificate |
+      | Template 01                   | student11  | C1     | mod_coursecertificate |
     And the following "activities" exist:
       | activity          | name        | intro             | course | idnumber           | template    | groupmode  |
       | coursecertificate | Certificate | Certificate intro | C1     | coursecertificate1 | Template 01 | 1          |

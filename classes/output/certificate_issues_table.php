@@ -246,6 +246,7 @@ class certificate_issues_table extends \table_sql {
         $total = \tool_certificate\certificate::count_issues_for_course(
             $this->certificate->template,
             $this->certificate->course,
+            'mod_coursecertificate',
             $this->cm->effectivegroupmode,
             $this->groupid
         );
@@ -254,6 +255,7 @@ class certificate_issues_table extends \table_sql {
         $this->rawdata = \tool_certificate\certificate::get_issues_for_course(
             $this->certificate->template,
             $this->certificate->course,
+            'mod_coursecertificate',
             $this->cm->effectivegroupmode,
             $this->groupid,
             $this->get_page_start(),
@@ -277,8 +279,9 @@ class certificate_issues_table extends \table_sql {
         $total = \tool_certificate\certificate::count_issues_for_course(
             $this->certificate->template,
             $this->certificate->course,
-            $this->groupmode,
-            $this->cm
+            'mod_coursecertificate',
+            $this->cm->effectivegroupmode,
+            $this->groupid
         );
         $this->out($total, false);
         exit;
