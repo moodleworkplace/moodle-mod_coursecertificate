@@ -54,7 +54,7 @@ class mod_coursecertificate_task_test_testcase extends advanced_testcase {
         global $DB;
 
         // Create course, certificate tempalte and coursecertificate module.
-        $course = $this->getDataGenerator()->create_course();
+        $course = $this->getDataGenerator()->create_course(['shortname' => 'C01']);
         $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
         $mod = $this->getDataGenerator()->create_module('coursecertificate',
             ['course' => $course->id, 'template' => $certificate1->get_id()]);
@@ -73,7 +73,10 @@ class mod_coursecertificate_task_test_testcase extends advanced_testcase {
             'courseid' => $course->id]);
 
         // Check certificate issue was created for the user.
-        $this->assertEquals($user1->id, reset($issues)->userid);
+        $issue = reset($issues);
+        $this->assertEquals($user1->id, $issue->userid);
+        $issuedata = @json_decode($issue->data, true);
+        $this->assertEquals('C01', $issuedata['courseshortname']);
     }
 
     public function test_issue_certificates_task_automaticsend_disabled() {

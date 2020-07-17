@@ -136,3 +136,26 @@ function coursecertificate_page_type_list(string $pagetype, stdClass $parentcont
     ];
     return $modulepagetype;
 }
+
+/**
+ * Callback for tool_certificate - the fields available for the certificates
+ */
+function mod_coursecertificate_tool_certificate_fields() {
+    global $CFG;
+
+    if (!class_exists('tool_certificate\customfield\issue_handler')) {
+        return;
+    }
+
+    $handler = tool_certificate\customfield\issue_handler::create();
+
+    $handler->ensure_field_exists('courseid', 'numeric',
+        get_string('courseinternalid', 'mod_coursecertificate'), false, 1);
+    $handler->ensure_field_exists('courseshortname', 'text', get_string('shortnamecourse'),
+        true, get_string('previewcourseshortname', 'mod_coursecertificate'));
+    $handler->ensure_field_exists('coursefullname', 'text', get_string('fullnamecourse'),
+        true, get_string('previewcoursefullname', 'mod_coursecertificate'));
+    $handler->ensure_field_exists('courseurl', 'text',
+        get_string('courseurl', 'mod_coursecertificate'),
+        true, $CFG->wwwroot . '/course/view.php?id=1');
+}

@@ -71,6 +71,13 @@ class issue_certificates_task extends \core\task\scheduled_task {
                 // Skip coursecertificate modules not visible.
                 continue;
             }
+            // Add course data to the issue.
+            $issuedata = [
+                'courseid' => $course->id,
+                'courseshortname' => $course->shortname,
+                'coursefullname' => $course->fullname,
+                'courseurl' => course_get_url($course)->out(),
+            ];
             // Get all the users already issued.
             $usersissued = $DB->get_fieldset_select(
                 'tool_certificate_issues',
@@ -91,7 +98,7 @@ class issue_certificates_task extends \core\task\scheduled_task {
                     $template->issue_certificate(
                         $user->id,
                         $coursecertificate->expires,
-                        [],
+                        $issuedata,
                         'mod_coursecertificate',
                         $course->id
                     );

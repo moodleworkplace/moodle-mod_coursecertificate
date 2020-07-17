@@ -39,6 +39,8 @@ $string['coursecertificate:viewreport'] = 'View Course certificate issues report
 $string['coursecertificatefieldset'] = 'Course certificate Settings';
 $string['coursecertificatename'] = 'Certificate';
 $string['coursecertificatesettings'] = 'Settings';
+$string['courseinternalid'] = 'Internal course ID used in URLs';
+$string['courseurl'] = 'Course URL';
 $string['disableautomaticsend'] = 'Users will no longer receive a PDF copy of the certificate in their inboxes as soon as they have
  access to this activity, although they still will be able to download it manually.';
 $string['emailteachers'] = 'Send notification and PDF to teachers by email';
@@ -62,6 +64,8 @@ $string['nouserscertified'] = 'No users are certified.';
 $string['page-mod-certificate-x'] = 'Any course certificate module page';
 $string['pluginadministration'] = 'Course certificate administration';
 $string['pluginname'] = 'Course certificate';
+$string['previewcoursefullname'] = 'Course full name';
+$string['previewcourseshortname'] = 'Course short name';
 $string['privacy:metadata'] = 'The course certificate activity does not store personal data.';
 $string['receivecertificate'] = 'Receive certificate';
 $string['receivecertificatenotification'] = 'Receive certificate?';
