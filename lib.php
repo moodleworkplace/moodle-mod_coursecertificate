@@ -140,7 +140,8 @@ function coursecertificate_page_type_list(string $pagetype, stdClass $parentcont
 /**
  * Callback for tool_certificate - the fields available for the certificates
  */
-function mod_coursecertificate_tool_certificate_fields() {
+function mod_coursecertificate_tool_certificate_fields()
+{
     global $CFG;
 
     if (!class_exists('tool_certificate\customfield\issue_handler')) {
@@ -158,4 +159,10 @@ function mod_coursecertificate_tool_certificate_fields() {
     $handler->ensure_field_exists('courseurl', 'text',
         get_string('courseurl', 'mod_coursecertificate'),
         true, $CFG->wwwroot . '/course/view.php?id=1');
+    // Get the course custom fields.
+    $coursehandler = \core_course\customfield\course_handler::create();
+    foreach ($coursehandler->get_fields() as $field) {
+        $handler->ensure_field_exists('coursecustomfield_' . $field->get('id'), 'text', $field->get_formatted_name(),
+            true, $field->get_formatted_name());
+    }
 }

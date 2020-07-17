@@ -53,8 +53,13 @@ class mod_coursecertificate_task_test_testcase extends advanced_testcase {
     public function test_issue_certificates_task_automaticsend_enabled() {
         global $DB;
 
+        // Create a course customfield.
+        $catid = $this->getDataGenerator()->create_custom_field_category([])->get('id');
+        $field = $this->getDataGenerator()->create_custom_field(['categoryid' => $catid, 'type' => 'text', 'shortname' => 'f1']);
+
         // Create course, certificate tempalte and coursecertificate module.
-        $course = $this->getDataGenerator()->create_course(['shortname' => 'C01']);
+        $course = $this->getDataGenerator()->create_course(['shortname' => 'C01', 'customfield_f1' => 'some text']);
+
         $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
         $mod = $this->getDataGenerator()->create_module('coursecertificate',
             ['course' => $course->id, 'template' => $certificate1->get_id()]);
@@ -77,6 +82,7 @@ class mod_coursecertificate_task_test_testcase extends advanced_testcase {
         $this->assertEquals($user1->id, $issue->userid);
         $issuedata = @json_decode($issue->data, true);
         $this->assertEquals('C01', $issuedata['courseshortname']);
+        $this->assertEquals('some text', $issuedata['coursecustomfield_' . $field->get('id')]);
     }
 
     public function test_issue_certificates_task_automaticsend_disabled() {
