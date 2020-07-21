@@ -63,9 +63,6 @@ class permission {
      * @return bool
      */
     public static function can_verify_issues(): bool {
-        if (!class_exists('\\tool_certificate\\permission')) {
-            throw new \coding_exception('\\tool_certificate\\permission class does not exists');
-        }
         return \tool_certificate\permission::can_verify();
     }
 
@@ -78,9 +75,6 @@ class permission {
     public static function can_revoke_issues(int $courseid): bool {
         global $DB;
 
-        if (!class_exists('\\tool_certificate\\permission')) {
-            throw new \coding_exception('\\tool_certificate\\permission class does not exists');
-        }
         if (!$DB->record_exists('course', ['id' => $courseid])) {
             // Invalid course.
             return false;
@@ -97,9 +91,6 @@ class permission {
     public static function can_view_all_issues(int $courseid): bool {
         global $DB;
 
-        if (!class_exists('\\tool_certificate\\permission')) {
-            throw new \coding_exception('\\tool_certificate\\permission class does not exists');
-        }
         if (!$DB->record_exists('course', ['id' => $courseid])) {
             // Invalid course.
             return false;

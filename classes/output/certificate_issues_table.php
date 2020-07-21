@@ -240,9 +240,6 @@ class certificate_issues_table extends \table_sql {
      * @uses \tool_certificate\certificate
      */
     public function query_db($pagesize, $useinitialsbar = true) {
-        if (!class_exists('\\tool_certificate\\certificate')) {
-            throw new \coding_exception('\\tool_certificate\\certificate class does not exists');
-        }
         $total = \tool_certificate\certificate::count_issues_for_course(
             $this->certificate->template,
             $this->certificate->course,

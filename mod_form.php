@@ -157,9 +157,6 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
      * @return array
      */
     private function get_template_select(): array {
-        if (!class_exists('\\tool_certificate\\permission')) {
-            throw new \coding_exception('\\tool_certificate\\permission class does not exists');
-        }
         $context = context_course::instance($this->current->course);
         $templates = [];
         if (!empty($records = \tool_certificate\permission::get_visible_templates($context))) {
@@ -181,9 +178,6 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
 
         if ($instance = $this->get_instance()) {
             $certificate = $certificate = $DB->get_record('coursecertificate', ['id' => $instance], '*', MUST_EXIST);
-            if (!class_exists('\\tool_certificate\\certificate')) {
-                throw new \coding_exception('\\tool_certificate\\certificate class does not exists');
-            }
             $courseissues = \tool_certificate\certificate::count_issues_for_course($certificate->template, $certificate->course,
                 'mod_coursecertificate', null, null);
             if ($courseissues > 0) {
