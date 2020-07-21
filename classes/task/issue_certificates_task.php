@@ -88,8 +88,9 @@ class issue_certificates_task extends \core\task\scheduled_task {
             $usersissued = $DB->get_fieldset_select(
                 'tool_certificate_issues',
                 'userid',
-                'component = :component AND courseid = :courseid',
-                ['component' => 'mod_coursecertificate', 'courseid' => $coursecertificate->course]
+                'component = :component AND courseid = :courseid AND templateid = :templateid',
+                ['component' => 'mod_coursecertificate', 'courseid' => $coursecertificate->course,
+                    'templateid' => $coursecertificate->template]
             );
             // Get active users in course context with receiveissue capability.
             $context = \context_course::instance($coursecertificate->course);
