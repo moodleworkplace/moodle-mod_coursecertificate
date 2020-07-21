@@ -73,13 +73,10 @@ class permission {
      * @return bool
      */
     public static function can_revoke_issues(int $courseid): bool {
-        global $DB;
-
-        if (!$DB->record_exists('course', ['id' => $courseid])) {
-            // Invalid course.
+        if (!$context = context_course::instance($courseid, IGNORE_MISSING)) {
             return false;
         }
-        return \tool_certificate\permission::can_issue_to_anybody(context_course::instance($courseid));
+        return \tool_certificate\permission::can_issue_to_anybody($context);
     }
 
     /**
@@ -89,13 +86,10 @@ class permission {
      * @return bool
      */
     public static function can_view_all_issues(int $courseid): bool {
-        global $DB;
-
-        if (!$DB->record_exists('course', ['id' => $courseid])) {
-            // Invalid course.
+        if (!$context = context_course::instance($courseid, IGNORE_MISSING)) {
             return false;
         }
-        return \tool_certificate\permission::can_view_all_certificates(context_course::instance($courseid));
+        return \tool_certificate\permission::can_view_all_certificates($context);
     }
 
     /**
