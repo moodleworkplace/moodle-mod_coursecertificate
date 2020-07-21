@@ -7,16 +7,16 @@ Feature: View the certificates that have been issued
   Background:
     Given the following "users" exist:
       | username | firstname | lastname | email                |
-      | teacher1 | Teacher   | 1        | teacher1@example.com |
-      | student1 | Student   | 1        | student1@example.com |
-      | student2 | Student   | 2        | student2@example.com |
-      | student3 | Student   | 3        | student3@example.com |
-      | student4 | Student   | 4        | student4@example.com |
-      | student5 | Student   | 5        | student5@example.com |
-      | student6 | Student   | 6        | student6@example.com |
-      | student7 | Student   | 7        | student7@example.com |
-      | student8 | Student   | 8        | student8@example.com |
-      | student9 | Student   | 9        | student9@example.com |
+      | teacher1 | Teacher   | 01        | teacher01@example.com |
+      | student1 | Student   | 01        | student01@example.com |
+      | student2 | Student   | 02        | student02@example.com |
+      | student3 | Student   | 03        | student03@example.com |
+      | student4 | Student   | 04        | student04@example.com |
+      | student5 | Student   | 05        | student05@example.com |
+      | student6 | Student   | 06        | student06@example.com |
+      | student7 | Student   | 07        | student07@example.com |
+      | student8 | Student   | 08        | student08@example.com |
+      | student9 | Student   | 09        | student09@example.com |
       | student10 | Student   | 10        | student10@example.com |
       | student11 | Student   | 11        | student11@example.com |
       | manager1 | Manager   | 1        | manager1@example.com |
@@ -84,33 +84,34 @@ Feature: View the certificates that have been issued
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "Certificate"
-    And I should see "student1@example.com"
+    And I click on "Email address" "link" in the "generaltable" "table"
+    And I should see "student01@example.com"
     And I set the field "Separate groups" to "Group 1"
-    And I should not see "student3@example.com"
+    And I should not see "student03@example.com"
     And I set the field "Separate groups" to "All participants"
-    And I should see "student3@example.com"
-    And I click on "Surname" "link" in the "generaltable" "table"
-    And I should not see "student1@example.com"
+    And I should see "student03@example.com"
+    And I click on "Email address" "link" in the "generaltable" "table"
+    And I should not see "student01@example.com"
     And I click on "2" "link" in the ".pagination" "css_element"
-    And I should see "student1@example.com"
+    And I should see "student01@example.com"
 
   Scenario: View issued certificates
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "Certificate"
-    And I click on "View" "link" in the "student1@example.com" "table_row"
+    And I click on "View" "link" in the "student01@example.com" "table_row"
 
   Scenario: Remove issued certificates
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "Certificate"
-    And I should see "student1@example.com"
-    And I click on "Revoke" "link" in the "student1@example.com" "table_row"
+    And I should see "student01@example.com"
+    And I click on "Revoke" "link" in the "student01@example.com" "table_row"
     And I press "Confirm"
-    And I should not see "student1@example.com"
+    And I should not see "student01@example.com"
 
   Scenario: Verify issued certificates
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "Certificate"
-    And I click on "Verify" "link" in the "student9@example.com" "table_row"
+    And I click on "Verify" "link" in the "student01@example.com" "table_row"
