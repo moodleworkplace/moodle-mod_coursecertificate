@@ -44,7 +44,7 @@ class permission {
      * @return bool
      */
     public static function can_manage(\context $context): bool {
-        return has_capability('mod/coursecertificate:manage', $context);
+        return has_capability('mod/coursecertificate:addinstance', $context);
     }
 
     /**

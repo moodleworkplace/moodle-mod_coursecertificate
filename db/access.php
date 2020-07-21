@@ -31,7 +31,6 @@ $capabilities = [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => [
-            'guest' => CAP_ALLOW,
             'student' => CAP_ALLOW,
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
@@ -45,14 +44,6 @@ $capabilities = [
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
-        ],
-    ],
-    'mod/coursecertificate:manage' => [
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => [
-            'manager' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
         ],
     ],
     'mod/coursecertificate:addinstance' => [
