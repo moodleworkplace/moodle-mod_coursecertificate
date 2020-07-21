@@ -72,7 +72,9 @@ class mod_coursecertificate_task_test_testcase extends advanced_testcase {
         $DB->update_record('coursecertificate', $mod);
 
         $task = new mod_coursecertificate\task\issue_certificates_task();
+        ob_start();
         $task->execute();
+        ob_end_clean();
 
         $issues = $DB->get_records('tool_certificate_issues', ['templateid' => $certificate1->get_id(),
             'courseid' => $course->id]);
@@ -103,7 +105,9 @@ class mod_coursecertificate_task_test_testcase extends advanced_testcase {
 
         // Run the task.
         $task = new mod_coursecertificate\task\issue_certificates_task();
+        ob_start();
         $task->execute();
+        ob_end_clean();
 
         // Check no issues were created.
         $issues = $DB->get_records('tool_certificate_issues', ['templateid' => $certificate1->get_id(),
