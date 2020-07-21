@@ -68,6 +68,10 @@ class mod_coursecertificate_task_test_testcase extends advanced_testcase {
         // Create user with 'student' role.
         $user1 = $this->getDataGenerator()->create_and_enrol($course);
 
+        // Enrol admin.
+        $adminuser = get_admin();
+        $this->getDataGenerator()->enrol_user($adminuser->id, $course->id);
+
         $mod->automaticsend = 1;
         $DB->update_record('coursecertificate', $mod);
 
@@ -85,6 +89,10 @@ class mod_coursecertificate_task_test_testcase extends advanced_testcase {
         $issuedata = @json_decode($issue->data, true);
         $this->assertEquals('C01', $issuedata['courseshortname']);
         $this->assertEquals('some text', $issuedata['coursecustomfield_' . $field->get('id')]);
+
+        // Check certificate issue was not created for the admin.
+        $adminissues = $DB->get_records('tool_certificate_issues', ['userid' => $adminuser->id]);
+        $this->assertEmpty($adminissues);
     }
 
     public function test_issue_certificates_task_automaticsend_disabled() {

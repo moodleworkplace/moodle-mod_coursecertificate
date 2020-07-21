@@ -16,21 +16,25 @@ Feature: Self issue certificate for coursecertificate template
     And the following "course enrolments" exist:
       | user     | course | role           |
       | teacher1 | C1     | editingteacher |
-      | manager1 | C1     | editingteacher |
       | student1 | C1     | student        |
-    And the following "roles" exist:
-      | shortname            | name                       | archetype |
-      | certificateissuer    | Certificate issuer         |           |
-    And the following "role assigns" exist:
-      | user     | role              | contextlevel | reference |
-      | manager1 | certificateissuer | System       |           |
-    And the following "permission overrides" exist:
-      | capability                     | permission | role                 | contextlevel | reference |
-      | tool/certificate:issue         | Allow      | certificateissuer    | System       |           |
     And the following certificate templates exist:
       | name                         | shared  |
-      | Certificate of participation | 1       |
-      | Certificate of completion    | 0       |
+      | Template 01                  | 1       |
+    And the following "activities" exist:
+      | activity          | name        | intro             | course | idnumber           | template    | groupmode  |
+      | coursecertificate | Certificate | Certificate intro | C1     | coursecertificate1 | Template 01 | 1          |
 
-  Scenario: Get certificate having the activity requirements
-  # TODO.
+  Scenario: Get certificate having the activity requirements when accessing the activity
+    Then I log in as "student1"
+    And I am on "Course 1" course homepage
+    And I follow "Certificate"
+    And I press the "back" button in the browser
+    And I click on ".popover-region-notifications" "css_element"
+    And I should see "Your certificate is available!"
+
+  Scenario: Teacher should not get certificate when accessing the activity
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage
+    And I follow "Certificate"
+    And I click on ".popover-region-notifications" "css_element"
+    And I should not see "Your certificate is available!"

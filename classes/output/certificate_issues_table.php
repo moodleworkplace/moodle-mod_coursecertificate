@@ -123,7 +123,7 @@ class certificate_issues_table extends \table_sql {
         $this->define_columns(array_keys($columnsheaders));
         $this->define_headers(array_values($columnsheaders));
         $this->collapsible(false);
-        $this->sortable(true, 'firstname', SORT_DESC);
+        $this->sortable(true, 'firstname');
         $this->no_sorting('code');
         $this->no_sorting('status');
         $this->no_sorting('actions');

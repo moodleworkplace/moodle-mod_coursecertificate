@@ -61,6 +61,9 @@ class view_page implements templatable, renderable {
     /** @var bool $canreceiveissues */
     protected $canreceiveissues;
 
+    /** @var bool */
+    private $canviewall;
+
     /** @var moodle_url $pageurl */
     protected $pageurl;
 
@@ -88,6 +91,7 @@ class view_page implements templatable, renderable {
         $this->certificate = $DB->get_record('coursecertificate', ['id' => $this->cm->instance], '*', MUST_EXIST);
         $this->canviewreport = permission::can_view_report($context);
         $this->canmanage = permission::can_manage($context);
+        $this->canviewall = permission::can_view_all_issues($course->id);
         $this->canreceiveissues = permission::can_receive_issues($context);
 
         // Trigger the event.
@@ -109,7 +113,7 @@ class view_page implements templatable, renderable {
         }
 
         // View certificate issue if user can not manage and can receive issues.
-        if (!$this->canmanage && $this->canreceiveissues) {
+        if (!$this->canviewall && $this->canreceiveissues) {
             // Course certificate template must exist.
             $params = ['id' => $this->certificate->template];
             $templaterecord = $DB->get_record('tool_certificate_templates', $params, '*', MUST_EXIST);
