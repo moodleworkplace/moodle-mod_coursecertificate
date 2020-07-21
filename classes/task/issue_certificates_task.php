@@ -80,7 +80,7 @@ class issue_certificates_task extends \core\task\scheduled_task {
             ];
             // Add course custom fields data.
             $handler = \core_course\customfield\course_handler::create();
-            foreach ($handler->get_instance_data($course->id, true) as $data){
+            foreach ($handler->get_instance_data($course->id, true) as $data) {
                 $issuedata['coursecustomfield_' . $data->get_field()->get('id')] = s($data->get_value());
             }
 

@@ -140,8 +140,7 @@ function coursecertificate_page_type_list(string $pagetype, stdClass $parentcont
 /**
  * Callback for tool_certificate - the fields available for the certificates
  */
-function mod_coursecertificate_tool_certificate_fields()
-{
+function mod_coursecertificate_tool_certificate_fields() {
     global $CFG;
 
     if (!class_exists('tool_certificate\customfield\issue_handler')) {
