@@ -51,22 +51,16 @@ class issue_certificates_task extends \core\task\scheduled_task {
     public function execute() {
         global $DB;
 
-        // Get all the coursecertificates.
-        $coursecertificates = $DB->get_records('coursecertificate');
+        // Get all the coursecertificates with automatic send enabled.
+        $sql = "SELECT c.*
+                FROM {coursecertificate} c
+                JOIN {tool_certificate_templates} ct
+                ON c.template = ct.id
+                WHERE c.automaticsend = 1";
+        $coursecertificates = $DB->get_records_sql($sql);
         foreach ($coursecertificates as $coursecertificate) {
-            if (!$coursecertificate->automaticsend) {
-                // Skip coursecertificates with automaticsend disabled.
-                continue;
-            }
-            // Check coursecertificate template exists.
-            if ($templaterecord = $DB->get_record('tool_certificate_templates', ['id' => $coursecertificate->template])) {
-                $template = \tool_certificate\template::instance($templaterecord->id);
-            } else {
-                mtrace("... Warning: Skipping coursecertificate $coursecertificate->id (invalid templateid: " .
-                    "$coursecertificate->template)");
-                continue;
-            }
-            [$course, $cm] = get_course_and_cm_from_instance($coursecertificate->id, 'coursecertificate');
+            [$course, $cm] = get_course_and_cm_from_instance($coursecertificate->id, 'coursecertificate',
+                $coursecertificate->course);
             if (!$cm->visible) {
                 // Skip coursecertificate modules not visible.
                 continue;
@@ -99,6 +93,9 @@ class issue_certificates_task extends \core\task\scheduled_task {
             // Filter only users with access to the activity (Does not filter mod visibility).
             $info = new \core_availability\info_module($cm);
             $users = $info->filter_user_list($potentialusers);
+
+            $template = \tool_certificate\template::instance($coursecertificate->template);
+
             // Issue the certificate.
             foreach ($users as $user) {
                 if (has_capability('tool/certificate:viewallcertificates', $context, $user)) {

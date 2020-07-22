@@ -31,5 +31,23 @@ defined('MOODLE_INTERNAL') || die();
  * @return bool
  */
 function xmldb_coursecertificate_upgrade($oldversion) {
+    global $DB;
+    $dbman = $DB->get_manager();
+
+    if ($oldversion < 2020072201) {
+
+        // Define index automaticsend (not unique) to be added to coursecertificate.
+        $table = new xmldb_table('coursecertificate');
+        $index = new xmldb_index('automaticsend', XMLDB_INDEX_NOTUNIQUE, ['automaticsend']);
+
+        // Conditionally launch add index automaticsend.
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        // Coursecertificate savepoint reached.
+        upgrade_mod_savepoint(true, 2020072201, 'coursecertificate');
+    }
+
     return true;
 }

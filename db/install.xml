@@ -22,6 +22,9 @@
                 <KEY NAME="fk_course" TYPE="foreign" FIELDS="course" REFTABLE="course" REFFIELDS="id"/>
                 <KEY NAME="fk_template" TYPE="foreign" FIELDS="template" REFTABLE="tool_certificate_templates" REFFIELDS="id"/>
             </KEYS>
+            <INDEXES>
+                <INDEX NAME="automaticsend" UNIQUE="false" FIELDS="automaticsend"/>
+            </INDEXES>
         </TABLE>
     </TABLES>
 </XMLDB>
