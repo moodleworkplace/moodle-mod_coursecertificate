@@ -61,8 +61,9 @@ class mod_coursecertificate_task_test_testcase extends advanced_testcase {
         $course = $this->getDataGenerator()->create_course(['shortname' => 'C01', 'customfield_f1' => 'some text']);
 
         $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
+        $expirydate = strtotime('+5 day');
         $mod = $this->getDataGenerator()->create_module('coursecertificate',
-            ['course' => $course->id, 'template' => $certificate1->get_id()]);
+            ['course' => $course->id, 'template' => $certificate1->get_id(), 'expires' => $expirydate]);
         $this->assertTrue($DB->record_exists('coursecertificate', ['course' => $course->id, 'id' => $mod->id]));
 
         // Create user with 'student' role.
@@ -86,6 +87,7 @@ class mod_coursecertificate_task_test_testcase extends advanced_testcase {
         // Check certificate issue was created for the user.
         $issue = reset($issues);
         $this->assertEquals($user1->id, $issue->userid);
+        $this->assertEquals($expirydate, $issue->expires);
         $issuedata = @json_decode($issue->data, true);
         $this->assertEquals('C01', $issuedata['courseshortname']);
         $this->assertEquals('some text', $issuedata['coursecustomfield_' . $field->get('id')]);
