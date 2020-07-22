@@ -115,3 +115,10 @@ Feature: View the certificates that have been issued
     And I am on "Course 1" course homepage
     And I follow "Certificate"
     And I click on "Verify" "link" in the "student06@example.com" "table_row"
+
+  Scenario: Download issued certificates list
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage
+    And I follow "Certificate"
+    And I press "Download"
+    And I log out
