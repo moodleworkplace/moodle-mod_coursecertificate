@@ -99,19 +99,19 @@ Feature: View the certificates that have been issued
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "Certificate"
-    And I click on "View" "link" in the "student01@example.com" "table_row"
+    And I click on "View" "link" in the "student06@example.com" "table_row"
 
   Scenario: Remove issued certificates
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "Certificate"
-    And I should see "student01@example.com"
-    And I click on "Revoke" "link" in the "student01@example.com" "table_row"
+    And I should see "student06@example.com"
+    And I click on "Revoke" "link" in the "student06@example.com" "table_row"
     And I press "Confirm"
-    And I should not see "student01@example.com"
+    And I should not see "student06@example.com"
 
   Scenario: Verify issued certificates
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "Certificate"
-    And I click on "Verify" "link" in the "student01@example.com" "table_row"
+    And I click on "Verify" "link" in the "student06@example.com" "table_row"
