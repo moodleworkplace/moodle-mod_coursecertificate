@@ -44,12 +44,16 @@ class mod_coursecertificate_task_test_testcase extends advanced_testcase {
 
     /**
      * Get certificate generator
+     *
      * @return tool_certificate_generator
      */
     protected function get_certificate_generator() : tool_certificate_generator {
         return $this->getDataGenerator()->get_plugin_generator('tool_certificate');
     }
 
+    /**
+     * Test issue_certificates_task with automaticsend setting enabled.
+     */
     public function test_issue_certificates_task_automaticsend_enabled() {
         global $DB;
 
@@ -97,10 +101,13 @@ class mod_coursecertificate_task_test_testcase extends advanced_testcase {
         $this->assertEmpty($adminissues);
     }
 
+    /**
+     * Test issue_certificates_task with automaticsend setting disabled.
+     */
     public function test_issue_certificates_task_automaticsend_disabled() {
         global $DB;
 
-        // Create course, certificate tempalte and coursecertificate module.
+        // Create course, certificate template and coursecertificate module.
         $course = $this->getDataGenerator()->create_course();
         $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
         $mod = $this->getDataGenerator()->create_module('coursecertificate',
