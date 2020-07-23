@@ -112,9 +112,9 @@ class view_page implements templatable, renderable {
             $groupid = groups_get_activity_group($this->cm, true);
         }
 
-        // View certificate issue if user can not manage and can receive issues.
-        if (!$this->canviewall && $this->canreceiveissues) {
-            // Course certificate template must exist.
+        // View certificate issue PDF if user can not manage, can receive issues and activity template is correct.
+        if (!$this->canviewall && $this->canreceiveissues && $this->certificate->template != 0) {
+            // View certificate PDF only if activity has a template.
             $params = ['id' => $this->certificate->template];
             $templaterecord = $DB->get_record('tool_certificate_templates', $params, '*', MUST_EXIST);
             if ($templaterecord) {
@@ -176,6 +176,8 @@ class view_page implements templatable, renderable {
         }
         $data['showautomaticsend'] = $this->canmanage;
         $data['showreport'] = $this->canviewreport;
+        $data['notemplateselected'] = $this->certificate->template == 0;
+        $data['studentview'] = !$this->canviewall && $this->canreceiveissues;
 
         return $data;
     }

@@ -57,7 +57,7 @@ class mod_coursecertificate_task_test_testcase extends advanced_testcase {
         $catid = $this->getDataGenerator()->create_custom_field_category([])->get('id');
         $field = $this->getDataGenerator()->create_custom_field(['categoryid' => $catid, 'type' => 'text', 'shortname' => 'f1']);
 
-        // Create course, certificate tempalte and coursecertificate module.
+        // Create course, certificate template and coursecertificate module.
         $course = $this->getDataGenerator()->create_course(['shortname' => 'C01', 'customfield_f1' => 'some text']);
 
         $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);

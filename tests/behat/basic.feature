@@ -159,3 +159,37 @@ Feature: Basic functionality of course certificate module
     And I should see "Certificate 02"
     And I follow "Certificate 01"
     And I should see "No users are certified."
+
+  Scenario: Display course certificate after removing current selected template.
+    And the following certificate templates exist:
+      | name                           | shared  |
+      | Certificate of participation A | 1       |
+      | Certificate of participation B | 1       |
+    And the following "activities" exist:
+      | activity          | name           | intro             | course | idnumber           | template                       |
+      | coursecertificate | Certificate 01 | Certificate intro | C1     | coursecertificate1 | Certificate of participation A |
+    And I log in as "admin"
+    # Using these steps adds tool_reportbuilder and tool_tenant dependency.
+    And I navigate to "Certificates > Manage certificate templates" in site administration
+    And I click on "Delete" "link" in the "Certificate of participation A" "table_row"
+    And I click on "Delete" "button" in the "Confirm" "dialogue"
+    And I log out
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I follow "Certificate 01"
+    And I should see "The selected template can’t be found. Please go to the activity settings and select a new one."
+    And I log out
+    And I log in as "student1"
+    And I am on "Course 1" course homepage
+    And I follow "Certificate 01"
+    And I should see "The certificate is not available. Please contact the course administrator."
+    And I log out
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I follow "Certificate 01"
+    And I click on "Actions menu" "link"
+    And I click on "Edit settings" "link"
+    And I set the following fields to these values:
+      | Template  | Certificate of participation B |
+    And I press "Save and display"
+    And I should not see "There is no selected template."

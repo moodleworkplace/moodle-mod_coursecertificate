@@ -28,21 +28,37 @@
 }}
 <div data-region="mod_coursecertificate_view">
     <h2>{{certificatename}}</h2>
-    {{#showautomaticsend}}
-        <div data-region="automaticsend-alert" class="position-relative w-100">
-            {{> coursecertificate/automaticsend_alert}}
-        </div>
-    {{/showautomaticsend}}
-    {{#showreport}}
-        <h3>{{#str}} certifiedusers, coursecertificate {{/str}}</h3>
-        <div data-region="issues-report" class="position-relative w-100">
-            {{> coursecertificate/issues_report}}
-        </div>
-    {{/showreport}}
+    {{#studentview}}
+        {{#notemplateselected}}
+            <div class="alert alert-danger mt-3">
+                {{#str}} notemplateselecteduser, coursecertificate {{/str}}
+            </div>
+        {{/notemplateselected}}
+    {{/studentview}}
+    {{^studentview}}
+        {{#showautomaticsend}}
+            <div data-region="automaticsend-alert" class="position-relative w-100">
+                {{> coursecertificate/automaticsend_alert}}
+            </div>
+        {{/showautomaticsend}}
+        {{#notemplateselected}}
+            <div class="alert alert-danger mt-3">
+                {{#str}} notemplateselected, coursecertificate {{/str}}
+            </div>
+        {{/notemplateselected}}
+        {{#showreport}}
+            <h3>{{#str}} certifiedusers, coursecertificate {{/str}}</h3>
+            <div data-region="issues-report" class="position-relative w-100">
+                {{> coursecertificate/issues_report}}
+            </div>
+        {{/showreport}}
+    {{/studentview}}
 </div>
 
 {{#js}}
+    {{^studentview}}
     require(['mod_coursecertificate/manager'], function(m) {
         m.init();
     });
+    {{/studentview}}
 {{/js}}

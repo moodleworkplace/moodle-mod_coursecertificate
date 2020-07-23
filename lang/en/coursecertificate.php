@@ -58,6 +58,8 @@ $string['modulename_help'] = 'The course certificate module provides an opportun
  a QR code, users will be able to scan it to validate their certificates.';
 $string['modulename_link'] = 'mod/certificate/view';
 $string['modulenameplural'] = 'Course certificates';
+$string['notemplateselected'] = 'The selected template can’t be found. Please go to the activity settings and select a new one.';
+$string['notemplateselecteduser'] = 'The certificate is not available. Please contact the course administrator.';
 $string['notemplateswarning'] = 'There are no available templates. Please contact the site administrator.';
 $string['notemplateswarningwithlink'] = 'There are no available templates. Please go to <a href="{$a}">Certificate</a> and create a new one.';
 $string['nouserscertified'] = 'No users are certified.';
