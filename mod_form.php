@@ -72,7 +72,7 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         $templateoptions = ['' => get_string('chooseatemplate', 'coursecertificate')] + $templates;
         $mform->addElement('select', 'template', get_string('template', 'coursecertificate'), $templateoptions);
 
-        if (empty($templates) && !$hasissues) {
+        if (empty($templates)) {
             // Adding warning text if there are not templates available.
             if (\tool_certificate\permission::can_manage_anywhere()) {
                 $linkurl = $CFG->wwwroot . "/admin/tool/certificate/manage_templates.php";
@@ -84,7 +84,8 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
             $mform->addElement('static', 'notemplateswarning', '', $html);
         } else {
             $warningstr = get_string('selecttemplatewarning', 'mod_coursecertificate');
-            $mform->addElement('static', 'selecttemplatewarning', '', html_writer::span($warningstr));
+            $html = html_writer::tag('div', $warningstr, ['class' => 'alert alert-warning']);
+            $mform->addElement('static', 'selecttemplatewarning', '', $html);
         }
         if (!$hasissues) {
             $mform->addRule('template', null, 'required', null, 'client');

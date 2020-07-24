@@ -102,10 +102,10 @@ Feature: Basic functionality of course certificate module
     And I log in as "manager1"
     And I am on "Course 1" course homepage with editing mode on
     And I add a "Course certificate" to section "1"
-    And I should see "There are no available templates. Please go to Certificate and create a new one."
+    And I should see "There are no available templates. Please go to certificate template management page and create a new one."
     And I press "Save and display"
     And I should see "You must supply a value here."
-    And "Certificate" "link" should exist in the ".alert-warning" "css_element"
+    And "certificate template management page" "link" should exist in the ".alert-warning" "css_element"
 
   Scenario: Teacher can not change course certificate template if it has been issued
     And the following certificate templates exist:
@@ -193,3 +193,39 @@ Feature: Basic functionality of course certificate module
       | Template  | Certificate of participation B |
     And I press "Save and display"
     And I should not see "There is no selected template."
+
+  Scenario: Display activity hidden warning
+    And the following certificate templates exist:
+      | name                           | shared  |
+      | Certificate of participation A | 1       |
+    And the following "activities" exist:
+      | activity          | name           | intro             | course | idnumber           | template                       | visible | automaticsend |
+      | coursecertificate | Certificate 01 | Certificate intro | C1     | coursecertificate1 | Certificate of participation A | 0       | 1             |
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I follow "Certificate 01"
+    And I should see "This activity is currently hidden. By making it visible, 1 students will meet the activity access restrictions."
+    And I press "Disable"
+    And I press "Confirm"
+    And I should not see "This activity is currently hidden. By making it visible, 1 students will meet the activity access restrictions."
+    And I press "Enable"
+    And I press "Confirm"
+    And I should see "This activity is currently hidden. By making it visible, 1 students will meet the activity access restrictions."
+
+  Scenario: Display automatic sending disabled info
+    And the following certificate templates exist:
+      | name                           | shared  |
+      | Certificate of participation A | 1       |
+    And the following "activities" exist:
+      | activity          | name           | intro             | course | idnumber           | template                       | visible | automaticsend |
+      | coursecertificate | Certificate 01 | Certificate intro | C1     | coursecertificate1 | Certificate of participation A | 1       | 0             |
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I follow "Certificate 01"
+    And I should see "Currently, 1 students meet this activity's access restrictions and will be issued with their certificate once they access it."
+    And I press "Enable"
+    And I press "Confirm"
+    And I should not see "Currently, 1 students meet this activity's access restrictions and will be issued with their certificate once they access it."
+    And I press "Disable"
+    And I press "Confirm"
+    And I should see "Currently, 1 students meet this activity's access restrictions and will be issued with their certificate once they access it."

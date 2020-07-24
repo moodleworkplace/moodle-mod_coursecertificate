@@ -37,6 +37,8 @@ define([
     /** @type {Object} The list of selectors for the coursecertificate module. */
     const SELECTORS = {
         AUTOMATICSENDREGION: "[data-region='automaticsend-alert']",
+        HIDDENWARNING: ".hidden-warning",
+        NOAUTOSENDINFO: ".noautosend-info",
         REPORTREGION: "[data-region='issues-report']",
         TOGGLEAUTOMATICSEND: "[data-action='toggle-automaticsend']",
         REVOKEISSUE: "[data-action='revoke-issue']",
@@ -54,16 +56,18 @@ define([
     };
 
     /**
-     * Show/Hide loading overlay.
+     * Show/Hide selector.
      *
-     * @param {Element} element
-     * @param {boolean} visibility
+     * @param {string} selector
+     * @param {boolean} visibile
      */
-    function displayLoading(element, visibility) {
-        if (visibility) {
-            element.querySelector(SELECTORS.LOADING).classList.remove('invisible');
+    function setVisibility(selector, visibile) {
+        if (visibile) {
+            document.querySelector(selector).classList.remove('d-none');
+            document.querySelector(selector).classList.remove('invisible');
         } else {
-            element.querySelector(SELECTORS.LOADING).classList.add('invisible');
+            document.querySelector(selector).classList.add('d-none');
+            document.querySelector(selector).classList.add('invisible');
         }
     }
 
@@ -73,12 +77,13 @@ define([
      * @param {Element} automaticsendregion
      */
     function toggleAutomaticSend(automaticsendregion) {
-        const {certificateid, automaticsend} = automaticsendregion.querySelector(SELECTORS.TOGGLEAUTOMATICSEND).dataset;
+        const {certificateid, automaticsend, userstoissue} =
+            automaticsendregion.querySelector(SELECTORS.TOGGLEAUTOMATICSEND).dataset;
         const newstatus = automaticsend === '0';
         const strings = newstatus
         // Load strings depending on newstatus.
         ? [{'key': 'confirmation', component: 'admin'},
-            {'key': 'enableautomaticsend', component: 'coursecertificate'},
+            {'key': 'enableautomaticsend', component: 'coursecertificate', param: userstoissue},
             {'key': 'confirm'},
             {'key': 'cancel'}]
         : [{'key': 'confirmation', component: 'admin'},
@@ -90,18 +95,23 @@ define([
             Notification.confirm(s[0], s[1], s[2], s[3], () => {
                 M.util.js_pending('mod_coursecertificate_toggle_automaticsend');
                 // Show loading template.
-                displayLoading(automaticsendregion, true);
+                setVisibility(SELECTORS.LOADING, true);
                 // Call to webservice.
                 Ajax.call([{methodname: SERVICES.UPDATEAUTOMATICSEND,
                     args: {id: certificateid, automaticsend: newstatus}}])[0]
                 // Reload automatic send alert template.
-                .then(() => {
-                    return Templates.render(TEMPLATES.AUTOMATICSENDALERT,
-                        {certificateid: certificateid, automaticsend: newstatus}, '');
-                })
-                .then((html) => {
-                    automaticsendregion.innerHTML = html;
-                    M.util.js_complete('mod_coursecertificate_toggle_automaticsend');
+                .then((result) => {
+                    let {showhiddenwarning, shownoautosendinfo} = result;
+                    Templates.render(TEMPLATES.AUTOMATICSENDALERT,
+                        {certificateid: certificateid, automaticsend: newstatus}, '')
+                        .then((html) => {
+                            automaticsendregion.innerHTML = html;
+                            setVisibility(SELECTORS.HIDDENWARNING, showhiddenwarning);
+                            setVisibility(SELECTORS.NOAUTOSENDINFO, shownoautosendinfo);
+                            M.util.js_complete('mod_coursecertificate_toggle_automaticsend');
+                            return null;
+                        })
+                        .fail(Notification.exception);
                     return null;
                 })
                 .fail(Notification.exception);

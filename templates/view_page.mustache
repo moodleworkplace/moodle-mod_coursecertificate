@@ -23,6 +23,9 @@
         "showautomaticsend": true,
         "showreport": true,
         "automaticsend": true,
+        "notemplateselected": false,
+        "showhiddenwarning": false,
+        "shownoautosendinfo": false,
         "table": "<table></table>"
     }
 }}
@@ -46,6 +49,12 @@
                 {{#str}} notemplateselected, coursecertificate {{/str}}
             </div>
         {{/notemplateselected}}
+        <div class="alert alert-warning mt-3 hidden-warning {{^showhiddenwarning}}d-none{{/showhiddenwarning}}">
+            {{#str}} activityhiddenwarning, coursecertificate, {{userstoissue}} {{/str}}
+        </div>
+        <div class="alert alert-info mt-3 noautosend-info {{^shownoautosendinfo}}d-none{{/shownoautosendinfo}}">
+            {{#str}} automaticsenddisabledinfo, coursecertificate, {{userstoissue}} {{/str}}
+        </div>
         {{#showreport}}
             <h3>{{#str}} certifiedusers, coursecertificate {{/str}}</h3>
             <div data-region="issues-report" class="position-relative w-100">
