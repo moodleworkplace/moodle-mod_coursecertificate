@@ -20,7 +20,7 @@ variables:
 before_script:
   - . prepare-workplace $cibot_sshkey
   - cd $CI_PROJECT_DIR/..
-  - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_certificate.git
+  - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_certificate.git --branch WP-2014
   - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_wp.git
   # This is needed while tool_certificate still uses tool_reportbuilder
   - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_reportbuilder.git

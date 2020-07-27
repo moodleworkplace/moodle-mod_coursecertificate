@@ -125,7 +125,6 @@ class certificate_issues_table extends \table_sql {
         $this->collapsible(false);
         $this->sortable(true, 'firstname');
         $this->no_sorting('code');
-        $this->no_sorting('status');
         $this->no_sorting('actions');
         $this->pageable(true);
         $this->is_downloadable(true);
@@ -180,7 +179,7 @@ class certificate_issues_table extends \table_sql {
      * @return string
      */
     public function col_status($certificateissue) {
-        $expired = ($certificateissue->expires > 0) && ($certificateissue->expires <= time());
+        $expired = $certificateissue->status == 0;
         $expiredstr = get_string('expired', 'tool_certificate');
         $validstr = get_string('valid', 'tool_certificate');
 
