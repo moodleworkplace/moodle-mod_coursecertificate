@@ -39,24 +39,18 @@ $string['certifiedusers'] = 'Certified users';
 $string['chooseatemplate'] = 'Choose a template...';
 $string['code'] = 'Code';
 $string['coursecertificate:addinstance'] = 'Add a new Course certificate activity';
-$string['coursecertificate:manage'] = 'Manage a Course certificate activity';
 $string['coursecertificate:receive'] = 'Receive issued certificates';
 $string['coursecertificate:view'] = 'View Course certificate';
 $string['coursecertificate:viewreport'] = 'View Course certificate issues report';
-$string['coursecertificatefieldset'] = 'Course certificate Settings';
-$string['coursecertificatename'] = 'Certificate';
-$string['coursecertificatesettings'] = 'Settings';
 $string['courseinternalid'] = 'Internal course ID used in URLs';
 $string['courseurl'] = 'Course URL';
 $string['disableautomaticsend'] = 'Students will no longer automatically receive a PDF copy of the certificate as soon as they meet
  this activity\'s access restrictions. Instead, they will need to click on the activity link displayed on the course page to receive
  the certificate, once they meet this activity\'s access restrictions.';
-$string['emailteachers'] = 'Send notification and PDF to teachers by email';
 $string['enableautomaticsend'] = 'All students will automatically receive a PDF copy of the certificate as soon as they meet this activity\'s access restrictions.<br/><br/>
 Currently, {$a} students already meet these access restrictions but haven\'t accessed this activity yet. They will immediately receive their copy as well.<br/><br/>
 Students who have already accessed this activity will not receive the certificate again.';
 $string['expirydate'] = 'Expiry date';
-$string['includepdf'] = 'Include PDF on the email notification sent to users';
 $string['issueddate'] = 'Date issued';
 $string['modulename'] = 'Course certificate';
 $string['modulename_help'] = 'The course certificate module provides an opportunity for learners to celebrate achievements by
@@ -71,14 +65,12 @@ $string['notemplateselecteduser'] = 'The certificate is not available. Please co
 $string['notemplateswarning'] = 'There are no available templates. Please contact the site administrator.';
 $string['notemplateswarningwithlink'] = 'There are no available templates. Please go to <a href="{$a}">certificate template management page</a> and create a new one.';
 $string['nouserscertified'] = 'No users are certified.';
-$string['page-mod-certificate-x'] = 'Any course certificate module page';
+$string['page-mod-coursecertificate-x'] = 'Any course certificate module page';
 $string['pluginadministration'] = 'Course certificate administration';
 $string['pluginname'] = 'Course certificate';
 $string['previewcoursefullname'] = 'Course full name';
 $string['previewcourseshortname'] = 'Course short name';
 $string['privacy:metadata'] = 'The course certificate activity does not store personal data.';
-$string['receivecertificate'] = 'Receive certificate';
-$string['receivecertificatenotification'] = 'Receive certificate?';
 $string['revoke'] = 'Revoke';
 $string['revokeissue'] = 'Are you sure you want to revoke this certificate issue from this user?';
 $string['selectdate'] = 'Select date';
@@ -86,5 +78,3 @@ $string['selecttemplatewarning'] = 'Once this activity issues at least one certi
 $string['status'] = 'Status';
 $string['taskissuecertificates'] = 'Issue course certificates';
 $string['template'] = 'Template';
-$string['userscanpreview'] = 'Users can preview the certificate';
-$string['whenavailable'] = 'When available';

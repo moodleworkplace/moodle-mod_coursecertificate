@@ -155,7 +155,7 @@ class view_page implements templatable, renderable {
             }
         }
 
-        $PAGE->set_url('/mod/certificate/view.php', ['id' => $this->cm->id]);
+        $PAGE->set_url('/mod/coursecertificate/view.php', ['id' => $this->cm->id]);
         $PAGE->set_title(format_string($this->certificate->name));
         $PAGE->set_heading(format_string($course->fullname));
         $PAGE->set_context($context);
