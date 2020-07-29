@@ -143,6 +143,24 @@ Feature: Basic functionality of course certificate module
     And I press "Confirm"
     And I should see "No users are certified."
 
+  Scenario: Teacher can manage blocks in the module page
+    And the following certificate templates exist:
+      | name                         | shared  |
+      | Certificate of participation | 1       |
+    And the following "activities" exist:
+      | activity          | name           | intro             | course | idnumber           | template                     |
+      | coursecertificate | Certificate 01 | Certificate intro | C1     | coursecertificate1 | Certificate of participation |
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I follow "Certificate 01"
+    And I add the "HTML" block
+    And I configure the "(new HTML block)" block
+    And I set the following fields to these values:
+      | HTML block title  | My block          |
+      | Content           | This is my block  |
+    And I press "Save changes"
+    And I should see "This is my block"
+
   Scenario: Display information about all coursecertificate activities
     And the following certificate templates exist:
       | name                         | shared  |
