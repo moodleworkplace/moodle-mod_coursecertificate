@@ -24,6 +24,7 @@
 namespace mod_coursecertificate\task;
 
 use context_module;
+use mod_coursecertificate\helper;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -51,22 +52,16 @@ class issue_certificates_task extends \core\task\scheduled_task {
     public function execute() {
         global $DB;
 
-        // Get all the coursecertificates.
-        $coursecertificates = $DB->get_records('coursecertificate');
+        // Get all the coursecertificates with automatic send enabled.
+        $sql = "SELECT c.*
+                FROM {coursecertificate} c
+                JOIN {tool_certificate_templates} ct
+                ON c.template = ct.id
+                WHERE c.automaticsend = 1";
+        $coursecertificates = $DB->get_records_sql($sql);
         foreach ($coursecertificates as $coursecertificate) {
-            if (!$coursecertificate->automaticsend) {
-                // Skip coursecertificates with automaticsend disabled.
-                continue;
-            }
-            // Check coursecertificate template exists.
-            if ($templaterecord = $DB->get_record('tool_certificate_templates', ['id' => $coursecertificate->template])) {
-                $template = \tool_certificate\template::instance($templaterecord->id);
-            } else {
-                mtrace("... Warning: Skipping coursecertificate $coursecertificate->id (invalid templateid: " .
-                    "$coursecertificate->template)");
-                continue;
-            }
-            [$course, $cm] = get_course_and_cm_from_instance($coursecertificate->id, 'coursecertificate');
+            [$course, $cm] = get_course_and_cm_from_instance($coursecertificate->id, 'coursecertificate',
+                $coursecertificate->course);
             if (!$cm->visible) {
                 // Skip coursecertificate modules not visible.
                 continue;
@@ -84,33 +79,21 @@ class issue_certificates_task extends \core\task\scheduled_task {
                 $issuedata['coursecustomfield_' . $data->get_field()->get('id')] = s($data->get_value());
             }
 
-            // Get all the users already issued.
-            $usersissued = $DB->get_fieldset_select(
-                'tool_certificate_issues',
-                'userid',
-                'component = :component AND courseid = :courseid AND templateid = :templateid',
-                ['component' => 'mod_coursecertificate', 'courseid' => $coursecertificate->course,
-                    'templateid' => $coursecertificate->template]
-            );
-            // Get active users in course context with receiveissue capability.
-            $context = \context_course::instance($coursecertificate->course);
-            $potentialusers = get_enrolled_users($context, 'mod/coursecertificate:receive', 0, 'u.*', null,
-                0, 0, true);
-            // Filter only users with access to the activity (Does not filter mod visibility).
-            $info = new \core_availability\info_module($cm);
-            $users = $info->filter_user_list($potentialusers);
+            $template = \tool_certificate\template::instance($coursecertificate->template);
+
+            // Get all the users with requirements that had not been issued.
+            $users = helper::get_users_to_issue($coursecertificate, $cm);
+
             // Issue the certificate.
             foreach ($users as $user) {
-                if (!in_array($user->id, $usersissued)) {
-                    $template->issue_certificate(
-                        $user->id,
-                        $coursecertificate->expires,
-                        $issuedata,
-                        'mod_coursecertificate',
-                        $course->id
-                    );
-                    mtrace("... issued coursecertificate $coursecertificate->id for user $user->id on course $course->id");
-                }
+                $template->issue_certificate(
+                    $user->id,
+                    $coursecertificate->expires,
+                    $issuedata,
+                    'mod_coursecertificate',
+                    $course->id
+                );
+                mtrace("... issued coursecertificate $coursecertificate->id for user $user->id on course $course->id");
             }
         }
     }

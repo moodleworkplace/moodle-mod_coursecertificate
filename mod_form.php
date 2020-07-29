@@ -62,7 +62,13 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         $this->standard_intro_elements();
 
         // Adding the template selector.
-        $templates = $this->get_template_select();
+        if ($hasissues) {
+            // If coursecertificate has issues, just add the current template to the selector.
+            $templates = $this->get_current_template();
+        } else {
+            // Get all available templates for the user.
+            $templates = $this->get_template_select();
+        }
         $templateoptions = ['' => get_string('chooseatemplate', 'coursecertificate')] + $templates;
         $mform->addElement('select', 'template', get_string('template', 'coursecertificate'), $templateoptions);
 
@@ -78,7 +84,8 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
             $mform->addElement('static', 'notemplateswarning', '', $html);
         } else {
             $warningstr = get_string('selecttemplatewarning', 'mod_coursecertificate');
-            $mform->addElement('static', 'selecttemplatewarning', '', html_writer::span($warningstr));
+            $html = html_writer::tag('div', $warningstr, ['class' => 'alert alert-warning']);
+            $mform->addElement('static', 'selecttemplatewarning', '', $html);
         }
         if (!$hasissues) {
             $mform->addRule('template', null, 'required', null, 'client');
@@ -152,7 +159,28 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
     }
 
     /**
-     * Gets array options of available templates for the user.
+     * Gets the current coursecertificate template for the template selector.
+     *
+     * @return array
+     */
+    private function get_current_template(): array {
+        global $DB;
+        $templates = [];
+        if ($instance = $this->get_instance()) {
+            $sql = "SELECT ct.id, ct.name
+                    FROM {tool_certificate_templates} ct
+                    JOIN {coursecertificate} c
+                    ON c.template = ct.id
+                    AND c.id = :instance";
+            if ($record = $DB->get_record_sql($sql, ['instance' => $instance], IGNORE_MISSING)) {
+                $templates[$record->id] = format_string($record->name);
+            }
+        }
+        return $templates;
+    }
+
+    /**
+     * Gets array options of available templates for the user for the template selector.
      *
      * @return array
      */
@@ -161,7 +189,7 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         $templates = [];
         if (!empty($records = \tool_certificate\permission::get_visible_templates($context))) {
             foreach ($records as $record) {
-                $templates[$record->id] = format_string($record->name);;
+                $templates[$record->id] = format_string($record->name);
             }
         }
         return $templates;

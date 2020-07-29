@@ -19,22 +19,31 @@
     Example context (json):
     {
         "certificateid": "1",
-        "automaticsend": true
+        "automaticsend": true,
+        "userstoissue": 0
     }
 }}
 {{> coursecertificate/loading}}
 {{#automaticsend}}
 <div class="alert alert-success p-3 clearfix">
-    <div class="p-2 float-left">{{#str}} automaticsendenabled, coursecertificate {{/str}}</div>
-    <button class="btn btn-light float-right" data-certificateid="{{certificateid}}" data-automaticsend="1" data-action="toggle-automaticsend">
+    <div class="p-2 float-left">{{#str}} automaticsendenabled, coursecertificate {{/str}}
+        <a class="btn btn-link p-0" role="button" data-container="body" data-toggle="popover" data-placement="right" data-content="{{#str}} automaticsendenabled_help, coursecertificate {{/str}}" data-html="true" tabindex="0" data-trigger="focus">
+            {{#pix}} a/help, core,  {{#str}} automaticsend_helptitle, coursecertificate {{/str}}{{/pix}}
+        </a>
+    </div>
+    <button class="btn btn-light float-right" data-certificateid="{{certificateid}}" data-automaticsend="1" data-userstoissue="{{userstoissue}}" data-action="toggle-automaticsend">
             {{#str}} disable {{/str}}
     </button>
 </div>
 {{/automaticsend}}
 {{^automaticsend}}
-<div class="alert alert-danger p-3 clearfix">
-    <div class="p-2 float-left">{{#str}} automaticsenddisabled, coursecertificate {{/str}}</div>
-    <button class="btn btn-light float-right" data-certificateid="{{certificateid}}" data-automaticsend="0" data-action="toggle-automaticsend">
+<div class="alert alert-secondary p-3 clearfix">
+    <div class="p-2 float-left">{{#str}} automaticsenddisabled, coursecertificate {{/str}}
+        <a class="btn btn-link p-0" role="button" data-container="body" data-toggle="popover" data-placement="right" data-content="{{#str}} automaticsenddisabled_help, coursecertificate {{/str}}" data-html="true" tabindex="0" data-trigger="focus">
+            {{#pix}} a/help, core,  {{#str}} automaticsend_helptitle, coursecertificate {{/str}}{{/pix}}
+        </a>
+    </div>
+    <button class="btn btn-light float-right" data-certificateid="{{certificateid}}" data-automaticsend="0" data-userstoissue="{{userstoissue}}" data-action="toggle-automaticsend">
         {{#str}} enable {{/str}}
     </button>
 </div>

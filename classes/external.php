@@ -53,7 +53,7 @@ class external extends \external_api {
      *
      * @param int $id
      * @param bool $automaticsend
-     * @return bool
+     * @return array
      */
     public static function update_automaticsend(int $id, bool $automaticsend) {
         global $DB;
@@ -70,18 +70,27 @@ class external extends \external_api {
             $certificate->automaticsend = $params['automaticsend'];
             if ($DB->update_record('coursecertificate', $certificate)) {
                 \core\event\course_module_updated::create_from_cm($cm, $context)->trigger();
-                return true;
+                return [
+                    'showhiddenwarning' => $certificate->automaticsend && !$cm->visible,
+                    'shownoautosendinfo' => !$certificate->automaticsend && $cm->visible,
+                ];
             }
         }
-        return false;
+        return [
+            'showhiddenwarning' => false,
+            'shownoautosendinfo' => false,
+        ];
     }
 
     /**
      * Describes the return function of update_certificate_automaticsend
      *
-     * @return \external_value
+     * @return \external_single_structure
      */
     public static function update_automaticsend_returns() {
-        return new \external_value(PARAM_BOOL, 'True if successfully updated.');
+        return new \external_single_structure([
+            'showhiddenwarning' => new \external_value(PARAM_BOOL, 'Desc'),
+            'shownoautosendinfo' => new \external_value(PARAM_BOOL, 'Desc'),
+        ]);
     }
 }

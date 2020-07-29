@@ -130,7 +130,7 @@ function coursecertificate_delete_instance(int $id): bool {
  * @param stdClass $currentcontext Current context of block
  * @return array array of page types and it's names
  */
-function coursecertificate_page_type_list(string $pagetype, stdClass $parentcontext, stdClass $currentcontext): array {
+function coursecertificate_page_type_list($pagetype, $parentcontext, $currentcontext): array {
     $modulepagetype = [
         'mod-coursecertificate-*' => get_string('page-mod-coursecertificate-x', 'mod_coursecertificate'),
     ];

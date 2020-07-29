@@ -30,7 +30,7 @@ $functions = [
         'methodname'   => 'update_automaticsend',
         'description'  => 'Update automaticsend setting for a certificate.',
         'type'         => 'write',
-        'capabilities' => 'mod/coursecertificate:manage',
+        'capabilities' => 'mod/coursecertificate:addinstance',
         'ajax'         => true,
     ]
 ];

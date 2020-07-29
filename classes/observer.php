@@ -15,39 +15,34 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Upgrade scripts
+ * Class mod_coursecertificate_observer
  *
  * @package     mod_coursecertificate
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+defined('MOODLE_INTERNAL') || die;
 
 /**
- * Execute mod_coursecertificate upgrade from the given old version.
+ * Class mod_coursecertificate_observer
  *
- * @param int $oldversion
- * @return bool
+ * @package     mod_coursecertificate
+ * @copyright   2020 Mikel Martín <mikel@moodle.com>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-function xmldb_coursecertificate_upgrade($oldversion) {
-    global $DB;
-    $dbman = $DB->get_manager();
-
-    if ($oldversion < 2020072201) {
-
-        // Define index automaticsend (not unique) to be added to coursecertificate.
-        $table = new xmldb_table('coursecertificate');
-        $index = new xmldb_index('automaticsend', XMLDB_INDEX_NOTUNIQUE, ['automaticsend']);
-
-        // Conditionally launch add index automaticsend.
-        if (!$dbman->index_exists($table, $index)) {
-            $dbman->add_index($table, $index);
+class mod_coursecertificate_observer
+{
+    /**
+     * Template deleted observer
+     *
+     * @param \tool_certificate\event\template_deleted $event
+     */
+    public static function on_template_deleted(\tool_certificate\event\template_deleted $event): void {
+        global $DB;
+        $records = $DB->get_records('coursecertificate', ['template' => $event->objectid]);
+        foreach ($records as $record) {
+            $DB->update_record('coursecertificate', (object)['id' => $record->id, 'template' => 0]);
         }
-
-        // Coursecertificate savepoint reached.
-        upgrade_mod_savepoint(true, 2020072201, 'coursecertificate');
     }
-
-    return true;
 }

@@ -42,24 +42,6 @@ class mod_coursecertificate_permission_test_testcase extends advanced_testcase {
     }
 
     /**
-     * Test can_manage.
-     */
-    public function test_can_manage() {
-        $course = $this->getDataGenerator()->create_course();
-        $user = $this->getDataGenerator()->create_and_enrol($course);
-        $this->setUser($user);
-
-        // User without manage capabilities.
-        $this->assertFalse(has_capability('mod/coursecertificate:manage', context_course::instance($course->id)));
-        $this->assertFalse(\mod_coursecertificate\permission::can_manage(context_course::instance($course->id)));
-
-        // Enrol user as editingteacher (with manage capabilities).
-        $this->getDataGenerator()->enrol_user($user->id, $course->id, 'editingteacher');
-        $this->assertTrue(has_capability('mod/coursecertificate:manage', context_course::instance($course->id)));
-        $this->assertTrue(\mod_coursecertificate\permission::can_manage(context_course::instance($course->id)));
-    }
-
-    /**
      * Test can_view_report.
      */
     public function test_can_view_report() {

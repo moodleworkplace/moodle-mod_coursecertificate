@@ -23,26 +23,51 @@
         "showautomaticsend": true,
         "showreport": true,
         "automaticsend": true,
+        "notemplateselected": false,
+        "showhiddenwarning": false,
+        "shownoautosendinfo": false,
         "table": "<table></table>"
     }
 }}
 <div data-region="mod_coursecertificate_view">
     <h2>{{certificatename}}</h2>
-    {{#showautomaticsend}}
-        <div data-region="automaticsend-alert" class="position-relative w-100">
-            {{> coursecertificate/automaticsend_alert}}
+    {{#studentview}}
+        {{#notemplateselected}}
+            <div class="alert alert-danger mt-3">
+                {{#str}} notemplateselecteduser, coursecertificate {{/str}}
+            </div>
+        {{/notemplateselected}}
+    {{/studentview}}
+    {{^studentview}}
+        {{#showautomaticsend}}
+            <div data-region="automaticsend-alert" class="position-relative w-100">
+                {{> coursecertificate/automaticsend_alert}}
+            </div>
+        {{/showautomaticsend}}
+        {{#notemplateselected}}
+            <div class="alert alert-danger mt-3">
+                {{#str}} notemplateselected, coursecertificate {{/str}}
+            </div>
+        {{/notemplateselected}}
+        <div class="alert alert-warning mt-3 hidden-warning {{^showhiddenwarning}}d-none{{/showhiddenwarning}}">
+            {{#str}} activityhiddenwarning, coursecertificate, {{userstoissue}} {{/str}}
         </div>
-    {{/showautomaticsend}}
-    {{#showreport}}
-        <h3>{{#str}} certifiedusers, coursecertificate {{/str}}</h3>
-        <div data-region="issues-report" class="position-relative w-100">
-            {{> coursecertificate/issues_report}}
+        <div class="alert alert-info mt-3 noautosend-info {{^shownoautosendinfo}}d-none{{/shownoautosendinfo}}">
+            {{#str}} automaticsenddisabledinfo, coursecertificate, {{userstoissue}} {{/str}}
         </div>
-    {{/showreport}}
+        {{#showreport}}
+            <h3>{{#str}} certifiedusers, coursecertificate {{/str}}</h3>
+            <div data-region="issues-report" class="position-relative w-100">
+                {{> coursecertificate/issues_report}}
+            </div>
+        {{/showreport}}
+    {{/studentview}}
 </div>
 
 {{#js}}
+    {{^studentview}}
     require(['mod_coursecertificate/manager'], function(m) {
         m.init();
     });
+    {{/studentview}}
 {{/js}}

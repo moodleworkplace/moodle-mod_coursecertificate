@@ -27,6 +27,7 @@ namespace mod_coursecertificate\output;
 use cm_info;
 use completion_info;
 use context_module;
+use mod_coursecertificate\helper;
 use mod_coursecertificate\permission;
 use moodle_url;
 use templatable;
@@ -61,6 +62,9 @@ class view_page implements templatable, renderable {
     /** @var bool $canreceiveissues */
     protected $canreceiveissues;
 
+    /** @var bool */
+    private $canviewall;
+
     /** @var moodle_url $pageurl */
     protected $pageurl;
 
@@ -88,6 +92,7 @@ class view_page implements templatable, renderable {
         $this->certificate = $DB->get_record('coursecertificate', ['id' => $this->cm->instance], '*', MUST_EXIST);
         $this->canviewreport = permission::can_view_report($context);
         $this->canmanage = permission::can_manage($context);
+        $this->canviewall = permission::can_view_all_issues($course->id);
         $this->canreceiveissues = permission::can_receive_issues($context);
 
         // Trigger the event.
@@ -108,9 +113,9 @@ class view_page implements templatable, renderable {
             $groupid = groups_get_activity_group($this->cm, true);
         }
 
-        // View certificate issue if user can not manage and can receive issues.
-        if (!$this->canmanage && $this->canreceiveissues) {
-            // Course certificate template must exist.
+        // View certificate issue PDF if user can not manage, can receive issues and activity template is correct.
+        if (!$this->canviewall && $this->canreceiveissues && $this->certificate->template != 0) {
+            // View certificate PDF only if activity has a template.
             $params = ['id' => $this->certificate->template];
             $templaterecord = $DB->get_record('tool_certificate_templates', $params, '*', MUST_EXIST);
             if ($templaterecord) {
@@ -150,7 +155,7 @@ class view_page implements templatable, renderable {
             }
         }
 
-        $PAGE->set_url('/mod/certificate/view.php', ['id' => $this->cm->id]);
+        $PAGE->set_url('/mod/coursecertificate/view.php', ['id' => $this->cm->id]);
         $PAGE->set_title(format_string($this->certificate->name));
         $PAGE->set_heading(format_string($course->fullname));
         $PAGE->set_context($context);
@@ -172,6 +177,11 @@ class view_page implements templatable, renderable {
         }
         $data['showautomaticsend'] = $this->canmanage;
         $data['showreport'] = $this->canviewreport;
+        $data['notemplateselected'] = $this->certificate->template == 0;
+        $data['studentview'] = !$this->canviewall && $this->canreceiveissues;
+        $data['userstoissue'] = count(helper::get_users_to_issue($this->certificate, $this->cm));
+        $data['showhiddenwarning'] = $this->certificate->automaticsend && !$this->cm->visible;
+        $data['shownoautosendinfo'] = !$this->certificate->automaticsend && $this->cm->visible;
 
         return $data;
     }

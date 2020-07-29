@@ -68,15 +68,39 @@ class mod_coursecertificate_external_test_testcase extends advanced_testcase
 
         // Create coursecertificate module.
         $mod = $this->getDataGenerator()->create_module('coursecertificate',
-            ['course' => $course->id, 'template' => $certificate1->get_id()]);
+            ['course' => $course->id, 'template' => $certificate1->get_id(), 'visible' => 0]);
 
         // Sanity check.
         $this->assertTrue($DB->record_exists('coursecertificate', ['course' => $course->id, 'id' => $mod->id]));
         $this->assertEquals(0, $mod->automaticsend);
 
-        // Update automaticsend.
-        external::update_automaticsend($mod->id, true);
+        // Enable automaticsend.
+        $result = external::update_automaticsend($mod->id, true);
+        $result = external::clean_returnvalue(external::update_automaticsend_returns(), $result);
+
         $this->assertEquals(1, $DB->get_field('coursecertificate', 'automaticsend', ['id' => $mod->id]));
+
+        $this->assertTrue($result['showhiddenwarning']);
+        $this->assertFalse($result['shownoautosendinfo']);
+
+        $cm = get_coursemodule_from_instance('coursecertificate', $mod->id);
+        $DB->update_record('course_modules', (object)['id' => $cm->id, 'visible' => 1]);
+
+        // Disable automaticsend.
+        $result = external::update_automaticsend($mod->id, false);
+        $result = external::clean_returnvalue(external::update_automaticsend_returns(), $result);
+
+        $this->assertEquals(0, $DB->get_field('coursecertificate', 'automaticsend', ['id' => $mod->id]));
+
+        $this->assertFalse($result['showhiddenwarning']);
+        $this->assertTrue($result['shownoautosendinfo']);
+
+        // Enable automaticsend.
+        $result = external::update_automaticsend($mod->id, true);
+        $result = external::clean_returnvalue(external::update_automaticsend_returns(), $result);
+
+        $this->assertFalse($result['showhiddenwarning']);
+        $this->assertFalse($result['shownoautosendinfo']);
     }
 
     /**
@@ -102,9 +126,7 @@ class mod_coursecertificate_external_test_testcase extends advanced_testcase
         $this->assertEquals(0, $mod->automaticsend);
 
         // Try to create an existing issue file.
-        $result = external::update_automaticsend($mod->id, true);
-        $result = external::clean_returnvalue(external::update_automaticsend_returns(), $result);
-        $this->assertFalse($result);
+        external::update_automaticsend($mod->id, true);
         $this->assertEquals(0, $DB->get_field('coursecertificate', 'automaticsend', ['id' => $mod->id]));
     }
 }
