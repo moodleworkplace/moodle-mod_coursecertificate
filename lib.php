@@ -161,7 +161,12 @@ function mod_coursecertificate_tool_certificate_fields() {
     // Get the course custom fields.
     $coursehandler = \core_course\customfield\course_handler::create();
     foreach ($coursehandler->get_fields() as $field) {
-        $handler->ensure_field_exists('coursecustomfield_' . $field->get('id'), 'text', $field->get_formatted_name(),
-            true, $field->get_formatted_name());
+        $handler->ensure_field_exists(
+            'coursecustomfield_' . $field->get('shortname'),
+            'text',
+            get_string('course') . ': ' . $field->get_formatted_name(),
+            true,
+            $field->get_formatted_name()
+        );
     }
 }

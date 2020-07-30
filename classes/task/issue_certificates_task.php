@@ -67,17 +67,7 @@ class issue_certificates_task extends \core\task\scheduled_task {
                 continue;
             }
             // Add course data to the issue.
-            $issuedata = [
-                'courseid' => $course->id,
-                'courseshortname' => $course->shortname,
-                'coursefullname' => $course->fullname,
-                'courseurl' => course_get_url($course)->out(),
-            ];
-            // Add course custom fields data.
-            $handler = \core_course\customfield\course_handler::create();
-            foreach ($handler->get_instance_data($course->id, true) as $data) {
-                $issuedata['coursecustomfield_' . $data->get_field()->get('id')] = s($data->get_value());
-            }
+            $issuedata = helper::get_issue_data($course);
 
             $template = \tool_certificate\template::instance($coursecertificate->template);
 

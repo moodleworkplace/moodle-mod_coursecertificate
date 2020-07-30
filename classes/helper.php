@@ -72,4 +72,26 @@ class helper {
         }
         return $users;
     }
+
+    /**
+     * Get data for the issue. Important course fields (id, shortname, fullname and URL) and course customfields.
+     *
+     * @param \stdClass $course
+     * @return array
+     */
+    public static function get_issue_data(\stdClass $course): array {
+        $issuedata = [
+            'courseid' => $course->id,
+            'courseshortname' => $course->shortname,
+            'coursefullname' => $course->fullname,
+            'courseurl' => course_get_url($course)->out(),
+        ];
+        // Add course custom fields data.
+        $handler = \core_course\customfield\course_handler::create();
+        foreach ($handler->get_instance_data($course->id, true) as $data) {
+            $issuedata['coursecustomfield_' . $data->get_field()->get('shortname')] = $data->export_value();
+        }
+
+        return $issuedata;
+    }
 }

@@ -94,7 +94,7 @@ class mod_coursecertificate_task_test_testcase extends advanced_testcase {
         $this->assertEquals($expirydate, $issue->expires);
         $issuedata = @json_decode($issue->data, true);
         $this->assertEquals('C01', $issuedata['courseshortname']);
-        $this->assertEquals('some text', $issuedata['coursecustomfield_' . $field->get('id')]);
+        $this->assertEquals('some text', $issuedata['coursecustomfield_' . $field->get('shortname')]);
 
         // Check certificate issue was not created for the admin.
         $adminissues = $DB->get_records('tool_certificate_issues', ['userid' => $adminuser->id]);
