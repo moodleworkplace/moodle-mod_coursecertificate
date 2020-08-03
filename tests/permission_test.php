@@ -63,19 +63,11 @@ class mod_coursecertificate_permission_test_testcase extends advanced_testcase {
      * Test can_verify_issues.
      */
     public function test_can_verify_issues() {
-        global $DB;
-
         $course = $this->getDataGenerator()->create_course();
         $user = $this->getDataGenerator()->create_and_enrol($course);
         $this->setUser($user);
 
-        // User without verify capabilities.
-        $this->assertFalse(has_capability('tool/certificate:verify', context_system::instance()));
-        $this->assertFalse(\mod_coursecertificate\permission::can_verify_issues());
-
-        // Assign system manager role.
-        $this->getDataGenerator()->role_assign($DB->get_record('role', array('shortname' => 'manager'))->id, $user->id,
-            context_system::instance());
+        // Every user can verify.
         $this->assertTrue(has_capability('tool/certificate:verify', context_system::instance()));
         $this->assertTrue(\mod_coursecertificate\permission::can_verify_issues());
     }
