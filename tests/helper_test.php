@@ -53,10 +53,8 @@ class mod_coursecertificate_helper_test_testcase extends advanced_testcase {
      * Test get users who meet access restrictions and had not been issued.
      */
     public function test_get_users_to_issue() {
-        global $DB;
-
         // Create course.
-        $course = $this->getDataGenerator()->create_course(['shortname' => 'C01', 'customfield_f1' => 'some text']);
+        $course = $this->getDataGenerator()->create_course();
 
         // Create and enrol users.
         $user1 = $this->getDataGenerator()->create_and_enrol($course);
@@ -78,5 +76,25 @@ class mod_coursecertificate_helper_test_testcase extends advanced_testcase {
         $users = \mod_coursecertificate\helper::get_users_to_issue($coursecertificate, $cm);
         $this->assertEquals(1, count($users));
         $this->assertEquals($users[0], $user2);
+    }
+
+    /**
+     * Test get course issue data.
+     */
+    public function test_get_issue_data() {
+        // Create a course customfield.
+        $catid = $this->getDataGenerator()->create_custom_field_category([])->get('id');
+        $field = $this->getDataGenerator()->create_custom_field(['categoryid' => $catid, 'type' => 'text', 'shortname' => 'f1']);
+
+        // Create course, certificate template and coursecertificate module.
+        $course = $this->getDataGenerator()->create_course(['shortname' => 'C01', 'fullname' => 'Course 01',
+            'customfield_f1' => 'some text']);
+
+        $issuedata = \mod_coursecertificate\helper::get_issue_data($course);
+        $this->assertEquals($course->id, $issuedata['courseid']);
+        $this->assertEquals('C01', $issuedata['courseshortname']);
+        $this->assertEquals('Course 01', $issuedata['coursefullname']);
+        $this->assertEquals(course_get_url($course)->out(), $issuedata['courseurl']);
+        $this->assertEquals('some text', $issuedata['coursecustomfield_f1']);
     }
 }

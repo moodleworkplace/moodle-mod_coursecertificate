@@ -126,11 +126,12 @@ class view_page implements templatable, renderable {
                     'component' => 'mod_coursecertificate'
                 ];
                 // If user does not have an issue yet, create it first.
+                $issuedata = helper::get_issue_data($course);
                 if (!$DB->record_exists('tool_certificate_issues', $issuesqlconditions)) {
                     \tool_certificate\template::instance($templaterecord->id)->issue_certificate(
                         $USER->id,
                         $this->certificate->expires,
-                        [],
+                        $issuedata,
                         'mod_coursecertificate',
                         $course->id
                     );
