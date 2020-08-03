@@ -57,15 +57,12 @@ Feature: View the certificates that have been issued
     And the following "roles" exist:
       | shortname              | name                       | archetype |
       | certificateissuer      | Certificate issuer         |           |
-      | certificateverifier    | Certificate verifier       |           |
     And the following "role assigns" exist:
       | user     | role                | contextlevel | reference |
       | manager1 | certificateissuer   | System       |           |
-      | teacher1 | certificateverifier | System       |           |
     And the following "permission overrides" exist:
       | capability                     | permission | role                 | contextlevel | reference |
       | tool/certificate:issue         | Allow      | certificateissuer    | System       |           |
-      | tool/certificate:verify        | Allow      | certificateverifier  | System       |           |
     And the following certificate templates exist:
       | name        | shared  |
       | Template 01 | 1       |
