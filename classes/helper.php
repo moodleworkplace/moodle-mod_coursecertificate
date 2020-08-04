@@ -26,6 +26,9 @@ namespace mod_coursecertificate;
 
 defined('MOODLE_INTERNAL') || die;
 
+require_once($CFG->dirroot . '/grade/querylib.php');
+require_once($CFG->libdir . '/gradelib.php');
+
 /**
  * The helper for the Coursecertificate module.
  *
@@ -77,14 +80,28 @@ class helper {
      * Get data for the issue. Important course fields (id, shortname, fullname and URL) and course customfields.
      *
      * @param \stdClass $course
+     * @param \stdClass $user
      * @return array
      */
-    public static function get_issue_data(\stdClass $course): array {
+    public static function get_issue_data(\stdClass $course, \stdClass $user): array {
+        global $DB;
+
+        // Get user course completion date.
+        $result = $DB->get_field('course_completions', 'timecompleted',
+            ['course' => $course->id, 'userid' => $user->id]);
+        $completiondate = $result ? userdate($result, get_string('strftimedatefullshort')) : '';
+
+        // Get user course grade.
+        $grade = grade_get_course_grade($user->id, $course->id);
+        $gradestr = $grade->grade ? $grade->str_grade : '';
+
         $issuedata = [
             'courseid' => $course->id,
             'courseshortname' => $course->shortname,
             'coursefullname' => $course->fullname,
             'courseurl' => course_get_url($course)->out(),
+            'coursecompletiondate' => $completiondate,
+            'coursegrade' => $gradestr,
         ];
         // Add course custom fields data.
         $handler = \core_course\customfield\course_handler::create();

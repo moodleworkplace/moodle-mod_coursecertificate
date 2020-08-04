@@ -66,8 +66,6 @@ class issue_certificates_task extends \core\task\scheduled_task {
                 // Skip coursecertificate modules not visible.
                 continue;
             }
-            // Add course data to the issue.
-            $issuedata = helper::get_issue_data($course);
 
             $template = \tool_certificate\template::instance($coursecertificate->template);
 
@@ -76,6 +74,9 @@ class issue_certificates_task extends \core\task\scheduled_task {
 
             // Issue the certificate.
             foreach ($users as $user) {
+                // Add course data to the issue.
+                $issuedata = helper::get_issue_data($course, $user);
+
                 $template->issue_certificate(
                     $user->id,
                     $coursecertificate->expires,
