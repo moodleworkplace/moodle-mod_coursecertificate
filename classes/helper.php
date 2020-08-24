@@ -93,7 +93,9 @@ class helper {
 
         // Get user course grade.
         $grade = grade_get_course_grade($user->id, $course->id);
-        $gradestr = $grade->grade ? $grade->str_grade : '';
+        if ($grade && $grade->grade) {
+            $gradestr = $grade->str_grade;
+        }
 
         $issuedata = [
             'courseid' => $course->id,
@@ -101,7 +103,7 @@ class helper {
             'coursefullname' => $course->fullname,
             'courseurl' => course_get_url($course)->out(),
             'coursecompletiondate' => $completiondate,
-            'coursegrade' => $gradestr,
+            'coursegrade' => $gradestr ?? '',
         ];
         // Add course custom fields data.
         $handler = \core_course\customfield\course_handler::create();
