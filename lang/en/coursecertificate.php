@@ -42,6 +42,7 @@ $string['coursecertificate:addinstance'] = 'Add a new Course certificate activit
 $string['coursecertificate:receive'] = 'Receive issued certificates';
 $string['coursecertificate:view'] = 'View Course certificate';
 $string['coursecertificate:viewreport'] = 'View Course certificate issues report';
+$string['coursecompletiondate'] = 'Completion date';
 $string['courseinternalid'] = 'Internal course ID used in URLs';
 $string['courseurl'] = 'Course URL';
 $string['disableautomaticsend'] = 'Students will no longer automatically receive a PDF copy of the certificate as soon as they meet

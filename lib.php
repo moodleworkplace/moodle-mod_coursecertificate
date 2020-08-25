@@ -158,6 +158,21 @@ function mod_coursecertificate_tool_certificate_fields() {
     $handler->ensure_field_exists('courseurl', 'text',
         get_string('courseurl', 'mod_coursecertificate'),
         true, $CFG->wwwroot . '/course/view.php?id=1');
+    $handler->ensure_field_exists(
+        'coursecompletiondate',
+        'text',
+        get_string('course') . ': ' . get_string('coursecompletiondate', 'mod_coursecertificate'),
+        true,
+        get_string('coursecompletiondate', 'mod_coursecertificate')
+    );
+    $handler->ensure_field_exists(
+        'coursegrade',
+        'text',
+        get_string('course') . ': ' . get_string('grade'),
+        true,
+        get_string('grade')
+    );
+
     // Get the course custom fields.
     $coursehandler = \core_course\customfield\course_handler::create();
     foreach ($coursehandler->get_fields() as $field) {

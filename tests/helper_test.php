@@ -86,15 +86,40 @@ class mod_coursecertificate_helper_test_testcase extends advanced_testcase {
         $catid = $this->getDataGenerator()->create_custom_field_category([])->get('id');
         $field = $this->getDataGenerator()->create_custom_field(['categoryid' => $catid, 'type' => 'text', 'shortname' => 'f1']);
 
-        // Create course, certificate template and coursecertificate module.
+        // Create course with completion self enabled.
         $course = $this->getDataGenerator()->create_course(['shortname' => 'C01', 'fullname' => 'Course 01',
-            'customfield_f1' => 'some text']);
+            'enablecompletion' => COMPLETION_ENABLED, 'customfield_f1' => 'some text']);
+        $criteriadata = new \stdClass();
+        $criteriadata->id = $course->id;
+        $criteriadata->criteria_self = COMPLETION_CRITERIA_TYPE_SELF;
 
-        $issuedata = \mod_coursecertificate\helper::get_issue_data($course);
+        /** @var \completion_criteria_self $criterion */
+        $criterion = \completion_criteria::factory(['criteriatype' => COMPLETION_CRITERIA_TYPE_SELF]);
+        $criterion->update_config($criteriadata);
+
+        // Create and enrol user.
+        $user = $this->getDataGenerator()->create_and_enrol($course);
+
+        // Set user grade to 10.00.
+        $assign = $this->getDataGenerator()->create_module('assign', ['course' => $course->id]);
+        $gradeitem2 = grade_item::fetch(['itemtype' => 'mod', 'itemmodule' => 'assign', 'iteminstance' => $assign->id,
+            'courseid' => $course->id]);
+        $gradeitem2->update_final_grade($user->id, 10, 'gradebook');
+
+        // Complete the course.
+        $this->setUser($user);
+        \core_completion_external::mark_course_self_completed($course->id);
+        $ccompletion = new \completion_completion(['course' => $course->id, 'userid' => $user->id]);
+        $ccompletion->mark_complete();
+
+        $issuedata = \mod_coursecertificate\helper::get_issue_data($course, $user);
         $this->assertEquals($course->id, $issuedata['courseid']);
         $this->assertEquals('C01', $issuedata['courseshortname']);
         $this->assertEquals('Course 01', $issuedata['coursefullname']);
         $this->assertEquals(course_get_url($course)->out(), $issuedata['courseurl']);
         $this->assertEquals('some text', $issuedata['coursecustomfield_f1']);
+        $coursecompletiondate = userdate($ccompletion->timecompleted, get_string('strftimedatefullshort'));
+        $this->assertEquals($coursecompletiondate, $issuedata['coursecompletiondate']);
+        $this->assertEquals('10.00', $issuedata['coursegrade']);
     }
 }
