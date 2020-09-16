@@ -1,4 +1,4 @@
-@mod @mod_coursecertificate @javascript
+@mod @mod_coursecertificate @moodleworkplace @javascript
 Feature: Self issue certificate for coursecertificate template
   In order to get a certificate issue
   As a student
