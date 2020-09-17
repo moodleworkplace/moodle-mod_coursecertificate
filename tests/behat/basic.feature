@@ -1,4 +1,4 @@
-@mod @mod_coursecertificate @javascript
+@mod @mod_coursecertificate @moodleworkplace @javascript
 Feature: Basic functionality of course certificate module
   In order to issue certificates in a course
   As a teacher
