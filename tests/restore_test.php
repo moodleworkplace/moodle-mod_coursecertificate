@@ -156,7 +156,6 @@ class mod_coursecertificate_restore_testcase extends restore_date_testcase {
         $files = $fs->get_area_files(context_system::instance()->id, 'tool_certificate', 'issues',
             $issue->id, 'itemid', false);
         $issuefile = reset($files);
-        $this->assertFileExists($issuefile->get_filepath());
 
         // Do backup.
         $this->backup($course);
@@ -181,7 +180,6 @@ class mod_coursecertificate_restore_testcase extends restore_date_testcase {
         $files = $fs->get_area_files(context_system::instance()->id, 'tool_certificate', 'issues',
             $newissue->id, 'itemid', false);
         $newissuefile = reset($files);
-        $this->assertFileExists($newissuefile->get_filepath());
-        $this->assertFileEquals($issuefile->get_filepath(), $newissuefile->get_filepath());
+        $this->assertEquals($issuefile->get_contenthash(), $newissuefile->get_contenthash());
     }
 }

@@ -79,9 +79,12 @@ class mod_coursecertificate_generator extends testing_module_generator {
     public function create_instance($record = null, array $options = null) {
         $record = (array)$record;
         if (empty($record['template'])) {
-            throw new coding_exception('Certificate template is required to create an instance of mod_coursecertificate');
+            $certgenerator = \testing_util::get_data_generator()->get_plugin_generator('tool_certificate');
+            $certificate1 = $certgenerator->create_template((object)['name' => 'Certificate 1']);
+            $record['template'] = $certificate1->get_id();
+        } else {
+            $record['template'] = $this->get_template_id($record['template']);
         }
-        $record['template'] = $this->get_template_id($record['template']);
 
         $defaultsettings = [
             'automaticsend' => 0,
