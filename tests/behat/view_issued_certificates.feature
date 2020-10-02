@@ -87,14 +87,17 @@ Feature: View the certificates that have been issued
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "Certificate"
-    And I click on "Email address" "link" in the "generaltable" "table"
-    And I should see "student01@example.com"
+    # Test group filtering.
     And I set the field "Separate groups" to "Group 1"
+    And I should see "student01@example.com"
+    And I should see "student02@example.com"
     And I should not see "student03@example.com"
     And I set the field "Separate groups" to "All participants"
     And I should see "student03@example.com"
+    # Test sorting.
     And I click on "Email address" "link" in the "generaltable" "table"
     And I should not see "student01@example.com"
+    # Test pagination.
     And I click on "2" "link" in the ".pagination" "css_element"
     And I should see "student01@example.com"
 
@@ -131,12 +134,14 @@ Feature: View the certificates that have been issued
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "Certificate"
+    And I click on "Email address" "link" in the "generaltable" "table"
     And I click on "View" "link" in the "student06@example.com" "table_row"
 
   Scenario: Remove issued certificates
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "Certificate"
+    And I click on "Email address" "link" in the "generaltable" "table"
     And I should see "student06@example.com"
     And I click on "Revoke" "link" in the "student06@example.com" "table_row"
     And I press "Confirm"
@@ -146,6 +151,7 @@ Feature: View the certificates that have been issued
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "Certificate"
+    And I click on "Email address" "link" in the "generaltable" "table"
     And I click on "Verify" "link" in the "student06@example.com" "table_row"
 
   Scenario: Download issued certificates list
