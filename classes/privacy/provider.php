@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines {@link \mod_coursecertificate\privacy\provider} class.
+ * Class provider
  *
  * @package     mod_coursecertificate
  * @category    privacy

@@ -84,8 +84,8 @@ class restore_coursecertificate_activity_task extends restore_activity_task {
 
     /**
      * Defines the restore log rules that will be applied by the
-     * {@link restore_logs_processor} when restoring mod_coursecertificate logs. It
-     * must return one array of {@link restore_log_rule} objects.
+     * {@see restore_logs_processor} when restoring mod_coursecertificate logs. It
+     * must return one array of {@see restore_log_rule} objects.
      *
      * @return restore_log_rule[].
      */

@@ -65,6 +65,7 @@ Feature: Basic functionality of course certificate module
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I duplicate "Certificate" activity
+    And I wait until "Certificate (copy)" "link" exists
     And I delete "Certificate (copy)" activity
     And I should not see "Certificate (copy)"
 
