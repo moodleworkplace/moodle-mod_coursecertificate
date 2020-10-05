@@ -187,7 +187,6 @@ Feature: Basic functionality of course certificate module
       | activity          | name           | intro             | course | idnumber           | template                       |
       | coursecertificate | Certificate 01 | Certificate intro | C1     | coursecertificate1 | Certificate of participation A |
     And I log in as "admin"
-    # Using these steps adds tool_reportbuilder and tool_tenant dependency.
     And I navigate to "Certificates > Manage certificate templates" in site administration
     And I click on "Delete" "link" in the "Certificate of participation A" "table_row"
     And I click on "Delete" "button" in the "Confirm" "dialogue"
