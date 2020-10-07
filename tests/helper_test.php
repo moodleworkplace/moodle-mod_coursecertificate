@@ -60,22 +60,35 @@ class mod_coursecertificate_helper_test_testcase extends advanced_testcase {
         $user1 = $this->getDataGenerator()->create_and_enrol($course);
         $user2 = $this->getDataGenerator()->create_and_enrol($course);
 
-        // Create certificate template and coursecertificate module.
+        // Create certificate template.
         $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
-        $coursecertificate = $this->getDataGenerator()->create_module('coursecertificate',
-            ['course' => $course->id, 'template' => $certificate1->get_id()]);
-        $cm = get_fast_modinfo($course)->instances['coursecertificate'][$coursecertificate->id];
+
+        // Create coursecertificate1 module without restrictions.
+        $coursecertificate1 = $this->getDataGenerator()->create_module('coursecertificate', ['course' => $course->id,
+            'template' => $certificate1->get_id()]);
+        $cm1 = get_fast_modinfo($course)->instances['coursecertificate'][$coursecertificate1->id];
 
         // Check both users are retured.
-        $users = \mod_coursecertificate\helper::get_users_to_issue($coursecertificate, $cm);
-        $this->assertEquals(2, count($users));
+        $users = \mod_coursecertificate\helper::get_users_to_issue($coursecertificate1, $cm1);
+        $this->assertCount(2, $users);
 
         $certificate1->issue_certificate($user1->id, null, [], 'mod_coursecertificate', $course->id);
 
-        // CHeck just user2 is returned.
-        $users = \mod_coursecertificate\helper::get_users_to_issue($coursecertificate, $cm);
-        $this->assertEquals(1, count($users));
+        // Check just user2 is returned (user1 was already issued).
+        $users = \mod_coursecertificate\helper::get_users_to_issue($coursecertificate1, $cm1);
+        $this->assertCount(1, $users);
         $this->assertEquals($users[0], $user2);
+
+        // Create coursecertificate2 module with data restriction in the future.
+        $futuredate = strtotime('+1year');
+        $availabilityvalue = '{"op":"&","c":[{"type":"date","d":">=","t":' . $futuredate . '}],"showc":[true]}';
+        $coursecertificate2 = $this->getDataGenerator()->create_module('coursecertificate', ['course' => $course->id,
+                'template' => $certificate1->get_id(), 'availability' => $availabilityvalue]);
+        $cm2 = get_fast_modinfo($course)->instances['coursecertificate'][$coursecertificate2->id];
+
+        // Check no user is returned.
+        $users = \mod_coursecertificate\helper::get_users_to_issue($coursecertificate2, $cm2);
+        $this->assertEmpty($users);
     }
 
     /**
