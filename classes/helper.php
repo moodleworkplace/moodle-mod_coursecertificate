@@ -24,6 +24,8 @@
 
 namespace mod_coursecertificate;
 
+use core_availability\info_module;
+
 defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->dirroot . '/grade/querylib.php');
@@ -67,6 +69,9 @@ class helper {
         $users = [];
         foreach ($potentialusers as $potentialuser) {
             if (has_capability('tool/certificate:viewallcertificates', $context, $potentialuser)) {
+                continue;
+            }
+            if (!info_module::is_user_visible($cm, $potentialuser->id, false)) {
                 continue;
             }
             if (!in_array($potentialuser->id, $usersissued)) {

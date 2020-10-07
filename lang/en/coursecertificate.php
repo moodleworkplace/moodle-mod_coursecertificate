@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['activityhiddenwarning'] = 'This activity is currently hidden. By making it visible, {$a} students will meet the activity access restrictions.';
+$string['activityhiddenwarning'] = 'This activity is currently hidden. By making it visible, students who meet the activity access restrictions will automatically receive a PDF copy of the certificate.';
 $string['automaticsend_helptitle'] = "Help with automatic sending";
 $string['automaticsenddisabled'] = 'The automatic sending of this certificate is disabled.';
 $string['automaticsenddisabled_help'] = 'By leaving this disabled, students must click on the activity link displayed on the course page to receive the certificate, once they meet this activity\'s access restrictions.<br/><br/>
