@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component    = 'mod_coursecertificate';
 $plugin->release      = '3.9.2';
-$plugin->version      = 2020100600;
+$plugin->version      = 2020100700;
 $plugin->requires     = 2020061502.00;
 $plugin->maturity     = MATURITY_STABLE;
 $plugin->dependencies = [
