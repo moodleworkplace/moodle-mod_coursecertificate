@@ -222,13 +222,13 @@ Feature: Basic functionality of course certificate module
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I follow "Certificate 01"
-    And I should see "This activity is currently hidden. By making it visible, 1 students will meet the activity access restrictions."
+    And I should see "This activity is currently hidden. By making it visible, students who meet the activity access restrictions will automatically receive a PDF copy of the certificate."
     And I press "Disable"
     And I press "Confirm"
-    And I should not see "This activity is currently hidden. By making it visible, 1 students will meet the activity access restrictions."
+    And I should not see "This activity is currently hidden. By making it visible, students who meet the activity access restrictions will automatically receive a PDF copy of the certificate."
     And I press "Enable"
     And I press "Confirm"
-    And I should see "This activity is currently hidden. By making it visible, 1 students will meet the activity access restrictions."
+    And I should see "This activity is currently hidden. By making it visible, students who meet the activity access restrictions will automatically receive a PDF copy of the certificate."
 
   Scenario: Display automatic sending disabled info
     And the following certificate templates exist:
