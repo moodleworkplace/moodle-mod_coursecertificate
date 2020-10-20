@@ -149,6 +149,7 @@ function mod_coursecertificate_tool_certificate_fields() {
 
     $handler = tool_certificate\customfield\issue_handler::create();
 
+    // TODO: the only currently supported field types are text/textarea (numeric will fallback to text).
     $handler->ensure_field_exists('courseid', 'numeric',
         get_string('courseinternalid', 'mod_coursecertificate'), false, 1);
     $handler->ensure_field_exists('courseshortname', 'text', get_string('shortnamecourse'),
@@ -173,12 +174,12 @@ function mod_coursecertificate_tool_certificate_fields() {
         get_string('grade')
     );
 
-    // Get the course custom fields.
+    // Get the course custom fields (note the only supported field types are text/textarea).
     $coursehandler = \core_course\customfield\course_handler::create();
     foreach ($coursehandler->get_fields() as $field) {
         $handler->ensure_field_exists(
             'coursecustomfield_' . $field->get('shortname'),
-            'text',
+            $field->get('type'),
             get_string('course') . ': ' . $field->get_formatted_name(),
             true,
             $field->get_formatted_name()
