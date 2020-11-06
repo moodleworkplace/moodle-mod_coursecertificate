@@ -41,7 +41,7 @@ class mod_coursecertificate_restore_testcase extends restore_date_testcase {
     /**
      * Set up
      */
-    public function setUp() {
+    public function setUp(): void {
         $this->resetAfterTest();
         $this->setAdminUser();
     }

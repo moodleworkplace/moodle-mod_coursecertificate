@@ -37,7 +37,7 @@ class mod_coursecertificate_observer_test_testcase extends advanced_testcase {
     /**
      * Set up
      */
-    public function setUp() {
+    public function setUp(): void {
         $this->resetAfterTest();
     }
 
