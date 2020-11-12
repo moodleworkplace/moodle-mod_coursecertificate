@@ -36,6 +36,7 @@ Feature: Basic functionality of course certificate module
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I add a "Course certificate" to section "1"
+    And "Manage certificate templates" "link" should not exist
     And I click on "Template" "select"
     And I should not see "Certificate of completion"
     And I set the following fields to these values:
@@ -70,15 +71,21 @@ Feature: Basic functionality of course certificate module
     And I should not see "Certificate (copy)"
 
   Scenario: Manager can create an instance of course certificate module with non shared templates
+    And the following "permission overrides" exist:
+      | capability                      | permission | role                 | contextlevel | reference |
+      | tool/certificate:manage         | Allow      | certificateissuer    | System       |           |
     And the following certificate templates exist:
       | name                         | shared  |
       | Certificate of participation | 1       |
       | Certificate of completion    | 0       |
     And I log in as "manager1"
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Course certificate" to section "1" and I fill the form with:
+    And I add a "Course certificate" to section "1"
+    And "Manage certificate templates" "link" should exist
+    And I set the following fields to these values:
       | Name     | Your awesome certificate  |
       | Template | Certificate of completion |
+    And I press "Save and display"
     And I follow "Your awesome certificate"
     And I should see "Your awesome certificate"
     And I should see "The automatic sending of this certificate is disabled"

@@ -53,6 +53,7 @@ Currently, {$a} students already meet these access restrictions but haven\'t acc
 Students who have already accessed this activity will not receive the certificate again.';
 $string['expirydate'] = 'Expiry date';
 $string['issueddate'] = 'Date issued';
+$string['managetemplates'] = 'Manage certificate templates';
 $string['modulename'] = 'Course certificate';
 $string['modulename_help'] = 'The course certificate module provides an opportunity for learners to celebrate achievements by
  obtaining certificates.<br/><br/> It allows you to choose from different certificate templates which will automatically display user data
