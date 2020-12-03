@@ -77,7 +77,7 @@ class mod_coursecertificate_helper_test_testcase extends advanced_testcase {
         // Check just user2 is returned (user1 was already issued).
         $users = \mod_coursecertificate\helper::get_users_to_issue($coursecertificate1, $cm1);
         $this->assertCount(1, $users);
-        $this->assertEquals($users[0], $user2);
+        $this->assertEquals($users[0]->id, $user2->id);
 
         // Create coursecertificate2 module with data restriction in the future.
         $futuredate = strtotime('+1year');
