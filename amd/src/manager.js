@@ -77,13 +77,13 @@ define([
      * @param {Element} automaticsendregion
      */
     function toggleAutomaticSend(automaticsendregion) {
-        const {certificateid, automaticsend, userstoissue} =
+        const {certificateid, automaticsend} =
             automaticsendregion.querySelector(SELECTORS.TOGGLEAUTOMATICSEND).dataset;
         const newstatus = automaticsend === '0';
         const strings = newstatus
         // Load strings depending on newstatus.
         ? [{'key': 'confirmation', component: 'admin'},
-            {'key': 'enableautomaticsend', component: 'coursecertificate', param: userstoissue},
+            {'key': 'enableautomaticsendpopup', component: 'coursecertificate'},
             {'key': 'confirm'},
             {'key': 'cancel'}]
         : [{'key': 'confirmation', component: 'admin'},

@@ -89,17 +89,6 @@ class helper {
     }
 
     /**
-     * Counts users who meet access restrictionss and had not been issued.
-     *
-     * @param \stdClass $coursecertificate
-     * @param \cm_info $cm
-     * @return int
-     */
-    public static function count_users_to_issue(\stdClass $coursecertificate, \cm_info $cm): int {
-        return count(self::get_users_to_issue($coursecertificate, $cm));
-    }
-
-    /**
      * Get data for the issue. Important course fields (id, shortname, fullname and URL) and course customfields.
      *
      * @param \stdClass $course

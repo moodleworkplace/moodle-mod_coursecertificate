@@ -22,8 +22,7 @@
     Example context (json):
     {
         "certificateid": "1",
-        "automaticsend": true,
-        "userstoissue": 0
+        "automaticsend": true
     }
 }}
 {{> coursecertificate/loading}}
@@ -34,7 +33,7 @@
             {{#pix}} a/help, core,  {{#str}} automaticsend_helptitle, coursecertificate {{/str}}{{/pix}}
         </a>
     </div>
-    <button class="btn btn-light float-right" data-certificateid="{{certificateid}}" data-automaticsend="1" data-userstoissue="{{userstoissue}}" data-action="toggle-automaticsend">
+    <button class="btn btn-light float-right" data-certificateid="{{certificateid}}" data-automaticsend="1" data-action="toggle-automaticsend">
             {{#str}} disable {{/str}}
     </button>
 </div>
@@ -46,7 +45,7 @@
             {{#pix}} a/help, core,  {{#str}} automaticsend_helptitle, coursecertificate {{/str}}{{/pix}}
         </a>
     </div>
-    <button class="btn btn-light float-right" data-certificateid="{{certificateid}}" data-automaticsend="0" data-userstoissue="{{userstoissue}}" data-action="toggle-automaticsend">
+    <button class="btn btn-light float-right" data-certificateid="{{certificateid}}" data-automaticsend="0" data-action="toggle-automaticsend">
         {{#str}} enable {{/str}}
     </button>
 </div>
