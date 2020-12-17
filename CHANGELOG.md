@@ -1,0 +1,10 @@
+# Changelog
+
+## 3.10+ (2020121700)
+### Changed
+- Fixed a bug in how a 'Text area' course custom field is handled in the certificate templates
+- For performance reasons the exact number of users who will receive certificate is no longer displayed.
+  [CONTRIB-8325](https://tracker.moodle.org/browse/CONTRIB-8325)
+
+## Previous versions
+Changelog was not maintained before version 3.10
