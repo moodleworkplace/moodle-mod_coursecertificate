@@ -180,7 +180,6 @@ class view_page implements templatable, renderable {
         $data['showreport'] = $this->canviewreport;
         $data['notemplateselected'] = $this->certificate->template == 0;
         $data['studentview'] = !$this->canviewall && $this->canreceiveissues;
-        $data['userstoissue'] = count(helper::get_users_to_issue($this->certificate, $this->cm));
         $data['showhiddenwarning'] = $this->certificate->automaticsend && !$this->cm->visible;
         $data['shownoautosendinfo'] = !$this->certificate->automaticsend && $this->cm->visible;
 

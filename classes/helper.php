@@ -49,36 +49,43 @@ class helper {
     public static function get_users_to_issue(\stdClass $coursecertificate, \cm_info $cm): array {
         global $DB;
 
-        // Get all the users already issued.
-        $usersissued = $DB->get_fieldset_select(
-            'tool_certificate_issues',
-            'userid',
-            'component = :component AND courseid = :courseid AND templateid = :templateid',
-            ['component' => 'mod_coursecertificate', 'courseid' => $coursecertificate->course,
-                'templateid' => $coursecertificate->template]
-        );
-        // Get active users in course context with receiveissue capability.
         $context = \context_course::instance($coursecertificate->course);
-        $enrolledusers = get_enrolled_users($context, 'mod/coursecertificate:receive', 0, 'u.*', null,
-            0, 0, true);
-        // Filter only users with access to the activity (Does not filter mod visibility).
-        $info = new \core_availability\info_module($cm);
-        $potentialusers = $info->filter_user_list($enrolledusers);
+        // Get users already issued subquery.
+        [$usersissuedsql, $usersissuedparams] = self::get_users_issued_select($coursecertificate->course,
+            $coursecertificate->template);
+        // Get users enrolled with receive capabilities subquery.
+        [$enrolledsql, $enrolledparams] = get_enrolled_sql($context, 'mod/coursecertificate:receive', 0, true);
+        $sql  = "SELECT eu.id FROM ($enrolledsql) eu WHERE eu.id NOT IN ($usersissuedsql)";
+        $params = array_merge($enrolledparams, $usersissuedparams);
+        $potentialusers = $DB->get_records_sql($sql, $params);
 
-        // Filter only users without 'viewall' capabilities and that had not been issued.
+        // Filter only users with access to the activity {@see info_module::filter_user_list}.
+        $info = new \core_availability\info_module($cm);
+        $filteredusers = $info->filter_user_list($potentialusers);
+
+        // Filter only users without 'viewall' capabilities and with access to the activity.
         $users = [];
-        foreach ($potentialusers as $potentialuser) {
-            if (has_capability('tool/certificate:viewallcertificates', $context, $potentialuser)) {
-                continue;
-            }
-            if (!info_module::is_user_visible($cm, $potentialuser->id, false)) {
-                continue;
-            }
-            if (!in_array($potentialuser->id, $usersissued)) {
-                $users[] = $potentialuser;
+        foreach ($filteredusers as $filtereduser) {
+            if (info_module::is_user_visible($cm, $filtereduser->id, false)) {
+                $users[] = $filtereduser;
             }
         }
         return $users;
+    }
+
+    /**
+     * Returns select for the users that have been already issued
+     *
+     * @param int $courseid
+     * @param int $templateid
+     * @return array
+     */
+    private static function get_users_issued_select(int $courseid, int $templateid): array {
+        $sql = "SELECT DISTINCT ci.userid FROM {tool_certificate_issues} ci
+                WHERE component = :component AND courseid = :courseid AND templateid = :templateid";
+        $params = ['component' => 'mod_coursecertificate', 'courseid' => $courseid,
+            'templateid' => $templateid];
+        return [$sql, $params];
     }
 
     /**

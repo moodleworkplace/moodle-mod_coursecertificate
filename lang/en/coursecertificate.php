@@ -30,6 +30,7 @@ $string['automaticsend_helptitle'] = "Help with automatic sending";
 $string['automaticsenddisabled'] = 'The automatic sending of this certificate is disabled.';
 $string['automaticsenddisabled_help'] = 'By leaving this disabled, students must click on the activity link displayed on the course page to receive the certificate, once they meet this activity\'s access restrictions.<br/><br/>
 By enabling it, students will automatically receive a PDF copy of the certificate once they meet this activity\'s access restrictions. Note that all students that already meet this activity\'s access restrictions will receive the certificate when enabling this.';
+$string['automaticsenddisabledalert'] = 'Students who meet this activity\'s access restrictions will be issued with their certificate once they access it.';
 $string['automaticsenddisabledinfo'] = 'Currently, {$a} students meet this activity\'s access restrictions and will be issued with their certificate once they access it.';
 $string['automaticsendenabled'] = 'The automatic sending of this certificate is enabled.';
 $string['automaticsendenabled_help'] = 'By leaving this enabled, students will automatically receive a PDF copy of the certificate once they meet this activity\'s access restrictions.<br/><br/>
@@ -50,6 +51,9 @@ $string['disableautomaticsend'] = 'Students will no longer automatically receive
  the certificate, once they meet this activity\'s access restrictions.';
 $string['enableautomaticsend'] = 'All students will automatically receive a PDF copy of the certificate as soon as they meet this activity\'s access restrictions.<br/><br/>
 Currently, {$a} students already meet these access restrictions but haven\'t accessed this activity yet. They will immediately receive their copy as well.<br/><br/>
+Students who have already accessed this activity will not receive the certificate again.';
+$string['enableautomaticsendpopup'] = 'All students will automatically receive a PDF copy of the certificate as soon as they meet this activity\'s access restrictions.<br/><br/>
+Students who already meet these access restrictions but haven\'t accessed this activity yet will immediately receive their copy as well.<br/><br/>
 Students who have already accessed this activity will not receive the certificate again.';
 $string['expirydate'] = 'Expiry date';
 $string['issueddate'] = 'Date issued';

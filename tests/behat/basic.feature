@@ -247,10 +247,10 @@ Feature: Basic functionality of course certificate module
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I follow "Certificate 01"
-    And I should see "Currently, 1 students meet this activity's access restrictions and will be issued with their certificate once they access it."
+    And I should see "Students who meet this activity's access restrictions will be issued with their certificate once they access it."
     And I press "Enable"
     And I press "Confirm"
-    And I should not see "Currently, 1 students meet this activity's access restrictions and will be issued with their certificate once they access it."
+    And I should not see "Students who meet this activity's access restrictions will be issued with their certificate once they access it."
     And I press "Disable"
     And I press "Confirm"
-    And I should see "Currently, 1 students meet this activity's access restrictions and will be issued with their certificate once they access it."
+    And I should see "Students who meet this activity's access restrictions will be issued with their certificate once they access it."
