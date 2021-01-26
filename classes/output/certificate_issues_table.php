@@ -213,6 +213,7 @@ class certificate_issues_table extends \table_sql {
             $previewicon = new \pix_icon('i/search', get_string('view'));
             $previewlink = template::view_url($certificateissue->code);
             $previewattributes = [
+                'target' => '_blank',
                 'class' => 'action-icon delete-icon',
                 'data-action' => 'preview-issue',
                 'data-issueid' => $certificateissue->issueid
