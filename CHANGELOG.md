@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## 3.10.1+ (2021020800)
 ### Changed
 - Viewing and previewing certificates now open a new browser tab
 
