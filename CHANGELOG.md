@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.10.4 (2021051100)
+### Changed
+- Fixes to coding style to make new version of codechecker happy
+
 ## 3.10.1+ (2021020800)
 ### Changed
 - Viewing and previewing certificates now open a new browser tab
