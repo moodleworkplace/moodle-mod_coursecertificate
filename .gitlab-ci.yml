@@ -27,9 +27,9 @@ variables:
     - export MOODLE_BRANCH=$MOODLE_BRANCH_WORKPLACE
     - . prepare-workplace $cibot_sshkey
     - cd $CI_PROJECT_DIR/..
-    - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-theme_workplace.git
-    - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_wp.git
-    - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_certificate.git
+    - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-theme_workplace.git --branch 3.11.0dev_release
+    - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_wp.git --branch 3.11.0dev_release
+    - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_certificate.git --branch 3.11.0dev_release
     - moodle-plugin-ci install --db-host="$DB_HOST" --no-init -vvv
     - cd moodle
 
@@ -78,7 +78,7 @@ behat:
     - export MOODLE_REPO=$MOODLE_REPO_LMS
     - . prepare-workplace $cibot_sshkey
     - cd $CI_PROJECT_DIR/..
-    - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_certificate.git
+    - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_certificate.git --branch 3.11.0dev_release
     - moodle-plugin-ci install --db-host="$DB_HOST" --no-init -vvv
     - cd moodle
     - php admin/tool/phpunit/cli/init.php
