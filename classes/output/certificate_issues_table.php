@@ -88,6 +88,7 @@ class certificate_issues_table extends \table_sql {
      * @param int|null $groupid
      */
     public function __construct(\stdClass $certificate, cm_info $cm, int $groupid = null) {
+        global $CFG;
         parent::__construct('mod-coursecertificate-issues-' . $cm->instance);
 
         $context = \context_module::instance($cm->id);
@@ -100,11 +101,21 @@ class certificate_issues_table extends \table_sql {
         $this->canrevoke = permission::can_revoke_issues($this->certificate->course);
         $this->canviewall = permission::can_view_all_issues($this->certificate->course);
 
-        $extrafields = get_extra_user_fields($context);
         $columnsheaders = ['fullname' => get_string('fullname')];
-        foreach ($extrafields as $extrafield) {
-            $columnsheaders += [$extrafield => get_user_field_name($extrafield)];
+        if ($CFG->version < 2021050700) {
+            // Moodle 3.9-3.10.
+            $extrafields = get_extra_user_fields($context);
+            foreach ($extrafields as $extrafield) {
+                $columnsheaders += [$extrafield => get_user_field_name($extrafield)];
+            }
+        } else {
+            // Moodle 3.11 and above.
+            $extrafields = \core_user\fields::for_identity($context, false)->get_required_fields();
+            foreach ($extrafields as $extrafield) {
+                $columnsheaders += [$extrafield => \core_user\fields::get_display_name($extrafield)];
+            }
         }
+
         $columnsheaders += [
             'status' => get_string('status', 'coursecertificate'),
             'expires' => get_string('expirydate', 'coursecertificate'),
