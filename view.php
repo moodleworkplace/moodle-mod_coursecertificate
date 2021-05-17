@@ -24,6 +24,8 @@
 
 require(__DIR__.'/../../config.php');
 
+global $PAGE, $USER, $CFG;
+
 $id = required_param('id', PARAM_INT);
 $page = optional_param('page', 0, PARAM_INT);
 $perpage = optional_param('perpage', 10, PARAM_INT);
@@ -36,5 +38,14 @@ $outputpage = new \mod_coursecertificate\output\view_page($id, $page, $perpage, 
 $output = $PAGE->get_renderer('coursecertificate');
 
 echo $output->header();
+
+if ($CFG->version >= 2021050700) {
+    // Moodle 3.11 and above.
+    $cminfo = cm_info::create($cm);
+    $completiondetails = \core_completion\cm_completion_details::get_instance($cminfo, $USER->id);
+    $activitydates = \core\activity_dates::get_dates_for_module($cminfo, $USER->id);
+    echo $output->activity_information($cminfo, $completiondetails, $activitydates);
+}
+
 echo $output->render($outputpage);
 echo $output->footer();
