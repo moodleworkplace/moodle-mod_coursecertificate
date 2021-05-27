@@ -23,9 +23,9 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use mod_customcert\privacy\provider;
+namespace mod_coursecertificate\privacy;
 
-defined('MOODLE_INTERNAL') || die();
+use core_privacy\tests\provider_testcase;
 
 /**
  * Privacy provider tests class.
@@ -35,14 +35,12 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_coursecertificate_privacy_provider_testcase extends \core_privacy\tests\provider_testcase {
+class mod_coursecertificate_privacy_provider_testcase extends provider_testcase {
 
     /**
      * Test for provider::get_reason().
      */
     public function test_get_reason() {
-        $this->resetAfterTest();
-
-        $this->assertEquals('privacy:metadata', \mod_coursecertificate\privacy\provider::get_reason());
+        $this->assertEquals('privacy:metadata', provider::get_reason());
     }
 }
