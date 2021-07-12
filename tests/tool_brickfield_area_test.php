@@ -34,6 +34,9 @@ class mod_coursecertificate_tool_brickfield_area_test extends \advanced_testcase
         if (!core_component::get_component_directory('tool_wp')) {
             $this->markTestSkipped('Not Workplace');
         }
+        if (!core_component::get_component_directory('tool_brickfield')) {
+            $this->markTestSkipped('Plugin tool_brickfield is not available');
+        }
     }
 
     /**
