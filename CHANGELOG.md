@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.11.1 (2021072000)
+### Changed
+- Coding style fixes
+
 ## 3.11 (2021060800)
 ### Changed
 - Compatibility with Moodle 3.9 - 3.11
