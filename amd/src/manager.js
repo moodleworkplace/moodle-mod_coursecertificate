@@ -17,7 +17,6 @@
  * This module instantiates the functionality for actions on course certificates.
  *
  * @module      mod_coursecertificate/manager
- * @package     mod_coursecertificate
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
