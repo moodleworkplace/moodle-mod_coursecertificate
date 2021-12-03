@@ -34,12 +34,12 @@ $perpage = optional_param('perpage', 10, PARAM_INT);
 
 require_course_login($course, true, $cm);
 
-$viewpage = new \mod_coursecertificate\output\view_page($id, $page, $perpage, $course, $cm);
+$outputpage = new \mod_coursecertificate\output\view_page($id, $page, $perpage, $course, $cm);
 $output = $PAGE->get_renderer('coursecertificate');
-$data = $viewpage->export_for_template($output);
+$data = $outputpage->export_for_template($output);
 
-// Redirect to view issue page if 'studentview' (user can not manage and can receive issues).
-if ($data['studentview']) {
+// Redirect to view issue page if 'studentview' (user can not manage but can receive issues) and issue code is set.
+if ($data['studentview'] && isset($data['issuecode'])) {
     $issueurl = new \moodle_url('/admin/tool/certificate/view.php', ['code' => $data['issuecode']]);
     redirect($issueurl);
 }
