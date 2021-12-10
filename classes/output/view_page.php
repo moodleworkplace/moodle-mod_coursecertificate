@@ -71,6 +71,9 @@ class view_page implements templatable, renderable {
     /** @var cm_info $cm */
     protected $cm;
 
+    /** @var string $issuecode */
+    protected $issuecode;
+
     /**
      * Constructor.
      *
@@ -136,12 +139,8 @@ class view_page implements templatable, renderable {
                         $course->id
                     );
                 }
-                // Redirect to view issue page.
-                if ($issue = $DB->get_record('tool_certificate_issues', $issuesqlconditions, '*', MUST_EXIST)) {
-                    $showissueurl = new \moodle_url('/admin/tool/certificate/view.php',
-                        ['code' => $issue->code]);
-                    redirect($showissueurl);
-                }
+                // Get the issue code.
+                $this->issuecode = $DB->get_field('tool_certificate_issues', 'code', $issuesqlconditions, MUST_EXIST);
             }
         }
 
@@ -155,11 +154,6 @@ class view_page implements templatable, renderable {
                 exit();
             }
         }
-
-        $PAGE->set_url('/mod/coursecertificate/view.php', ['id' => $this->cm->id]);
-        $PAGE->set_title(format_string($this->certificate->name));
-        $PAGE->set_heading(format_string($course->fullname));
-        $PAGE->set_context($context);
     }
 
     /**
@@ -182,6 +176,7 @@ class view_page implements templatable, renderable {
         $data['studentview'] = !$this->canviewall && $this->canreceiveissues;
         $data['showhiddenwarning'] = $this->certificate->automaticsend && !$this->cm->visible;
         $data['shownoautosendinfo'] = !$this->certificate->automaticsend && $this->cm->visible;
+        $data['issuecode'] = $this->issuecode;
 
         return $data;
     }

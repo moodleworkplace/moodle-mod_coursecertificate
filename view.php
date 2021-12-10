@@ -34,8 +34,22 @@ $perpage = optional_param('perpage', 10, PARAM_INT);
 
 require_course_login($course, true, $cm);
 
-$outputpage = new \mod_coursecertificate\output\view_page($id, $page, $perpage, $course, $cm);
+$viewpage = new \mod_coursecertificate\output\view_page($id, $page, $perpage, $course, $cm);
 $output = $PAGE->get_renderer('coursecertificate');
+$data = $viewpage->export_for_template($output);
+
+// Redirect to view issue page if 'studentview' (user can not manage and can receive issues).
+if ($data['studentview']) {
+    $issueurl = new \moodle_url('/admin/tool/certificate/view.php', ['code' => $data['issuecode']]);
+    redirect($issueurl);
+}
+
+$PAGE->set_url('/mod/coursecertificate/view.php', ['id' => $id]);
+$PAGE->set_title(format_string($data['certificatename']));
+$PAGE->set_heading(format_string($course->fullname));
+
+$context = \context_module::instance($id);
+$PAGE->set_context($context);
 
 echo $output->header();
 
@@ -47,5 +61,5 @@ if ($CFG->version >= 2021050700) {
     echo $output->activity_information($cminfo, $completiondetails, $activitydates);
 }
 
-echo $output->render($outputpage);
+echo $output->render_from_template('mod_coursecertificate/view_page', $data);
 echo $output->footer();
