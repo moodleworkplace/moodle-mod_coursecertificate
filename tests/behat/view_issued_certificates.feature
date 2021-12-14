@@ -6,21 +6,21 @@ Feature: View the certificates that have been issued
 
   Background:
     Given the following "users" exist:
-      | username | firstname | lastname | email                |
-      | teacher1 | Teacher   | 01        | teacher01@example.com |
-      | teacher2 | Teacher   | 02        | teacher02@example.com |
-      | student1 | Student   | 01        | student01@example.com |
-      | student2 | Student   | 02        | student02@example.com |
-      | student3 | Student   | 03        | student03@example.com |
-      | student4 | Student   | 04        | student04@example.com |
-      | student5 | Student   | 05        | student05@example.com |
-      | student6 | Student   | 06        | student06@example.com |
-      | student7 | Student   | 07        | student07@example.com |
-      | student8 | Student   | 08        | student08@example.com |
-      | student9 | Student   | 09        | student09@example.com |
-      | student10 | Student   | 10        | student10@example.com |
-      | student11 | Student   | 11        | student11@example.com |
-      | manager1 | Manager   | 1        | manager1@example.com |
+      | username  | firstname | lastname  | email                 | country |
+      | teacher1  | Teacher   | 01        | teacher01@example.com | ES      |
+      | teacher2  | Teacher   | 02        | teacher02@example.com | FR      |
+      | student1  | Student   | 01        | student01@example.com | ES      |
+      | student2  | Student   | 02        | student02@example.com | FR      |
+      | student3  | Student   | 03        | student03@example.com | ES      |
+      | student4  | Student   | 04        | student04@example.com | PT      |
+      | student5  | Student   | 05        | student05@example.com | ES      |
+      | student6  | Student   | 06        | student06@example.com | ES      |
+      | student7  | Student   | 07        | student07@example.com | ES      |
+      | student8  | Student   | 08        | student08@example.com | ES      |
+      | student9  | Student   | 09        | student09@example.com | ES      |
+      | student10 | Student   | 10        | student10@example.com | ES      |
+      | student11 | Student   | 11        | student11@example.com | ES      |
+      | manager1  | Manager   | 1         | manager1@example.com  | ES      |
     And the following "courses" exist:
       | fullname | shortname | groupmode  |
       | Course 1 | C1        | 1          |
@@ -82,11 +82,17 @@ Feature: View the certificates that have been issued
     And the following "activities" exist:
       | activity          | name        | intro             | course | idnumber           | template    | groupmode  |
       | coursecertificate | Certificate | Certificate intro | C1     | coursecertificate1 | Template 01 | 1          |
+    And the following config values are set as admin:
+      | showuseridentity | email,country |
 
   Scenario: View the issued certificates list
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "Certificate"
+    # Test country names.
+    And I should see "France" in the "student02@example.com" "table_row"
+    And I should see "Spain" in the "student03@example.com" "table_row"
+    And I should see "Portugal" in the "student04@example.com" "table_row"
     # Test group filtering.
     And I set the field "Separate groups" to "Group 1"
     And I should see "student01@example.com"

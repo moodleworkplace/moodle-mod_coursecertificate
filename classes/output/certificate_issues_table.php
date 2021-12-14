@@ -81,6 +81,11 @@ class certificate_issues_table extends \table_sql {
     protected $canverify;
 
     /**
+     * @var string[] The list of countries.
+     */
+    protected $countries;
+
+    /**
      * Sets up the table.
      *
      * @param \stdClass $certificate
@@ -114,6 +119,10 @@ class certificate_issues_table extends \table_sql {
             foreach ($extrafields as $extrafield) {
                 $columnsheaders += [$extrafield => \core_user\fields::get_display_name($extrafield)];
             }
+        }
+
+        if (in_array('country', $extrafields)) {
+            $this->countries = get_string_manager()->get_list_of_countries(true);
         }
 
         $columnsheaders += [
@@ -157,6 +166,16 @@ class certificate_issues_table extends \table_sql {
         } else {
             return fullname($certificateissue);
         }
+    }
+
+    /**
+     * Generate the country column.
+     *
+     * @param \stdClass $certificateissue
+     * @return string
+     */
+    public function col_country($certificateissue) {
+        return $this->countries[$certificateissue->country] ?? $certificateissue->country;
     }
 
     /**
