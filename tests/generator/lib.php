@@ -15,17 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * mod_coursecertificate data generator.
- *
- * @package    mod_coursecertificate
- * @category   test
- * @copyright  2020 Marina Glancy
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-defined('MOODLE_INTERNAL') || die();
-
-/**
  * mod_coursecertificate data generator class.
  *
  * @package    mod_coursecertificate

@@ -23,9 +23,10 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_coursecertificate\privacy;
+namespace mod_coursecertificate;
 
 use core_privacy\tests\provider_testcase;
+use mod_coursecertificate\privacy\provider;
 
 /**
  * Privacy provider tests class.
@@ -35,7 +36,7 @@ use core_privacy\tests\provider_testcase;
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_coursecertificate_privacy_provider_testcase extends provider_testcase {
+class privacy_provider_test extends provider_testcase {
 
     /**
      * Test for provider::get_reason().

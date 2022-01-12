@@ -14,16 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Unit tests for observer class.
- *
- * @package     mod_coursecertificate
- * @category    test
- * @copyright   2020 Mikel Martín <mikel@moodle.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+namespace mod_coursecertificate;
 
-defined('MOODLE_INTERNAL') || die;
+use advanced_testcase;
+use tool_certificate_generator;
 
 /**
  * Unit tests for observer class.
@@ -33,7 +27,7 @@ defined('MOODLE_INTERNAL') || die;
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_coursecertificate_observer_test_testcase extends advanced_testcase {
+class observer_test extends advanced_testcase {
     /**
      * Set up
      */

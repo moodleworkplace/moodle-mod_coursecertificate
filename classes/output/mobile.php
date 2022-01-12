@@ -23,8 +23,6 @@ use tool_certificate\certificate;
 use tool_certificate\permission;
 use tool_certificate\template;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Mobile output class for coursecertificate module.
  *

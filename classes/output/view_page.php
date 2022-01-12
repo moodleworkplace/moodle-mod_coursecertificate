@@ -33,8 +33,6 @@ use moodle_url;
 use templatable;
 use renderable;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Certificate issues report renderable class.
  *

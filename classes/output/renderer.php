@@ -26,8 +26,6 @@ namespace mod_coursecertificate\output;
 
 use plugin_renderer_base;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * mod_coursecertificate_renderer class.
  *

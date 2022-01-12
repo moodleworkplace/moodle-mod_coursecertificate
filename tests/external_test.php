@@ -23,9 +23,10 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use mod_coursecertificate\external;
+namespace mod_coursecertificate;
 
-defined('MOODLE_INTERNAL') || die;
+use advanced_testcase;
+use tool_certificate_generator;
 
 /**
  * Unit tests for the webservices.
@@ -35,8 +36,7 @@ defined('MOODLE_INTERNAL') || die;
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_coursecertificate_external_test_testcase extends advanced_testcase
-{
+class external_test extends advanced_testcase {
     /**
      * Set up
      */

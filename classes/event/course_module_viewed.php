@@ -24,8 +24,6 @@
 
 namespace mod_coursecertificate\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The course_module_viewed event class.
  *

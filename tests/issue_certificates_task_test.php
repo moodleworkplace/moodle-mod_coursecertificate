@@ -14,16 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Unit test for the task.
- *
- * @package     mod_coursecertificate
- * @category    test
- * @copyright   2020 Mikel Martín <mikel@moodle.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+namespace mod_coursecertificate;
 
-defined('MOODLE_INTERNAL') || die;
+use advanced_testcase;
+use tool_certificate_generator;
 
 /**
  * Unit test for the task.
@@ -33,7 +27,7 @@ defined('MOODLE_INTERNAL') || die;
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_coursecertificate_task_test_testcase extends advanced_testcase {
+class issue_certificates_task_test extends advanced_testcase {
     /**
      * Set up
      */
@@ -78,7 +72,7 @@ class mod_coursecertificate_task_test_testcase extends advanced_testcase {
         $mod->automaticsend = 1;
         $DB->update_record('coursecertificate', $mod);
 
-        $task = new mod_coursecertificate\task\issue_certificates_task();
+        $task = new \mod_coursecertificate\task\issue_certificates_task();
         ob_start();
         $task->execute();
         ob_end_clean();
@@ -121,7 +115,7 @@ class mod_coursecertificate_task_test_testcase extends advanced_testcase {
         $this->assertEquals(0, $mod->automaticsend);
 
         // Run the task.
-        $task = new mod_coursecertificate\task\issue_certificates_task();
+        $task = new \mod_coursecertificate\task\issue_certificates_task();
         ob_start();
         $task->execute();
         ob_end_clean();

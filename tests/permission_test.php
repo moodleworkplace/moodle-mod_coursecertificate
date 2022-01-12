@@ -14,16 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Unit tests for permission class.
- *
- * @package     mod_coursecertificate
- * @category    test
- * @copyright   2020 Mikel Martín <mikel@moodle.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+namespace mod_coursecertificate;
 
-defined('MOODLE_INTERNAL') || die;
+use advanced_testcase;
+use context_course;
+use context_system;
 
 /**
  * Unit tests for permission class.
@@ -33,7 +28,7 @@ defined('MOODLE_INTERNAL') || die;
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_coursecertificate_permission_test_testcase extends advanced_testcase {
+class permission_test extends advanced_testcase {
     /**
      * Set up
      */
