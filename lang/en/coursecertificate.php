@@ -71,6 +71,7 @@ $string['notemplateselecteduser'] = 'The certificate is not available. Please co
 $string['notemplateswarning'] = 'There are no available templates. Please contact the site administrator.';
 $string['notemplateswarningwithlink'] = 'There are no available templates. Please go to <a href="{$a}">certificate template management page</a> and create a new one.';
 $string['nouserscertified'] = 'No users are certified.';
+$string['open'] = 'Open';
 $string['page-mod-coursecertificate-x'] = 'Any course certificate module page';
 $string['pluginadministration'] = 'Course certificate administration';
 $string['pluginname'] = 'Course certificate';

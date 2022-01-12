@@ -1,0 +1,109 @@
+{{!
+    This file is part of the mod_coursecertificate plugin for Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_coursecertificate/mobile_view_page
+
+    Template for showing list of certificate issues in the mobile app.
+
+    Example context (json):
+    {
+        "cmid": "1",
+        "certificate": {
+            "id": "1",
+            "course": "1",
+            "name": "Certificate example",
+            "intro": "This is the certificate description."
+        },
+        "showreport": "true",
+        "hasissues": "true",
+        "issues": [
+            {
+                "fullname": "Test User",
+                "email": "user@test.com",
+                "status": "1",
+                "statusstring": "Valid",
+                "timecreated": "3 December 2021, 2:16 PM",
+                "expires": "Never",
+                "code": "9448292828AU",
+                "previewurl": "http://test.com/admin/tool/certificate/view.php?code=9448292828AU",
+                "verifyurl": "http://test.com/admin/tool/certificate/index.php?code=9448292828AU"
+            }
+        ],
+        "showissue": "false"
+    }
+}}
+{{=<% %>=}}
+<core-course-module-description description="<% certificate.intro %>" component="mod_coursecertificate" componentId="<% cmid %>"></core-course-module-description>
+<%#showreport%>
+<ion-list>
+    <ion-list-header>
+        <p class="item-heading"><strong>{{ 'plugin.mod_coursecertificate.certifiedusers' | translate }}</strong></p>
+    </ion-list-header>
+    <%#showgroups%>
+    <ion-item>
+        <ion-select [(ngModel)]="CONTENT_OTHERDATA.group" name="group" (ionChange)="updateContent({cmid: '<% cmid %>', courseid: '<% certificate.course %>', group: CONTENT_OTHERDATA.group})" interface="popover">
+            <%#groups%>
+            <ion-select-option [value]="<% id %>"><% name %></ion-select-option>
+            <%/groups%>
+        </ion-select>
+    </ion-item>
+    <%/showgroups%>
+    <%#hasissues%>
+        <%#issues%>
+            <ion-item button title="" class="ion-text-wrap" core-site-plugins-new-content component="mod_coursecertificate" method="mobile_issue_details"
+                      [args]="{
+                        fullname: '<% fullname %>',
+                        email: '<% email %>',
+                        statusstring: '<% statusstring %>',
+                        timecreated: '<% timecreated %>',
+                        expires: '<% expires %>',
+                        code: '<% code %>',
+                        previewurl: '<% previewurl %>',
+                        verifyurl: '<% verifyurl %>'
+                      }">
+                <ion-label>
+                    <ion-row>
+                        <h2><% fullname %></h2>
+                    </ion-row>
+                    <ion-row>
+                        <ion-note><% timecreated %></ion-note>
+                    </ion-row>
+                </ion-label>
+                <%#status%>
+                    <ion-badge class="ion-color ion-color-success">{{ 'plugin.mod_coursecertificate.valid' | translate }}</ion-badge>
+                <%/status%>
+                <%^status%>
+                    <ion-badge class="ion-color ion-color-danger">{{ 'plugin.mod_coursecertificate.expired' | translate }}</ion-badge>
+                <%/status%>
+            </ion-item>
+        <%/issues%>
+    <%/hasissues%>
+    <%^hasissues%>
+        <ion-item>
+            <ion-label> {{ 'plugin.mod_coursecertificate.nouserscertified' | translate }} </ion-label>
+        </ion-item>
+    <%/hasissues%>
+</ion-list>
+<%/showreport%>
+
+<%#showissue%>
+<ion-button class="ion-margin" expand="block" component="mod_coursecertificate" [componentId]="<% cmid %>"
+            [core-download-file]="{fileurl: '<% fileurl %>', timemodified: '<% currenttimestamp %>'}">
+    <ion-icon name="far-file" slot="start" aria-hidden="true"></ion-icon>
+    {{ 'plugin.mod_coursecertificate.open' | translate }}
+</ion-button>
+<%/showissue%>
