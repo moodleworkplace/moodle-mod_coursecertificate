@@ -26,8 +26,6 @@ namespace mod_coursecertificate\task;
 use context_module;
 use mod_coursecertificate\helper;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Issue certificates scheduled task class.
  *

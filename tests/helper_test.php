@@ -14,16 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Unit tests for the helper.
- *
- * @package     mod_coursecertificate
- * @category    test
- * @copyright   2020 Mikel Martín <mikel@moodle.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+namespace mod_coursecertificate;
 
-defined('MOODLE_INTERNAL') || die;
+use advanced_testcase;
+use tool_certificate_generator;
 
 /**
  * Unit tests for the helper.
@@ -33,7 +27,7 @@ defined('MOODLE_INTERNAL') || die;
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_coursecertificate_helper_test_testcase extends advanced_testcase {
+class helper_test extends advanced_testcase {
     /**
      * Set up
      */
@@ -115,7 +109,7 @@ class mod_coursecertificate_helper_test_testcase extends advanced_testcase {
 
         // Set user grade to 10.00.
         $assign = $this->getDataGenerator()->create_module('assign', ['course' => $course->id]);
-        $gradeitem2 = grade_item::fetch(['itemtype' => 'mod', 'itemmodule' => 'assign', 'iteminstance' => $assign->id,
+        $gradeitem2 = \grade_item::fetch(['itemtype' => 'mod', 'itemmodule' => 'assign', 'iteminstance' => $assign->id,
             'courseid' => $course->id]);
         $gradeitem2->update_final_grade($user->id, 10, 'gradebook');
 

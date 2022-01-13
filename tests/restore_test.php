@@ -23,6 +23,16 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_coursecertificate;
+
+use backup;
+use backup_controller;
+use context_system;
+use restore_controller;
+use restore_date_testcase;
+use restore_dbops;
+use tool_certificate_generator;
+use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -37,7 +47,7 @@ require_once($CFG->libdir . "/phpunit/classes/restore_date_testcase.php");
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_coursecertificate_restore_testcase extends restore_date_testcase {
+class restore_test extends restore_date_testcase {
     /**
      * Set up
      */

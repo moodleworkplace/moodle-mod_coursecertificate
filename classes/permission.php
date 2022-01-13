@@ -26,8 +26,6 @@ namespace mod_coursecertificate;
 
 use context_course;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Course certificate related permissions class.
  *

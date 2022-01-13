@@ -25,8 +25,6 @@
 
 namespace mod_coursecertificate\privacy;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Privacy API implementation for the coursecertificate plugin.
  *

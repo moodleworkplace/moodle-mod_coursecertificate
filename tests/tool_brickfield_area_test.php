@@ -14,7 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace mod_coursecertificate;
+
+use core_component;
 use tool_brickfield\manager;
+use tool_certificate_generator;
 
 /**
  * Test for accessibility tool support (Workplace only)
@@ -23,7 +27,7 @@ use tool_brickfield\manager;
  * @copyright  2021 Marina Glancy
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_coursecertificate_tool_brickfield_area_test extends \advanced_testcase {
+class tool_brickfield_area_test extends \advanced_testcase {
 
     /**
      * Skip the test if this is not a Workplace installation
@@ -49,8 +53,8 @@ class mod_coursecertificate_tool_brickfield_area_test extends \advanced_testcase
         $areaclassnames = array_map('get_class', $areas);
 
         // Make sure the list of areas contains some known areas.
-        $this->assertContains(mod_coursecertificate\local\tool_brickfield\areas\intro::class, $areaclassnames);
-        $this->assertContains(mod_coursecertificate\local\tool_brickfield\areas\name::class, $areaclassnames);
+        $this->assertContains(\mod_coursecertificate\local\tool_brickfield\areas\intro::class, $areaclassnames);
+        $this->assertContains(\mod_coursecertificate\local\tool_brickfield\areas\name::class, $areaclassnames);
     }
 
     /**

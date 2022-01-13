@@ -21,18 +21,7 @@
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-defined('MOODLE_INTERNAL') || die;
-
-/**
- * Class mod_coursecertificate_observer
- *
- * @package     mod_coursecertificate
- * @copyright   2020 Mikel Martín <mikel@moodle.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-class mod_coursecertificate_observer
-{
+class mod_coursecertificate_observer {
     /**
      * Template deleted observer
      *
