@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.11.5 (2022011800)
+### Added
+- Added support for the mobile app
+
+### Changed
+- Show country name instead of the two-letter code in the generated certificates
+- Compliance with codechecker v3.0.5
+
 ## 3.11.1 (2021072000)
 ### Changed
 - Coding style fixes
