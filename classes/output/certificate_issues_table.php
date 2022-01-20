@@ -29,6 +29,7 @@ use context_course;
 use context_module;
 use context_system;
 use mod_coursecertificate\permission;
+use tool_certificate\certificate;
 use tool_certificate\template;
 
 defined('MOODLE_INTERNAL') || die;
@@ -93,7 +94,6 @@ class certificate_issues_table extends \table_sql {
      * @param int|null $groupid
      */
     public function __construct(\stdClass $certificate, cm_info $cm, int $groupid = null) {
-        global $CFG;
         parent::__construct('mod-coursecertificate-issues-' . $cm->instance);
 
         $context = \context_module::instance($cm->id);
@@ -107,21 +107,9 @@ class certificate_issues_table extends \table_sql {
         $this->canviewall = permission::can_view_all_issues($this->certificate->course);
 
         $columnsheaders = ['fullname' => get_string('fullname')];
-        if ($CFG->version < 2021050700) {
-            // Moodle 3.9-3.10.
-            $extrafields = get_extra_user_fields($context);
-            foreach ($extrafields as $extrafield) {
-                $columnsheaders += [$extrafield => get_user_field_name($extrafield)];
-            }
-        } else {
-            // Moodle 3.11 and above.
-            $extrafields = \core_user\fields::for_identity($context, false)->get_required_fields();
-            foreach ($extrafields as $extrafield) {
-                $columnsheaders += [$extrafield => \core_user\fields::get_display_name($extrafield)];
-            }
-        }
+        $columnsheaders += certificate::get_user_extra_field_names($context);
 
-        if (in_array('country', $extrafields)) {
+        if (array_key_exists('country', $columnsheaders)) {
             $this->countries = get_string_manager()->get_list_of_countries(true);
         }
 
