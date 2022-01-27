@@ -70,4 +70,19 @@ class behat_mod_coursecertificate extends behat_base {
         }
         $this->execute("behat_completion::activity_should_have_the_completion_condition", [$activityname, $conditionname]);
     }
+
+    /**
+     * Step to open current course or activity settings page (language string changed between 3.11 and 4.0)
+     *
+     * @When /^I open course or activity settings page$/
+     * @return void
+     */
+    public function i_open_course_or_activity_settings_page(): void {
+        global $CFG;
+        if ($CFG->version < 2022012100) {
+            $this->execute("behat_navigation::i_navigate_to_in_current_page_administration", ['Edit settings']);
+        } else {
+            $this->execute("behat_navigation::i_navigate_to_in_current_page_administration", ['Settings']);
+        }
+    }
 }

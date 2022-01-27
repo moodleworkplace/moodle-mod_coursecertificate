@@ -80,15 +80,15 @@ Feature: View the certificates that have been issued
       | Template 01                   | student10  | C1     | mod_coursecertificate |
       | Template 01                   | student11  | C1     | mod_coursecertificate |
     And the following "activities" exist:
-      | activity          | name        | intro             | course | idnumber           | template    | groupmode  |
-      | coursecertificate | Certificate | Certificate intro | C1     | coursecertificate1 | Template 01 | 1          |
+      | activity          | name           | intro             | course | idnumber           | template    | groupmode  |
+      | coursecertificate | My certificate | Certificate intro | C1     | coursecertificate1 | Template 01 | 1          |
     And the following config values are set as admin:
       | showuseridentity | email,country |
 
   Scenario: View the issued certificates list
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
-    And I follow "Certificate"
+    And I follow "My certificate"
     # Test country names.
     And I should see "France" in the "student02@example.com" "table_row"
     And I should see "Spain" in the "student03@example.com" "table_row"
@@ -110,7 +110,7 @@ Feature: View the certificates that have been issued
   Scenario: View the issued certificates list as non-editing teacher and separate/visible groups
     And I log in as "teacher2"
     And I am on "Course 1" course homepage
-    And I follow "Certificate"
+    And I follow "My certificate"
     And I should not see "student01@example.com"
 #    And I click on "Separate groups" "field"
     And "Group 1" "option" should not exist in the "Separate groups" "select"
@@ -121,14 +121,14 @@ Feature: View the certificates that have been issued
     And I log out
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    And I open "Certificate" actions menu
+    And I open "My certificate" actions menu
     And I choose "Edit settings" in the open action menu
     And I expand all fieldsets
     And I set the field "Group mode" to "Visible groups"
     And I log out
     And I log in as "teacher2"
     And I am on "Course 1" course homepage
-    And I follow "Certificate"
+    And I follow "My certificate"
     And I should not see "student01@example.com"
     And "Group 1" "option" should not exist in the "Separate groups" "select"
     And "Group 2" "option" should exist in the "Separate groups" "select"
@@ -139,14 +139,14 @@ Feature: View the certificates that have been issued
   Scenario: View issued certificates
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
-    And I follow "Certificate"
+    And I follow "My certificate"
     And I click on "Email address" "link" in the "generaltable" "table"
     And I click on "View" "link" in the "student06@example.com" "table_row"
 
   Scenario: Remove issued certificates
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
-    And I follow "Certificate"
+    And I follow "My certificate"
     And I click on "Email address" "link" in the "generaltable" "table"
     And I should see "student06@example.com"
     And I click on "Revoke" "link" in the "student06@example.com" "table_row"
@@ -156,13 +156,13 @@ Feature: View the certificates that have been issued
   Scenario: Verify issued certificates
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
-    And I follow "Certificate"
+    And I follow "My certificate"
     And I click on "Email address" "link" in the "generaltable" "table"
     And I click on "Verify" "link" in the "student06@example.com" "table_row"
 
   Scenario: Download issued certificates list
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
-    And I follow "Certificate"
+    And I follow "My certificate"
     And I press "Download"
     And I log out

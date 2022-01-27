@@ -22,12 +22,12 @@ Feature: Self issue certificate for coursecertificate template
       | Template 01                  | 1       |
     And the following "activities" exist:
       | activity          | name        | intro             | course | idnumber           | template    | groupmode  |
-      | coursecertificate | Certificate | Certificate intro | C1     | coursecertificate1 | Template 01 | 1          |
+      | coursecertificate | My certificate | Certificate intro | C1     | coursecertificate1 | Template 01 | 1          |
 
   Scenario: Get certificate having the activity requirements when accessing the activity
     Then I log in as "student1"
     And I am on "Course 1" course homepage
-    And I follow "Certificate"
+    And I follow "My certificate"
     And I press the "back" button in the browser
     And I click on ".popover-region-notifications" "css_element"
     And I should see "Your certificate is available!"
@@ -35,6 +35,6 @@ Feature: Self issue certificate for coursecertificate template
   Scenario: Teacher should not get certificate when accessing the activity
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
-    And I follow "Certificate"
+    And I follow "My certificate"
     And I click on ".popover-region-notifications" "css_element"
     And I should not see "Your certificate is available!"
