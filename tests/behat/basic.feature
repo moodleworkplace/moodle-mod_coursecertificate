@@ -49,7 +49,7 @@ Feature: Basic functionality of course certificate module
     And I press "Enable"
     And I press "Confirm"
     And I should see "The automatic sending of this certificate is enabled"
-    And I navigate to "Edit settings" in current page administration
+    And I open course or activity settings page
     And I set the following fields to these values:
       | Name      | Your super awesome certificate     |
     And I press "Save and display"
@@ -86,7 +86,6 @@ Feature: Basic functionality of course certificate module
       | Name     | Your awesome certificate  |
       | Template | Certificate of completion |
     And I press "Save and display"
-    And I follow "Your awesome certificate"
     And I should see "Your awesome certificate"
     And I should see "The automatic sending of this certificate is disabled"
     And I should see "No users are certified."
@@ -127,10 +126,9 @@ Feature: Basic functionality of course certificate module
     And I add a "Course certificate" to section "1" and I fill the form with:
       | Name     | Your awesome certificate     |
       | Template | Certificate of participation |
-    And I follow "Your awesome certificate"
+    And I click on "Your awesome certificate" "link" in the "region-main" "region"
     And I should see "Student 1"
-    And I click on "Actions menu" "link"
-    And I click on "Edit settings" "link"
+    And I open course or activity settings page
     And the "Template" "select" should be disabled
 
   Scenario: Teacher can revoke a certificate
@@ -145,7 +143,7 @@ Feature: Basic functionality of course certificate module
     And I add a "Course certificate" to section "1" and I fill the form with:
       | Name     | Your awesome certificate     |
       | Template | Certificate of participation |
-    And I follow "Your awesome certificate"
+    And I click on "Your awesome certificate" "link" in the "region-main" "region"
     And I should see "Student 1"
     And I click on "Revoke" "link"
     And I press "Confirm"
@@ -161,11 +159,10 @@ Feature: Basic functionality of course certificate module
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I follow "Certificate 01"
-    And I add the "HTML" block
-    And I configure the "(new HTML block)" block
+    And I add the "Tags" block
+    And I configure the "Tags" block
     And I set the following fields to these values:
-      | HTML block title  | My block          |
-      | Content           | This is my block  |
+      | Tags block title  | This is my block  |
     And I press "Save changes"
     And I should see "This is my block"
 
@@ -212,8 +209,7 @@ Feature: Basic functionality of course certificate module
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I follow "Certificate 01"
-    And I click on "Actions menu" "link"
-    And I click on "Edit settings" "link"
+    And I open course or activity settings page
     And I set the following fields to these values:
       | Template  | Certificate of participation B |
     And I press "Save and display"
