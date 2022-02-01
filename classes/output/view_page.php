@@ -32,6 +32,8 @@ use mod_coursecertificate\permission;
 use moodle_url;
 use templatable;
 use renderable;
+use tool_certificate\certificate;
+use tool_certificate\template;
 
 /**
  * Certificate issues report renderable class.
@@ -129,13 +131,13 @@ class view_page implements templatable, renderable {
                 // If user does not have an issue yet, create it first.
                 $issuedata = helper::get_issue_data($course, $USER);
                 if (!$DB->record_exists('tool_certificate_issues', $issuesqlconditions)) {
-                    \tool_certificate\template::instance($templaterecord->id)->issue_certificate(
-                        $USER->id,
-                        $this->certificate->expires,
-                        $issuedata,
-                        'mod_coursecertificate',
-                        $course->id
+                    $expirydate = certificate::calculate_expirydate(
+                        $this->certificate->expirydatetype,
+                        $this->certificate->expirydateoffset,
+                        $this->certificate->expirydateoffset
                     );
+                    $template = template::instance($templaterecord->id);
+                    $template->issue_certificate($USER->id, $expirydate, $issuedata, 'mod_coursecertificate', $course->id);
                 }
                 // Get the issue code.
                 $this->issuecode = $DB->get_field('tool_certificate_issues', 'code', $issuesqlconditions, MUST_EXIST);

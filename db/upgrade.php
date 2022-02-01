@@ -47,5 +47,29 @@ function xmldb_coursecertificate_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2020072201, 'coursecertificate');
     }
 
+    if ($oldversion < 2022020200) {
+
+        $table = new xmldb_table('coursecertificate');
+
+        // Rename field expires on table coursecertificate to expirydateoffset.
+        $field = new xmldb_field('expires', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'automaticsend');
+
+        // Launch rename field expires.
+        $dbman->rename_field($table, $field, 'expirydateoffset');
+
+        // Define field expirydatetype to be added to coursecertificate.
+        $field = new xmldb_field('expirydatetype', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'automaticsend');
+
+        // Conditionally launch add field expirydatetype.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Set expirydatetype to 1 (Expiry date absolute) for previous records with "expires" configured.
+        $DB->execute("UPDATE {coursecertificate} SET expirydatetype = 1 WHERE expirydateoffset > 0");
+
+        // Coursecertificate savepoint reached.
+        upgrade_mod_savepoint(true, 2022020200, 'coursecertificate');
+    }
     return true;
 }

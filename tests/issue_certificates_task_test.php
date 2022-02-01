@@ -17,6 +17,7 @@
 namespace mod_coursecertificate;
 
 use advanced_testcase;
+use tool_certificate\certificate;
 use tool_certificate_generator;
 
 /**
@@ -60,8 +61,13 @@ class issue_certificates_task_test extends advanced_testcase {
 
         $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
         $expirydate = strtotime('+5 day');
-        $mod = $this->getDataGenerator()->create_module('coursecertificate',
-            ['course' => $course->id, 'template' => $certificate1->get_id(), 'expires' => $expirydate]);
+        $record = [
+            'course' => $course->id,
+            'template' => $certificate1->get_id(),
+            'expirydatetype' => certificate::DATE_EXPIRATION_ABSOLUTE,
+            'expirydateoffset' => $expirydate
+        ];
+        $mod = $this->getDataGenerator()->create_module('coursecertificate', $record);
         $this->assertTrue($DB->record_exists('coursecertificate', ['course' => $course->id, 'id' => $mod->id]));
 
         // Create user with 'student' role.

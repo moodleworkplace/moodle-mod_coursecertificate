@@ -22,6 +22,8 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use tool_certificate\certificate;
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
@@ -106,22 +108,7 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         $mform->disabledIf('template', 'hasissues', 'eq', 1);
 
         // Adding the expirydate selector.
-        $selectdatestr = get_string('selectdate', 'coursecertificate');
-        $neverstr = get_string('never');
-        $expirydatestr = get_string('expirydate', 'coursecertificate');
-        $expirydateoptions = [
-            0 => $neverstr,
-            1 => $selectdatestr,
-        ];
-        $group = [];
-        $expirydatetype = $mform->createElement('select', 'expirydatetype', '', $expirydateoptions,
-            ['class' => 'calendar-fix-selector-width']);
-        $group[] =& $expirydatetype;
-        $expirydate = $mform->createElement('date_selector', 'expires', '');
-        $group[] =& $expirydate;
-        $mform->addGroup($group, 'expirydategroup', $expirydatestr, ' ', false);
-        $mform->hideIf('expires', 'expirydatetype', 'noteq', 1);
-        $mform->disabledIf('expires', 'expirydatetype', 'noteq', 1);
+        certificate::add_expirydate_to_form($mform);
 
         // Add standard elements.
         $this->standard_coursemodule_elements();
@@ -150,8 +137,13 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
      * @return void
      **/
     public function data_preprocessing(&$defaultvalues) {
-        if (isset($defaultvalues['expires']) && ($defaultvalues['expires'] != 0)) {
-            $defaultvalues['expirydatetype'] = 1;
+        if (isset($defaultvalues['expirydatetype'])) {
+            if ($defaultvalues['expirydatetype'] == certificate::DATE_EXPIRATION_ABSOLUTE) {
+                $defaultvalues['expirydateabsolute'] = $defaultvalues['expirydateoffset'];
+            }
+            if ($defaultvalues['expirydatetype'] == certificate::DATE_EXPIRATION_AFTER) {
+                $defaultvalues['expirydaterelative'] = $defaultvalues['expirydateoffset'];
+            }
         }
     }
 
@@ -165,7 +157,16 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
      */
     public function data_postprocessing($data) {
         parent::data_postprocessing($data);
-        $data->expires = $data->expirydatetype == 0 ? 0 : $data->expires;
+        switch ($data->expirydatetype) {
+            case certificate::DATE_EXPIRATION_ABSOLUTE:
+                $data->expirydateoffset = $data->expirydateabsolute;
+                break;
+            case certificate::DATE_EXPIRATION_AFTER:
+                $data->expirydateoffset = $data->expirydaterelative;
+                break;
+            default:
+                $data->expirydateoffset = 0;
+        }
     }
 
     /**
@@ -216,7 +217,7 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
 
         if ($instance = $this->get_instance()) {
             $certificate = $certificate = $DB->get_record('coursecertificate', ['id' => $instance], '*', MUST_EXIST);
-            $courseissues = \tool_certificate\certificate::count_issues_for_course($certificate->template, $certificate->course,
+            $courseissues = certificate::count_issues_for_course($certificate->template, $certificate->course,
                 'mod_coursecertificate', null, null);
             if ($courseissues > 0) {
                 return  "1";
