@@ -148,13 +148,7 @@ function mod_coursecertificate_tool_certificate_fields() {
     }
 
     $handler = tool_certificate\customfield\issue_handler::create();
-    if ($CFG->version < 2021050700) {
-        // Moodle 3.9-3.10.
-        $gradestring = get_string('grade');
-    } else {
-        // Moodle 3.11 and above.
-        $gradestring = get_string('gradenoun');
-    }
+    $gradestring = get_string('gradenoun');
 
     // TODO: the only currently supported field types are text/textarea (numeric will fallback to text).
     $handler->ensure_field_exists('courseid', 'numeric',
