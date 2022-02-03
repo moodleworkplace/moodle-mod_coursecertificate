@@ -37,6 +37,7 @@ require_course_login($course, true, $cm);
 $outputpage = new \mod_coursecertificate\output\view_page($id, $page, $perpage, $course, $cm);
 $output = $PAGE->get_renderer('coursecertificate');
 $data = $outputpage->export_for_template($output);
+$certificatename = $PAGE->activityrecord->name;
 
 // Redirect to view issue page if 'studentview' (user can not manage but can receive issues) and issue code is set.
 if ($data['studentview'] && isset($data['issuecode'])) {
@@ -45,21 +46,26 @@ if ($data['studentview'] && isset($data['issuecode'])) {
 }
 
 $PAGE->set_url('/mod/coursecertificate/view.php', ['id' => $id]);
-$PAGE->set_title(format_string($data['certificatename']));
+$PAGE->set_title($course->shortname . ': ' . $certificatename);
 $PAGE->set_heading(format_string($course->fullname));
 
 $context = \context_module::instance($id);
 $PAGE->set_context($context);
+$heading = $output->heading(format_string($certificatename), 2);
 
-echo $output->header();
-
-if ($CFG->version >= 2021050700) {
-    // Moodle 3.11 and above.
+if ($CFG->version >= 2022012900) {
+    // Moodle 4.0 and above. Heading and completion information are part of activity header present in the theme.
+    $PAGE->activityheader->set_attrs([]);
+    $heading = '';
+} else if ($CFG->version >= 2021050700) {
+    // Moodle 3.11. Display completion information under the header.
     $cminfo = cm_info::create($cm);
     $completiondetails = \core_completion\cm_completion_details::get_instance($cminfo, $USER->id);
     $activitydates = \core\activity_dates::get_dates_for_module($cminfo, $USER->id);
-    echo $output->activity_information($cminfo, $completiondetails, $activitydates);
+    $heading .= $output->activity_information($cminfo, $completiondetails, $activitydates);
 }
 
+echo $output->header();
+echo $heading;
 echo $output->render_from_template('mod_coursecertificate/view_page', $data);
 echo $output->footer();

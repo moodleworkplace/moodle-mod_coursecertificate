@@ -163,7 +163,6 @@ class view_page implements templatable, renderable {
     public function export_for_template(\renderer_base $output) {
         $data = [];
         $data['certificateid'] = $this->certificate->id;
-        $data['certificatename'] = $this->certificate->name;
         $data['automaticsend'] = $this->certificate->automaticsend;
         if (isset($this->table)) {
             $data['table'] = $this->render_table($this->table);
