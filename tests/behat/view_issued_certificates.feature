@@ -89,35 +89,53 @@ Feature: View the certificates that have been issued
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "My certificate"
-    # Test country names.
-    And I should see "France" in the "student02@example.com" "table_row"
-    And I should see "Spain" in the "student03@example.com" "table_row"
-    And I should see "Portugal" in the "student04@example.com" "table_row"
-    # Test group filtering.
-    And I set the field "Separate groups" to "Group 1"
-    And I should see "student01@example.com"
-    And I should see "student02@example.com"
-    And I should not see "student03@example.com"
-    And I set the field "Separate groups" to "All participants"
-    And I should see "student03@example.com"
-    # Test sorting.
+    # Ensure consistent sort by email address.
     And I click on "Email address" "link" in the "generaltable" "table"
-    And I should not see "student01@example.com"
+    And the following should exist in the "generaltable" table:
+      | First name / Surname | Email address         | Country   | Status | Expiry date | Date issued         |
+      | Student 02           | student02@example.com | France    | Valid  | Never       | ##today##%d %B %Y## |
+      | Student 03           | student03@example.com | Spain     | Valid  | Never       | ##today##%d %B %Y## |
+      | Student 04           | student04@example.com | Portugal  | Valid  | Never       | ##today##%d %B %Y## |
+    And the following should not exist in the "generaltable" table:
+      | First name / Surname | Email address         |
+      | Student 01           | student01@example.com |
     # Test pagination.
     And I click on "2" "link" in the ".pagination" "css_element"
-    And I should see "student01@example.com"
+    And the following should exist in the "generaltable" table:
+      | First name / Surname | Email address         | Country   | Status | Expiry date | Date issued         |
+      | Student 01           | student01@example.com | Spain     | Valid  | Never       | ##today##%d %B %Y## |
+
+  Scenario: Filter issued certificates by group
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage
+    And I follow "My certificate"
+    And I set the field "Separate groups" to "Group 1"
+    And the following should exist in the "generaltable" table:
+      | First name / Surname | Email address         |
+      | Student 01           | student01@example.com |
+      | Student 02           | student02@example.com |
+    And the following should not exist in the "generaltable" table:
+      | First name / Surname | Email address         |
+      | Student 03           | student03@example.com |
+    And I set the field "Separate groups" to "All participants"
+    And the following should exist in the "generaltable" table:
+      | First name / Surname | Email address         |
+      | Student 03           | student03@example.com |
 
   Scenario: View the issued certificates list as non-editing teacher and separate/visible groups
     And I log in as "teacher2"
     And I am on "Course 1" course homepage
     And I follow "My certificate"
     And I should not see "student01@example.com"
-#    And I click on "Separate groups" "field"
     And "Group 1" "option" should not exist in the "Separate groups" "select"
     And "Group 2" "option" should exist in the "Separate groups" "select"
     And I select "Group 3" from the "Separate groups" singleselect
-    And I should not see "student03@example.com"
-    And I should see "student05@example.com"
+    And the following should not exist in the "generaltable" table:
+      | First name / Surname | Email address         |
+      | Student 03           | student03@example.com |
+    And the following should exist in the "generaltable" table:
+      | First name / Surname | Email address         |
+      | Student 05           | student05@example.com |
     And I log out
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
@@ -129,12 +147,18 @@ Feature: View the certificates that have been issued
     And I log in as "teacher2"
     And I am on "Course 1" course homepage
     And I follow "My certificate"
-    And I should not see "student01@example.com"
+    And the following should not exist in the "generaltable" table:
+      | First name / Surname | Email address         |
+      | Student 01           | student01@example.com |
     And "Group 1" "option" should not exist in the "Separate groups" "select"
     And "Group 2" "option" should exist in the "Separate groups" "select"
     And I select "Group 3" from the "Separate groups" singleselect
-    And I should not see "student03@example.com"
-    And I should see "student05@example.com"
+    And the following should not exist in the "generaltable" table:
+      | First name / Surname | Email address         |
+      | Student 03           | student03@example.com |
+    And the following should exist in the "generaltable" table:
+      | First name / Surname | Email address         |
+      | Student 05           | student05@example.com |
 
   Scenario: View issued certificates
     And I log in as "teacher1"
@@ -148,10 +172,14 @@ Feature: View the certificates that have been issued
     And I am on "Course 1" course homepage
     And I follow "My certificate"
     And I click on "Email address" "link" in the "generaltable" "table"
-    And I should see "student06@example.com"
+    And the following should exist in the "generaltable" table:
+      | First name / Surname | Email address         |
+      | Student 06           | student06@example.com |
     And I click on "Revoke" "link" in the "student06@example.com" "table_row"
     And I press "Confirm"
-    And I should not see "student06@example.com"
+    And the following should not exist in the "generaltable" table:
+      | First name / Surname | Email address         |
+      | Student 06           | student06@example.com |
 
   Scenario: Verify issued certificates
     And I log in as "teacher1"
