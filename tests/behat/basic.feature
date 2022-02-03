@@ -158,7 +158,7 @@ Feature: Basic functionality of course certificate module
       | coursecertificate | Certificate 01 | Certificate intro | C1     | coursecertificate1 | Certificate of participation |
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    And I follow "Certificate 01"
+    And I click on "Certificate 01" "link" in the "region-main" "region"
     And I add the "Tags" block
     And I configure the "Tags" block
     And I set the following fields to these values:
@@ -198,17 +198,17 @@ Feature: Basic functionality of course certificate module
     And I log out
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    And I follow "Certificate 01"
+    And I click on "Certificate 01" "link" in the "region-main" "region"
     And I should see "The selected template can’t be found. Please go to the activity settings and select a new one."
     And I log out
     And I log in as "student1"
     And I am on "Course 1" course homepage
-    And I follow "Certificate 01"
+    And I click on "Certificate 01" "link" in the "region-main" "region"
     And I should see "The certificate is not available. Please contact the course administrator."
     And I log out
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    And I follow "Certificate 01"
+    And I click on "Certificate 01" "link" in the "region-main" "region"
     And I open course or activity settings page
     And I set the following fields to these values:
       | Template  | Certificate of participation B |
@@ -224,7 +224,7 @@ Feature: Basic functionality of course certificate module
       | coursecertificate | Certificate 01 | Certificate intro | C1     | coursecertificate1 | Certificate of participation A | 0       | 1             |
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    And I follow "Certificate 01"
+    And I click on "Certificate 01" "link" in the "region-main" "region"
     And I should see "This activity is currently hidden. By making it visible, students who meet the activity access restrictions will automatically receive a PDF copy of the certificate."
     And I press "Disable"
     And I press "Confirm"
@@ -242,7 +242,7 @@ Feature: Basic functionality of course certificate module
       | coursecertificate | Certificate 01 | Certificate intro | C1     | coursecertificate1 | Certificate of participation A | 1       | 0             |
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    And I follow "Certificate 01"
+    And I click on "Certificate 01" "link" in the "region-main" "region"
     And I should see "Students who meet this activity's access restrictions will be issued with their certificate once they access it."
     And I press "Enable"
     And I press "Confirm"
