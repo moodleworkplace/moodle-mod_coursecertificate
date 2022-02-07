@@ -1,7 +1,7 @@
 image: moodlehq/moodle-workplace-plugin-ci:7.3
 
 services:
-  - postgres:9.6
+  - postgres:10
   #- mysql:5.7.26
   - name: selenium/standalone-chrome:3
     alias: selenium-standalone-chrome
@@ -9,9 +9,11 @@ services:
 variables:
   MOODLE_REPO_WORKPLACE: git@git.in.moodle.com:workplace/workplacedev.git
   MOODLE_BRANCH_WORKPLACE: master
+  MOODLE_BRANCH_WORKPLACE311: WORKPLACE_311
   MOODLE_REPO_LMS: git@git.in.moodle.com:moodle/moodle.git
-  MOODLE_BRANCH_LMS: MOODLE_311_STABLE
-  MOODLE_BRANCH_LMSPREV: MOODLE_310_STABLE
+  MOODLE_BRANCH_LMS: master # TODO replace with stable when released
+  MOODLE_BRANCH_LMS311: MOODLE_311_STABLE
+  MOODLE_BRANCH_LMS310: MOODLE_310_STABLE
   MOODLE_BEHAT_WDHOST: "http://selenium-standalone-chrome:4444/wd/hub"
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: ""
@@ -74,9 +76,8 @@ behat:
     - tags
     - /^WORKPLACE_\d+$/
 
-.scriptlms: &scriptlms
+.scriptshorttest: &scriptshorttest
   script:
-    - export MOODLE_REPO=$MOODLE_REPO_LMS
     - . prepare-workplace $cibot_sshkey
     - cd $CI_PROJECT_DIR/..
     - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_certificate.git
@@ -87,23 +88,45 @@ behat:
     - php -S ${IPADDRESS}:8000 -t $CI_PROJECT_DIR/../moodle > /dev/null 2>&1 &
     - php admin/tool/behat/cli/init.php --add-core-features-to-theme --parallel=3 --optimize-runs=@mod_coursecertificate
     - . check-start
-    - . check moodle-plugin-ci phpunit --coverage-text
+    - . check moodle-plugin-ci phpunit
     - . check moodle-plugin-ci behat --suite default --profile chrome
     - . check-finish
 
-lms:
+wp311:
   before_script:
-    - export MOODLE_BRANCH=$MOODLE_BRANCH_LMS
-  <<: *scriptlms
+    - export MOODLE_REPO=$MOODLE_REPO_WORKPLACE
+    - export MOODLE_BRANCH=$MOODLE_BRANCH_WORKPLACE311
+  <<: *scriptshorttest
   except:
     - master
     - tags
     - /^WORKPLACE_\d+$/
 
-lmsprev:
+lms:
   before_script:
-    - export MOODLE_BRANCH=$MOODLE_BRANCH_LMSPREV
-  <<: *scriptlms
+    - export MOODLE_REPO=$MOODLE_REPO_LMS
+    - export MOODLE_BRANCH=$MOODLE_BRANCH_LMS
+  <<: *scriptshorttest
+  except:
+    - master
+    - tags
+    - /^WORKPLACE_\d+$/
+
+lms311:
+  before_script:
+    - export MOODLE_REPO=$MOODLE_REPO_LMS
+    - export MOODLE_BRANCH=$MOODLE_BRANCH_LMS311
+  <<: *scriptshorttest
+  except:
+    - master
+    - tags
+    - /^WORKPLACE_\d+$/
+
+lms310:
+  before_script:
+    - export MOODLE_REPO=$MOODLE_REPO_LMS
+    - export MOODLE_BRANCH=$MOODLE_BRANCH_LMS310
+  <<: *scriptshorttest
   except:
     - master
     - tags
