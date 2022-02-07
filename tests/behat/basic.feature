@@ -61,12 +61,12 @@ Feature: Basic functionality of course certificate module
     And I log out
     And I log in as "student1"
     And I am on "Course 1" course homepage
-    And I follow "Your super awesome certificate"
+    And I click on "Your super awesome certificate" "link" in the "region-main" "region"
     And I press the "back" button in the browser
     And I log out
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
-    And I follow "Your super awesome certificate"
+    And I click on "Your super awesome certificate" "link" in the "region-main" "region"
     Then I should see "Never" in the "student1@example.com" "table_row"
 
   Scenario: Teacher can create an instance of course certificate module with expiry date absolute
@@ -85,12 +85,12 @@ Feature: Basic functionality of course certificate module
     And I log out
     And I log in as "student1"
     And I am on "Course 1" course homepage
-    And I follow "Your awesome certificate"
+    And I click on "Your awesome certificate" "link" in the "region-main" "region"
     And I press the "back" button in the browser
     And I log out
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
-    And I follow "Your awesome certificate"
+    And I click on "Your awesome certificate" "link" in the "region-main" "region"
     Then I should see "##tomorrow##%d %B %Y##" in the "student1@example.com" "table_row"
 
   Scenario: Teacher can create an instance of course certificate module with expiry date relative
@@ -110,12 +110,12 @@ Feature: Basic functionality of course certificate module
     And I log out
     And I log in as "student1"
     And I am on "Course 1" course homepage
-    And I follow "Your awesome certificate"
+    And I click on "Your awesome certificate" "link" in the "region-main" "region"
     And I press the "back" button in the browser
     And I log out
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
-    And I follow "Your awesome certificate"
+    And I click on "Your awesome certificate" "link" in the "region-main" "region"
     Then I should see "##+1 week##%d %B %Y##" in the "student1@example.com" "table_row"
 
   Scenario: Teacher can duplicate and delete an instance of course certificate module
