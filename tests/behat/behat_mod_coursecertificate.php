@@ -25,6 +25,7 @@
 
 // NOTE: no MOODLE_INTERNAL test here, this file may be required by behat before including /config.php.
 
+use Behat\Mink\Exception\ExpectationException;
 use Moodle\BehatExtension\Exception\SkippedException;
 
 require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
@@ -83,6 +84,27 @@ class behat_mod_coursecertificate extends behat_base {
             $this->execute("behat_navigation::i_navigate_to_in_current_page_administration", ['Edit settings']);
         } else {
             $this->execute("behat_navigation::i_navigate_to_in_current_page_administration", ['Settings']);
+        }
+    }
+
+    /**
+     * Check that the manual completion button for the activity exists a number of times.
+     *
+     * @Given the manual completion button for :activityname course certificate should be displayed :times times
+     *
+     * @param string $activityname The activity name.
+     * @param int $times The number of appearances.
+     */
+    public function the_manual_completion_button_for_activity_coursecertificate_should_be_displayed_times(string $activityname,
+                                                                                                          int $times): void {
+        $selector = "div[data-activityname='$activityname'] button";
+        $count = count($this->find_all('css',  $selector));
+        if ($count != $times) {
+            // The button appears a different number of times.
+            throw new ExpectationException(
+                "The manual completion button for '{$activityname}' exists '{$count}' times",
+                $this->getSession()
+            );
         }
     }
 }
