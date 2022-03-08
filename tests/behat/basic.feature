@@ -241,7 +241,7 @@ Feature: Basic functionality of course certificate module
     And I click on "Course certificates" "link" in the "Activities" "block"
     And I should see "Certificate 01"
     And I should see "Certificate 02"
-    And I follow "Certificate 01"
+    And I click on "Certificate 01" "link" in the "region-main" "region"
     And I should see "No users are certified."
 
   Scenario: Display course certificate after removing current selected template.
