@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.11.6 (2022031500)
+### Added
+- Allow relative dates for expiry dates (i.e. 1 year after issue)
+
 ## 3.11.5 (2022011800)
 ### Added
 - Added support for the mobile app
