@@ -36,7 +36,7 @@
  * @param string $feature FEATURE_xx constant for requested feature
  * @return mixed True if module supports feature, false if not, null if doesn't know
  */
-function coursecertificate_supports(string $feature): ?bool {
+function coursecertificate_supports(string $feature) {
     switch($feature) {
         case FEATURE_GROUPS:
             return true;
@@ -52,6 +52,8 @@ function coursecertificate_supports(string $feature): ?bool {
             return true;
         case FEATURE_BACKUP_MOODLE2:
             return true;
+        case FEATURE_MOD_PURPOSE:
+            return MOD_PURPOSE_ASSESSMENT;
         default:
             return null;
     }
