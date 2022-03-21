@@ -44,6 +44,10 @@ require_once($CFG->libdir . "/phpunit/classes/restore_date_testcase.php");
  *
  * @package     mod_coursecertificate
  * @category    test
+ * @covers      \backup_coursecertificate_activity_task
+ * @covers      \backup_coursecertificate_activity_structure_step
+ * @covers      \restore_coursecertificate_activity_task
+ * @covers      \restore_coursecertificate_activity_structure_step
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
