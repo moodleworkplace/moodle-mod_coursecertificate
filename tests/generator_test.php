@@ -23,6 +23,7 @@ use tool_certificate_generator;
  * Unit tests for the mod_coursecertificate generator
  *
  * @package    mod_coursecertificate
+ * @covers     \mod_coursecertificate_generator
  * @copyright  2020 Marina Glancy
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

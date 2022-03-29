@@ -24,6 +24,8 @@ use tool_certificate_generator;
  * Test for accessibility tool support (Workplace only)
  *
  * @package    mod_coursecertificate
+ * @covers     \mod_coursecertificate\local\tool_brickfield\areas\intro
+ * @covers     \mod_coursecertificate\local\tool_brickfield\areas\name
  * @copyright  2021 Marina Glancy
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

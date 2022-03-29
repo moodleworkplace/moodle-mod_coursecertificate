@@ -33,6 +33,7 @@ use tool_certificate_generator;
  *
  * @package     mod_coursecertificate
  * @category    test
+ * @covers      \mod_coursecertificate\external
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
