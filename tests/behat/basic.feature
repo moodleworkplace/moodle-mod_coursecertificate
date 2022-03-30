@@ -67,7 +67,9 @@ Feature: Basic functionality of course certificate module
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I click on "Your super awesome certificate" "link" in the "region-main" "region"
-    Then I should see "Never" in the "student1@example.com" "table_row"
+    Then the following should exist in the "generaltable" table:
+      | First name | Status | Expiry date |
+      | Student 1  | Valid  | Never       |
 
   Scenario: Teacher can create an instance of course certificate module with expiry date absolute
     And the following certificate templates exist:
@@ -81,6 +83,8 @@ Feature: Basic functionality of course certificate module
       | Template          | Certificate of participation |
       | Expiry date type  | Select date                  |
       | Day               | ##tomorrow##%d##             |
+      | Month             | ##tomorrow##%B##             |
+      | Year              | ##tomorrow##%Y##             |
     And I press "Save and display"
     And I log out
     And I log in as "student1"
@@ -91,7 +95,9 @@ Feature: Basic functionality of course certificate module
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I click on "Your awesome certificate" "link" in the "region-main" "region"
-    Then I should see "##tomorrow##%d %B %Y##" in the "student1@example.com" "table_row"
+    Then the following should exist in the "generaltable" table:
+      | First name | Status | Expiry date            |
+      | Student 1  | Valid  | ##tomorrow##%d %B %Y## |
 
   Scenario: Teacher can create an instance of course certificate module with expiry date relative
     And the following certificate templates exist:
@@ -116,7 +122,9 @@ Feature: Basic functionality of course certificate module
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I click on "Your awesome certificate" "link" in the "region-main" "region"
-    Then I should see "##+1 week##%d %B %Y##" in the "student1@example.com" "table_row"
+    Then the following should exist in the "generaltable" table:
+      | First name | Status | Expiry date           |
+      | Student 1  | Valid  | ##+1 week##%d %B %Y## |
 
   Scenario: Teacher can duplicate and delete an instance of course certificate module
     And the following certificate templates exist:
