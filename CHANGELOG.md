@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.0.0 (2022042000)
+### Changed
+- This version of the plugin is only for Moodle LMS 4.0 and above
+- New icon for Moodle LMS 4.0
+- Use new API to display activity header
+
 ## 3.11.6 (2022031500)
 ### Added
 - Allow relative dates for expiry dates (i.e. 1 year after issue)
