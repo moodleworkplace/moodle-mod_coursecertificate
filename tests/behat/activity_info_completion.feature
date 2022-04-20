@@ -30,6 +30,7 @@ Feature: Completion in the course certificate activity
     And I am on "Course 1" course homepage
     When I follow "Certificate 1"
     Then the manual completion button for "Certificate 1" course certificate should be disabled
+    And the manual completion button for "Certificate 1" course certificate should be displayed "1" times
 
   Scenario: Viewing a course certificate activity with automatic completion as a teacher
     And the following "activities" exist:

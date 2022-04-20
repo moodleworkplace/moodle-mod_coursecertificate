@@ -45,21 +45,12 @@ if ($data['studentview'] && isset($data['issuecode'])) {
 }
 
 $PAGE->set_url('/mod/coursecertificate/view.php', ['id' => $id]);
-$PAGE->set_title(format_string($data['certificatename']));
+$PAGE->set_title($course->shortname . ': ' . $PAGE->activityrecord->name);
 $PAGE->set_heading(format_string($course->fullname));
 
 $context = \context_module::instance($id);
 $PAGE->set_context($context);
 
 echo $output->header();
-
-if ($CFG->version >= 2021050700) {
-    // Moodle 3.11 and above.
-    $cminfo = cm_info::create($cm);
-    $completiondetails = \core_completion\cm_completion_details::get_instance($cminfo, $USER->id);
-    $activitydates = \core\activity_dates::get_dates_for_module($cminfo, $USER->id);
-    echo $output->activity_information($cminfo, $completiondetails, $activitydates);
-}
-
 echo $output->render_from_template('mod_coursecertificate/view_page', $data);
 echo $output->footer();
