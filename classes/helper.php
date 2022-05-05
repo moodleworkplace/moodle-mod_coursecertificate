@@ -25,6 +25,8 @@
 namespace mod_coursecertificate;
 
 use core_availability\info_module;
+use tool_certificate\certificate;
+use tool_certificate\template;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -71,6 +73,58 @@ class helper {
             }
         }
         return $users;
+    }
+
+    /**
+     * Returns the record for the certificate user has in a given course
+     *
+     * In rare situations (race conditions) there can be more than one certificate, in which case return the last record.
+     *
+     * @param int $userid
+     * @param int $courseid
+     * @param int $templateid
+     * @return \stdClass
+     */
+    public static function get_user_certificate(int $userid, int $courseid, int $templateid): ?\stdClass {
+        global $DB;
+        $sql = "SELECT * FROM {tool_certificate_issues} ci
+                WHERE component = :component AND courseid = :courseid AND templateid = :templateid AND userid = :userid
+                ORDER BY id DESC";
+        $params = [
+            'component' => 'mod_coursecertificate',
+            'courseid' => $courseid,
+            'templateid' => $templateid,
+            'userid' => $userid,
+        ];
+        $records = $DB->get_records_sql($sql, $params);
+        return $records ? reset($records) : null;
+    }
+
+    /**
+     * Issue a course certificate to the user if they don't already have one
+     *
+     * @param \stdClass $user
+     * @param \stdClass $coursecertificate
+     * @param \stdClass|null $course course record, if known (to save on retrieving one)
+     * @param template|null $template template, if known (for performance reasons when called in a loop)
+     * @return int id of the certificate issue or 0 if user already had an issued certificate
+     */
+    public static function issue_certificate(\stdClass $user, \stdClass $coursecertificate,
+                                             ?\stdClass $course = null, ?template $template = null): int {
+        if (self::get_user_certificate($user->id, $coursecertificate->course, $coursecertificate->template)) {
+            // If user already has a certificate - do not issue a new one.
+            return 0;
+        }
+
+        $course = $course ?? get_course($coursecertificate->course);
+        $template = $template ?? template::instance($coursecertificate->template);
+        $issuedata = self::get_issue_data($course, $user);
+        $expirydate = certificate::calculate_expirydate(
+            $coursecertificate->expirydatetype,
+            $coursecertificate->expirydateoffset,
+            $coursecertificate->expirydateoffset
+        );
+        return $template->issue_certificate($user->id, $expirydate, $issuedata, 'mod_coursecertificate', $course->id);
     }
 
     /**
