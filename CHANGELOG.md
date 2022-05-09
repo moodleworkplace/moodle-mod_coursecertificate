@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.11.7 (2022031510)
+### Changed
+- Prevent race condition resulting in issuing course certificate twice
+
 ## 3.11.6 (2022031500)
 ### Added
 - Allow relative dates for expiry dates (i.e. 1 year after issue)
