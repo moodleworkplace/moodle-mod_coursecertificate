@@ -119,28 +119,10 @@ class view_page implements templatable, renderable {
         // View certificate issue PDF if user can not manage, can receive issues and activity template is correct.
         if (!$this->canviewall && $this->canreceiveissues && $this->certificate->template != 0) {
             // View certificate PDF only if activity has a template.
-            $params = ['id' => $this->certificate->template];
-            $templaterecord = $DB->get_record('tool_certificate_templates', $params, '*', MUST_EXIST);
-            if ($templaterecord) {
-                $issuesqlconditions = [
-                    'userid' => $USER->id,
-                    'templateid' => $templaterecord->id,
-                    'courseid' => $course->id,
-                    'component' => 'mod_coursecertificate'
-                ];
-                // If user does not have an issue yet, create it first.
-                $issuedata = helper::get_issue_data($course, $USER);
-                if (!$DB->record_exists('tool_certificate_issues', $issuesqlconditions)) {
-                    $expirydate = certificate::calculate_expirydate(
-                        $this->certificate->expirydatetype,
-                        $this->certificate->expirydateoffset,
-                        $this->certificate->expirydateoffset
-                    );
-                    $template = template::instance($templaterecord->id);
-                    $template->issue_certificate($USER->id, $expirydate, $issuedata, 'mod_coursecertificate', $course->id);
-                }
-                // Get the issue code.
-                $this->issuecode = $DB->get_field('tool_certificate_issues', 'code', $issuesqlconditions, MUST_EXIST);
+            // Issue certificate to the user if they don't have one or retrieve the issued certificate.
+            helper::issue_certificate($USER, $this->certificate, $course);
+            if ($existingcertificate = helper::get_user_certificate($USER->id, $course->id, $this->certificate->template)) {
+                $this->issuecode = $existingcertificate->code;
             }
         }
 
