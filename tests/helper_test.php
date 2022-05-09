@@ -129,4 +129,80 @@ class helper_test extends advanced_testcase {
         $this->assertEquals($coursecompletiondate, $issuedata['coursecompletiondate']);
         $this->assertEquals('10.00', $issuedata['coursegrade']);
     }
+
+    public function test_get_user_certificate() {
+        $this->resetAfterTest();
+
+        // Create course, certificate template and coursecertificate module.
+        $course = $this->getDataGenerator()->create_course();
+        $template1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
+        $template2 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 2']);
+        $record = ['course' => $course->id, 'template' => $template1->get_id()];
+        $mod = $this->getDataGenerator()->create_module('coursecertificate', $record);
+
+        // Create user with 'student' role.
+        $user1 = $this->getDataGenerator()->create_and_enrol($course);
+
+        // User has no certificates.
+        $this->assertNull(helper::get_user_certificate($user1->id, $course->id, $template1->get_id()));
+        $this->assertNull(helper::get_user_certificate($user1->id, $course->id, $template2->get_id()));
+
+        // Issue one course certificate to user and one general certificate.
+        helper::issue_certificate($user1, $mod);
+        $template2->issue_certificate($user1->id);
+
+        // Function helper::get_user_certificate() will only return course certificate.
+        $cert = helper::get_user_certificate($user1->id, $course->id, $template1->get_id());
+        $this->assertNotEmpty($cert->id);
+        $this->assertNull(helper::get_user_certificate($user1->id, $course->id, $template2->get_id()));
+    }
+
+    public function test_get_user_certificate_race_condition() {
+        $this->resetAfterTest();
+
+        // Create course, certificate template and coursecertificate module.
+        $course = $this->getDataGenerator()->create_course();
+        $template1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
+        $template2 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 2']);
+        $record = ['course' => $course->id, 'template' => $template1->get_id()];
+        $mod = $this->getDataGenerator()->create_module('coursecertificate', $record);
+
+        // Create user with 'student' role.
+        $user1 = $this->getDataGenerator()->create_and_enrol($course);
+
+        // Issue two certificates to the user 2 (emulate race condition).
+        $id1 = helper::issue_certificate($user1, $mod);
+        $id2 = $template1->issue_certificate($user1->id, null, [], 'mod_coursecertificate', $course->id);
+        $this->assertNotEmpty($id1);
+        $this->assertNotEmpty($id2);
+        $this->assertNotEquals($id1, $id2);
+
+        // Now user has two certificates but the helper::get_user_certificate() will only return the last one.
+        $cert = helper::get_user_certificate($user1->id, $course->id, $template1->get_id());
+        $this->assertEquals($id2, $cert->id);
+    }
+
+    public function test_issue_certificate() {
+        $this->resetAfterTest();
+
+        // Create course, certificate template and coursecertificate module.
+        $course = $this->getDataGenerator()->create_course();
+        $template1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
+        $record = ['course' => $course->id, 'template' => $template1->get_id()];
+        $mod = $this->getDataGenerator()->create_module('coursecertificate', $record);
+
+        // Create user with 'student' role.
+        $user1 = $this->getDataGenerator()->create_and_enrol($course);
+        $user2 = $this->getDataGenerator()->create_and_enrol($course);
+        $user3 = $this->getDataGenerator()->create_and_enrol($course);
+
+        // Issue certificates to users using different number of parameters.
+        $id1 = helper::issue_certificate($user1, $mod);
+        $this->assertNotEmpty($id1);
+        $this->assertNotEmpty(helper::issue_certificate($user2, $mod, $course));
+        $this->assertNotEmpty(helper::issue_certificate($user3, $mod, $course, $template1));
+
+        // Try to issue a user a certificate again - no certificate will be issued.
+        $this->assertEmpty(helper::issue_certificate($user1, $mod));
+    }
 }

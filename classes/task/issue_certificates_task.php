@@ -73,15 +73,9 @@ class issue_certificates_task extends \core\task\scheduled_task {
 
             // Issue the certificate.
             foreach ($users as $user) {
-                // Add course data to the issue.
-                $issuedata = helper::get_issue_data($course, $user);
-                $expirydate = certificate::calculate_expirydate(
-                    $coursecertificate->expirydatetype,
-                    $coursecertificate->expirydateoffset,
-                    $coursecertificate->expirydateoffset
-                );
-                $template->issue_certificate($user->id, $expirydate, $issuedata, 'mod_coursecertificate', $course->id);
-                mtrace("... issued coursecertificate $coursecertificate->id for user $user->id on course $course->id");
+                if (helper::issue_certificate($user, $coursecertificate, $course, $template)) {
+                    mtrace("... issued coursecertificate $coursecertificate->id for user $user->id on course $course->id");
+                }
             }
         }
     }
