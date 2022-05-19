@@ -127,6 +127,9 @@ class certificate_issues_table extends \table_sql {
         if (!$this->is_downloading() && ($this->canrevoke || $this->canviewall)) {
             $columnsheaders += ['actions' => get_string('actions')];
         }
+        if ($this->is_downloading() && !$this->export_class_instance()->supports_html()) {
+            $columnsheaders += ['archived' => get_string('archived', 'tool_certificate')];
+        }
 
         $this->define_columns(array_keys($columnsheaders));
         $this->define_headers(array_values($columnsheaders));
@@ -149,10 +152,16 @@ class certificate_issues_table extends \table_sql {
     public function col_fullname($certificateissue) {
         global $OUTPUT;
 
+        $badge = '';
+        if ((!$this->is_downloading() || $this->export_class_instance()->supports_html()) && $certificateissue->archived) {
+            $badge = get_string('archived', 'tool_certificate');
+            $badge = $this->is_downloading() ? " ($badge)" :
+                (' ' . \html_writer::span($badge, 'badge badge-secondary'));
+        }
         if (!$this->is_downloading()) {
-            return $OUTPUT->user_picture($certificateissue) . ' ' . fullname($certificateissue);
+            return $OUTPUT->user_picture($certificateissue) . ' ' . fullname($certificateissue) . $badge;
         } else {
-            return fullname($certificateissue);
+            return fullname($certificateissue) . $badge;
         }
     }
 

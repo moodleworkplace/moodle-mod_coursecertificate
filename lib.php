@@ -187,3 +187,61 @@ function mod_coursecertificate_tool_certificate_fields() {
         );
     }
 }
+
+/**
+ * This function is used by the reset_course_userdata function in moodlelib.
+ *
+ * @param stdClass $data the data submitted from the reset course.
+ * @return array status array
+ */
+function coursecertificate_reset_userdata($data) {
+    global $DB;
+
+    $status = [];
+    $key = 'archive_certificates';
+
+    if (!empty($data->$key)) {
+        // Loop through the books and remove the tags from the chapters.
+        if ($certificates = $DB->get_records('coursecertificate', array('course' => $data->courseid))) {
+            foreach ($certificates as $certificate) {
+                if (!$cm = get_coursemodule_from_instance('coursecertificate', $certificate->id)) {
+                    continue;
+                }
+                $DB->execute('UPDATE {tool_certificate_issues} SET archived = 1
+                                 WHERE courseid = ? AND templateid = ? AND component = ? AND archived = 0',
+                    [$data->courseid, $certificate->template, 'mod_coursecertificate']);
+            }
+        }
+
+        $status[] = [
+            'component' => get_string('modulenameplural', 'mod_coursecertificate'),
+            'item' => get_string('certificatesarchived', 'mod_coursecertificate'),
+            'error' => false
+        ];
+
+    }
+
+    return $status;
+}
+
+/**
+ * The elements to add the course reset form.
+ *
+ * @param MoodleQuickForm $mform
+ */
+function coursecertificate_reset_course_form_definition($mform) {
+    $mform->addElement('header', 'coursecertificateheader', get_string('modulenameplural', 'mod_coursecertificate'));
+    $mform->addElement('checkbox', 'archive_certificates', get_string('archivecertificates', 'mod_coursecertificate'));
+}
+
+/**
+ * Course reset form defaults
+ *
+ * @param stdClass $course
+ * @return array
+ */
+function coursecertificate_reset_course_form_defaults($course) {
+    return [
+        'archive_certificates' => 1,
+    ];
+}

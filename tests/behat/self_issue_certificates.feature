@@ -38,3 +38,18 @@ Feature: Self issue certificate for coursecertificate template
     And I follow "My certificate"
     And I click on ".popover-region-notifications" "css_element"
     And I should not see "Your certificate is available!"
+
+  Scenario: User can receive new course certificate when they have archived ones
+    Given the following certificate issues exist:
+      | template    | user      | course | component             | code  | timecreated | archived |
+      | Template 01 | student1  | C1     | mod_coursecertificate | code1 | 1009882800  | 1        |
+    When I log in as "student1"
+    And I am on "Course 1" course homepage
+    And I follow "My certificate"
+    And I press the "back" button in the browser
+    And I follow "Profile" in the user menu
+    And I click on "//a[contains(.,'My certificates') and contains(@href,'tool/certificate')]" "xpath_element"
+    And the following should exist in the "generaltable" table:
+      | Certificate | Date issued         |
+      | Template 01 | ##today##%d %B %Y## |
+      | Template 01 | 1 January 2002      |

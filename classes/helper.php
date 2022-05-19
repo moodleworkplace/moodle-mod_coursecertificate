@@ -89,6 +89,7 @@ class helper {
         global $DB;
         $sql = "SELECT * FROM {tool_certificate_issues} ci
                 WHERE component = :component AND courseid = :courseid AND templateid = :templateid AND userid = :userid
+                      AND archived = 0
                 ORDER BY id DESC";
         $params = [
             'component' => 'mod_coursecertificate',

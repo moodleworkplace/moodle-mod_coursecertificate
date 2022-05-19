@@ -26,6 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['activityhiddenwarning'] = 'This activity is currently hidden. By making it visible, students who meet the activity access restrictions will automatically receive a PDF copy of the certificate.';
+$string['archivecertificates'] = 'Archive issued certificates';
 $string['automaticsend_helptitle'] = "Help with automatic sending";
 $string['automaticsenddisabled'] = 'The automatic sending of this certificate is disabled.';
 $string['automaticsenddisabled_help'] = 'By leaving this disabled, students must click on the activity link displayed on the course page to receive the certificate, once they meet this activity\'s access restrictions.<br/><br/>
@@ -36,6 +37,7 @@ $string['automaticsendenabled'] = 'The automatic sending of this certificate is 
 $string['automaticsendenabled_help'] = 'By leaving this enabled, students will automatically receive a PDF copy of the certificate once they meet this activity\'s access restrictions.<br/><br/>
 By disabling it, students will need to click on the activity link displayed on the course page to receive the certificate, once they meet this activity\'s access restrictions.';
 $string['certificateissues'] = 'Certificate issues';
+$string['certificatesarchived'] = 'Certificates archived';
 $string['certifiedusers'] = 'Certified users';
 $string['chooseatemplate'] = 'Choose a template...';
 $string['code'] = 'Code';
