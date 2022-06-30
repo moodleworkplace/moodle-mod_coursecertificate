@@ -137,7 +137,8 @@ class helper {
      */
     private static function get_users_issued_select(int $courseid, int $templateid): array {
         $sql = "SELECT DISTINCT ci.userid FROM {tool_certificate_issues} ci
-                WHERE component = :component AND courseid = :courseid AND templateid = :templateid";
+                WHERE component = :component AND courseid = :courseid AND templateid = :templateid
+                      AND archived = 0";
         $params = ['component' => 'mod_coursecertificate', 'courseid' => $courseid,
             'templateid' => $templateid];
         return [$sql, $params];

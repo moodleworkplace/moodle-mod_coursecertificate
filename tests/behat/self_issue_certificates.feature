@@ -21,7 +21,7 @@ Feature: Self issue certificate for coursecertificate template
       | name                         | shared  |
       | Template 01                  | 1       |
     And the following "activities" exist:
-      | activity          | name        | intro             | course | idnumber           | template    | groupmode  |
+      | activity          | name           | intro             | course | idnumber           | template    | groupmode  |
       | coursecertificate | My certificate | Certificate intro | C1     | coursecertificate1 | Template 01 | 1          |
 
   Scenario: Get certificate having the activity requirements when accessing the activity
@@ -43,6 +43,7 @@ Feature: Self issue certificate for coursecertificate template
     Given the following certificate issues exist:
       | template    | user      | course | component             | code  | timecreated | archived |
       | Template 01 | student1  | C1     | mod_coursecertificate | code1 | 1009882800  | 1        |
+      | Template 01 | student1  | C1     | mod_coursecertificate | code2 | 1041415200  | 1        |
     When I log in as "student1"
     And I am on "Course 1" course homepage
     And I follow "My certificate"
@@ -52,4 +53,5 @@ Feature: Self issue certificate for coursecertificate template
     And the following should exist in the "generaltable" table:
       | Certificate | Date issued         |
       | Template 01 | ##today##%d %B %Y## |
+      | Template 01 | 1 January 2003      |
       | Template 01 | 1 January 2002      |

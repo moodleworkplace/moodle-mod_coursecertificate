@@ -205,16 +205,13 @@ function coursecertificate_reset_userdata($data) {
     $key = 'archive_certificates';
 
     if (!empty($data->$key)) {
-        // Loop through the books and remove the tags from the chapters.
-        if ($certificates = $DB->get_records('coursecertificate', array('course' => $data->courseid))) {
-            foreach ($certificates as $certificate) {
-                if (!$cm = get_coursemodule_from_instance('coursecertificate', $certificate->id)) {
-                    continue;
-                }
-                $DB->execute('UPDATE {tool_certificate_issues} SET archived = 1
-                                 WHERE courseid = ? AND templateid = ? AND component = ? AND archived = 0',
-                    [$data->courseid, $certificate->template, 'mod_coursecertificate']);
-            }
+        // Archive all issued certificates in this course (but only for the templates that are currently configured in
+        // instances of mod_coursecertificate in this course).
+        $certificates = get_coursemodules_in_course('coursecertificate', $data->courseid, 'm.template');
+        foreach ($certificates as $certificate) {
+            $DB->execute('UPDATE {tool_certificate_issues} SET archived = 1
+                             WHERE courseid = ? AND templateid = ? AND component = ? AND archived = 0',
+                [$data->courseid, $certificate->template, 'mod_coursecertificate']);
         }
 
         $status[] = [
