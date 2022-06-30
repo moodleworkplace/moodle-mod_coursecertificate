@@ -204,7 +204,6 @@ Feature: View the certificates that have been issued
     And I follow "My certificate"
     And I should not see "Student 01"
     And I click on "2" "link" in the ".pagination" "css_element"
-    And I wait "30" seconds
     And the following should exist in the "generaltable" table:
       | First name / Surname | Email address         | Date issued    | Code  |
       | Student 01           | student01@example.com | 1 January 2002 | code1 |
@@ -217,4 +216,3 @@ Feature: View the certificates that have been issued
       | Certificate | Code  |
       | Template 01 | code1 |
       | Template 01 | code2 |
-    And I am on "Course 1" course homepage

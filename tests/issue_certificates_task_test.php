@@ -132,4 +132,58 @@ class issue_certificates_task_test extends advanced_testcase {
             'courseid' => $course->id]);
         $this->assertEmpty($issues);
     }
+
+    /**
+     * Test issue_certificates_task with automaticsend setting enabled.
+     */
+    public function test_issue_certificates_task_automaticsend_after_reset() {
+        global $DB;
+
+        // Create course, certificate template and coursecertificate module.
+        $course = $this->getDataGenerator()->create_course(['shortname' => 'C01']);
+        $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
+        $record = [
+            'course' => $course->id,
+            'template' => $certificate1->get_id(),
+            'automaticsend' => 1
+        ];
+        $mod = $this->getDataGenerator()->create_module('coursecertificate', $record);
+
+        // Create several users and enrol as students.
+        $user1 = $this->getDataGenerator()->create_and_enrol($course);
+        $user2 = $this->getDataGenerator()->create_and_enrol($course);
+        $user3 = $this->getDataGenerator()->create_and_enrol($course);
+
+        // One of the user has active certificate and second one has archived certificate.
+        helper::issue_certificate($user1, $mod);
+        $lastissueid = helper::issue_certificate($user2, $mod);
+        $DB->update_record('tool_certificate_issues', ['id' => $lastissueid, 'archived' => 1]);
+
+        // Run scheduled task.
+        $task = new \mod_coursecertificate\task\issue_certificates_task();
+        ob_start();
+        $task->execute();
+        ob_end_clean();
+
+        // There should be two new issues.
+        $newissues = $DB->get_records_select('tool_certificate_issues',
+            'templateid = :templateid and courseid = :courseid and id > :lastissueid',
+            ['templateid' => $certificate1->get_id(), 'courseid' => $course->id, 'lastissueid' => $lastissueid]);
+        $this->assertCount(2, $newissues);
+
+        // Now each student has one active certificate and user2 has two certificates - one active and one archived.
+        $sql = "SELECT id, userid, archived FROM {tool_certificate_issues}
+                WHERE component = :component AND courseid = :courseid AND templateid = :templateid
+                ORDER BY userid, archived";
+        $params = [
+            'component' => 'mod_coursecertificate',
+            'courseid' => $course->id,
+            'templateid' => $certificate1->get_id(),
+        ];
+        $res = [];
+        foreach ($DB->get_records_sql($sql, $params) as $record) {
+            $res[$record->userid] = array_merge($res[$record->userid] ?? [], [$record->archived]);
+        }
+        $this->assertEquals([$user1->id => [0], $user2->id => [0, 1], $user3->id => [0]], $res);
+    }
 }
