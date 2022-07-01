@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['activityhiddenwarning'] = 'This activity is currently hidden. By making it visible, students who meet the activity access restrictions will automatically receive a PDF copy of the certificate.';
 $string['archivecertificates'] = 'Archive issued certificates';
+$string['archivecertificates_help'] = 'Archived certificates can still be verified and are still displayed on the user profile page. However when an existing course certificate is archived, a user can be issued a new certificate once they satisfy the activity access restrictions.';
 $string['automaticsend_helptitle'] = "Help with automatic sending";
 $string['automaticsenddisabled'] = 'The automatic sending of this certificate is disabled.';
 $string['automaticsenddisabled_help'] = 'By leaving this disabled, students must click on the activity link displayed on the course page to receive the certificate, once they meet this activity\'s access restrictions.<br/><br/>

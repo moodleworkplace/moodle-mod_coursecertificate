@@ -233,6 +233,7 @@ function coursecertificate_reset_userdata($data) {
 function coursecertificate_reset_course_form_definition($mform) {
     $mform->addElement('header', 'coursecertificateheader', get_string('modulenameplural', 'mod_coursecertificate'));
     $mform->addElement('checkbox', 'archive_certificates', get_string('archivecertificates', 'mod_coursecertificate'));
+    $mform->addHelpButton('archive_certificates', 'archivecertificates', 'mod_coursecertificate');
 }
 
 /**
