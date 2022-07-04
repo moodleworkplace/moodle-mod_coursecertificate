@@ -67,18 +67,18 @@ Feature: View the certificates that have been issued
       | name        | shared  |
       | Template 01 | 1       |
     And the following certificate issues exist:
-      | template                      | user      | course | component             |
-      | Template 01                   | student1  | C1     | mod_coursecertificate |
-      | Template 01                   | student2  | C1     | mod_coursecertificate |
-      | Template 01                   | student3  | C1     | mod_coursecertificate |
-      | Template 01                   | student4  | C1     | mod_coursecertificate |
-      | Template 01                   | student5  | C1     | mod_coursecertificate |
-      | Template 01                   | student6  | C1     | mod_coursecertificate |
-      | Template 01                   | student7  | C1     | mod_coursecertificate |
-      | Template 01                   | student8  | C1     | mod_coursecertificate |
-      | Template 01                   | student9  | C1     | mod_coursecertificate |
-      | Template 01                   | student10  | C1     | mod_coursecertificate |
-      | Template 01                   | student11  | C1     | mod_coursecertificate |
+      | template    | user      | course | component             | code  | timecreated |
+      | Template 01 | student1  | C1     | mod_coursecertificate | code1 | 1009882800  |
+      | Template 01 | student2  | C1     | mod_coursecertificate |       | 1009969200  |
+      | Template 01 | student3  | C1     | mod_coursecertificate |       |             |
+      | Template 01 | student4  | C1     | mod_coursecertificate |       |             |
+      | Template 01 | student5  | C1     | mod_coursecertificate |       |             |
+      | Template 01 | student6  | C1     | mod_coursecertificate |       |             |
+      | Template 01 | student7  | C1     | mod_coursecertificate |       |             |
+      | Template 01 | student8  | C1     | mod_coursecertificate |       |             |
+      | Template 01 | student9  | C1     | mod_coursecertificate |       |             |
+      | Template 01 | student10 | C1     | mod_coursecertificate |       |             |
+      | Template 01 | student11 | C1     | mod_coursecertificate |       |             |
     And the following "activities" exist:
       | activity          | name           | intro             | course | idnumber           | template    | groupmode  |
       | coursecertificate | My certificate | Certificate intro | C1     | coursecertificate1 | Template 01 | 1          |
@@ -93,7 +93,7 @@ Feature: View the certificates that have been issued
     And I click on "Email address" "link" in the "generaltable" "table"
     And the following should exist in the "generaltable" table:
       | First name / Surname | Email address         | Country   | Status | Expiry date | Date issued         |
-      | Student 02           | student02@example.com | France    | Valid  | Never       | ##today##%d %B %Y## |
+      | Student 02           | student02@example.com | France    | Valid  | Never       | 2 January 2002      |
       | Student 03           | student03@example.com | Spain     | Valid  | Never       | ##today##%d %B %Y## |
       | Student 04           | student04@example.com | Portugal  | Valid  | Never       | ##today##%d %B %Y## |
     And the following should not exist in the "generaltable" table:
@@ -102,8 +102,8 @@ Feature: View the certificates that have been issued
     # Test pagination.
     And I click on "2" "link" in the ".pagination" "css_element"
     And the following should exist in the "generaltable" table:
-      | First name / Surname | Email address         | Country   | Status | Expiry date | Date issued         |
-      | Student 01           | student01@example.com | Spain     | Valid  | Never       | ##today##%d %B %Y## |
+      | First name / Surname | Email address         | Country   | Status | Expiry date | Date issued    |
+      | Student 01           | student01@example.com | Spain     | Valid  | Never       | 1 January 2002 |
 
   Scenario: Filter issued certificates by group
     And I log in as "teacher1"
@@ -194,3 +194,25 @@ Feature: View the certificates that have been issued
     And I follow "My certificate"
     And I press "Download"
     And I log out
+
+  Scenario: View archived certificates
+    Given the following certificate issues exist:
+      | template    | user     | course | component             | archived | code  | timecreated |
+      | Template 01 | student1 | C1     | mod_coursecertificate | 1        | code2 | 946724400   |
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage
+    And I follow "My certificate"
+    And I should not see "Student 01"
+    And I click on "2" "link" in the ".pagination" "css_element"
+    And the following should exist in the "generaltable" table:
+      | First name / Surname | Email address         | Date issued    | Code  |
+      | Student 01           | student01@example.com | 1 January 2002 | code1 |
+      | Student 01 Archived  | student01@example.com | 1 January 2000 | code2 |
+    And I log out
+    When I log in as "student1"
+    And I follow "Profile" in the user menu
+    And I click on "//a[contains(.,'My certificates') and contains(@href,'tool/certificate')]" "xpath_element"
+    And the following should exist in the "generaltable" table:
+      | Certificate | Code  |
+      | Template 01 | code1 |
+      | Template 01 | code2 |
