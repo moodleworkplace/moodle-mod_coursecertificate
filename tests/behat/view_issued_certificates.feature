@@ -93,17 +93,10 @@ Feature: View the certificates that have been issued
     And I click on "Email address" "link" in the "generaltable" "table"
     And the following should exist in the "generaltable" table:
       | First name / Surname | Email address         | Country   | Status | Expiry date | Date issued         |
+      | Student 01           | student01@example.com | Spain     | Valid  | Never       | 1 January 2002      |
       | Student 02           | student02@example.com | France    | Valid  | Never       | 2 January 2002      |
       | Student 03           | student03@example.com | Spain     | Valid  | Never       | ##today##%d %B %Y## |
       | Student 04           | student04@example.com | Portugal  | Valid  | Never       | ##today##%d %B %Y## |
-    And the following should not exist in the "generaltable" table:
-      | First name / Surname | Email address         |
-      | Student 01           | student01@example.com |
-    # Test pagination.
-    And I click on "2" "link" in the ".pagination" "css_element"
-    And the following should exist in the "generaltable" table:
-      | First name / Surname | Email address         | Country   | Status | Expiry date | Date issued    |
-      | Student 01           | student01@example.com | Spain     | Valid  | Never       | 1 January 2002 |
 
   Scenario: Filter issued certificates by group
     And I log in as "teacher1"
@@ -165,7 +158,7 @@ Feature: View the certificates that have been issued
     And I am on "Course 1" course homepage
     And I follow "My certificate"
     And I click on "Email address" "link" in the "generaltable" "table"
-    And I click on "View" "link" in the "student06@example.com" "table_row"
+    And I press "View" action in the "student06@example.com" report row
 
   Scenario: Remove issued certificates
     And I log in as "teacher1"
@@ -175,8 +168,8 @@ Feature: View the certificates that have been issued
     And the following should exist in the "generaltable" table:
       | First name / Surname | Email address         |
       | Student 06           | student06@example.com |
-    And I click on "Revoke" "link" in the "student06@example.com" "table_row"
-    And I press "Confirm"
+    And I press "Revoke" action in the "student06@example.com" report row
+    And I click on "Revoke" "button" in the "Confirm" "dialogue"
     And the following should not exist in the "generaltable" table:
       | First name / Surname | Email address         |
       | Student 06           | student06@example.com |
@@ -202,12 +195,7 @@ Feature: View the certificates that have been issued
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I follow "My certificate"
-    And I should not see "Student 01"
-    And I click on "2" "link" in the ".pagination" "css_element"
-    And the following should exist in the "generaltable" table:
-      | First name / Surname | Email address         | Date issued    | Code  |
-      | Student 01           | student01@example.com | 1 January 2002 | code1 |
-      | Student 01 Archived  | student01@example.com | 1 January 2000 | code2 |
+    And I should see "Archived" in the "code2" "table_row"
     And I log out
     When I log in as "student1"
     And I follow "Profile" in the user menu

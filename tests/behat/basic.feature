@@ -49,7 +49,7 @@ Feature: Basic functionality of course certificate module
     And I press "Save and display"
     And I should see "Your awesome certificate"
     And I should see "The automatic sending of this certificate is disabled"
-    And I should see "No users are certified."
+    And I should see "Nothing to display"
     And I press "Enable"
     And I press "Confirm"
     And I should see "The automatic sending of this certificate is enabled"
@@ -158,7 +158,7 @@ Feature: Basic functionality of course certificate module
     And I press "Save and display"
     And I should see "Your awesome certificate"
     And I should see "The automatic sending of this certificate is disabled"
-    And I should see "No users are certified."
+    And I should see "Nothing to display"
 
   Scenario: Teacher can not create course certificate if there are not available templates
     And the following certificate templates exist:
@@ -213,10 +213,9 @@ Feature: Basic functionality of course certificate module
       | Name     | Your awesome certificate     |
       | Template | Certificate of participation |
     Then I click on "Your awesome certificate" "link" in the "region-main" "region"
-    And I should see "Student 1"
-    And I click on "Revoke" "link"
-    And I press "Confirm"
-    And I should see "No users are certified."
+    And I press "Revoke" action in the "Student 1" report row
+    And I click on "Revoke" "button" in the "Confirm" "dialogue"
+    And I should see "Nothing to display"
 
   Scenario: Teacher can manage blocks in the module page
     And the following certificate templates exist:
@@ -250,7 +249,7 @@ Feature: Basic functionality of course certificate module
     And I should see "Certificate 01"
     And I should see "Certificate 02"
     And I click on "Certificate 01" "link" in the "region-main" "region"
-    And I should see "No users are certified."
+    And I should see "Nothing to display"
 
   Scenario: Display course certificate after removing current selected template.
     And the following certificate templates exist:
@@ -262,7 +261,7 @@ Feature: Basic functionality of course certificate module
       | coursecertificate | Certificate 01 | Certificate intro | C1     | coursecertificate1 | Certificate of participation A |
     When I log in as "admin"
     And I navigate to "Certificates > Manage certificate templates" in site administration
-    And I click on "Delete" "link" in the "Certificate of participation A" "table_row"
+    And I press "Delete" action in the "Certificate of participation A" report row
     And I click on "Delete" "button" in the "Confirm" "dialogue"
     And I log out
     And I log in as "teacher1"

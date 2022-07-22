@@ -32,8 +32,6 @@ use mod_coursecertificate\permission;
 use moodle_url;
 use templatable;
 use renderable;
-use tool_certificate\certificate;
-use tool_certificate\template;
 use core_reportbuilder\system_report_factory;
 use tool_certificate\reportbuilder\local\systemreports\issues;
 
@@ -133,7 +131,7 @@ class view_page implements templatable, renderable {
                 'templateid' => $this->certificate->template,
                 'courseid' => $course->id,
                 'groupmode' => $groupmode,
-                'groupid' => $groupid,
+                'groupid' => $groupid ?? 0,
             ]);
         }
     }
