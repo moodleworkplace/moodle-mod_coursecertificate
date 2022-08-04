@@ -127,10 +127,8 @@ class view_page implements templatable, renderable {
 
         // Show issues table.
         if ($this->canviewreport) {
-            $this->report = system_report_factory::create(issues::class, $context->get_course_context(), '', '', 0, [
+            $this->report = system_report_factory::create(issues::class, $context, '', '', 0, [
                 'templateid' => $this->certificate->template,
-                'courseid' => $course->id,
-                'groupmode' => $groupmode,
                 'groupid' => $groupid ?? 0,
             ]);
         }
