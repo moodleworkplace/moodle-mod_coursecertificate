@@ -19,6 +19,7 @@ namespace mod_coursecertificate;
 use advanced_testcase;
 use context_course;
 use context_system;
+use tool_certificate_generator;
 
 /**
  * Unit tests for permission class.
@@ -35,6 +36,14 @@ class permission_test extends advanced_testcase {
      */
     public function setUp(): void {
         $this->resetAfterTest();
+    }
+
+    /**
+     * Get certificate generator
+     * @return tool_certificate_generator
+     */
+    protected function get_certificate_generator() : tool_certificate_generator {
+        return $this->getDataGenerator()->get_plugin_generator('tool_certificate');
     }
 
     /**
@@ -134,5 +143,69 @@ class permission_test extends advanced_testcase {
         $this->getDataGenerator()->enrol_user($user->id, $course->id, 'student');
         $this->assertTrue(has_capability('mod/coursecertificate:receive', context_course::instance($course->id)));
         $this->assertTrue(\mod_coursecertificate\permission::can_receive_issues(context_course::instance($course->id)));
+    }
+
+    /**
+     * Test can_view_group_in_context.
+     */
+    public function test_can_view_group_in_context() {
+        // Create course, certificate template and coursecertificate module.
+        $course = $this->getDataGenerator()->create_course();
+        $template1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate Course 1']);
+        $record = [
+            'course' => $course,
+            'template' => $template1->get_id(),
+        ];
+        $modnogroups = $this->getDataGenerator()->create_module('coursecertificate', array_merge($record, ['groupmode' => NOGROUPS]));
+        $contextmodnogroups = \context_module::instance($modnogroups->cmid);
+        $modseparate = $this->getDataGenerator()->create_module('coursecertificate', array_merge($record, ['groupmode' => SEPARATEGROUPS]));
+        $contextmodseparate = \context_module::instance($modseparate->cmid);
+        $modvisiblegroups = $this->getDataGenerator()->create_module('coursecertificate', array_merge($record, ['groupmode' => VISIBLEGROUPS]));
+        $contextmodvisiblegroups = \context_module::instance($modvisiblegroups->cmid);
+
+        $user1 = $this->getDataGenerator()->create_and_enrol($course, 'student');
+        $user2 = $this->getDataGenerator()->create_and_enrol($course, 'student');
+        $teacher1 = $this->getDataGenerator()->create_and_enrol($course, 'editingteacher');
+
+        $group1 = $this->getDataGenerator()->create_group(['courseid' => $course->id]);
+        $group2 = $this->getDataGenerator()->create_group(['courseid' => $course->id]);
+        $this->getDataGenerator()->create_group_member(['groupid' => $group1->id, 'userid' => $user1->id]);
+        $this->getDataGenerator()->create_group_member(['groupid' => $group2->id, 'userid' => $user2->id]);
+
+        // Check as editing teacher, expect no restrictions.
+        $this->setUser($teacher1);
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodseparate, 0));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodnogroups, 0));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodvisiblegroups, 0));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodseparate, $group1->id));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodnogroups, $group1->id));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodvisiblegroups, $group1->id));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodseparate, $group2->id));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodnogroups, $group2->id));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodvisiblegroups, $group2->id));
+
+        // Check as user1, expect restrictions in separate groups when requesting all user and group user is not in.
+        $this->setUser($user1);
+        $this->assertFalse(\mod_coursecertificate\permission::can_view_issues($contextmodseparate, 0));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodnogroups, 0));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodvisiblegroups, 0));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodseparate, $group1->id));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodnogroups, $group1->id));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodvisiblegroups, $group1->id));
+        $this->assertFalse(\mod_coursecertificate\permission::can_view_issues($contextmodseparate, $group2->id));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodnogroups, $group2->id));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodvisiblegroups, $group2->id));
+
+        // Check as user2, expect restrictions in separate groups when requesting all user and group user is not in.
+        $this->setUser($user2);
+        $this->assertFalse(\mod_coursecertificate\permission::can_view_issues($contextmodseparate, 0));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodnogroups, 0));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodvisiblegroups, 0));
+        $this->assertFalse(\mod_coursecertificate\permission::can_view_issues($contextmodseparate, $group1->id));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodnogroups, $group1->id));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodvisiblegroups, $group1->id));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodseparate, $group2->id));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodnogroups, $group2->id));
+        $this->assertTrue(\mod_coursecertificate\permission::can_view_issues($contextmodvisiblegroups, $group2->id));
     }
 }
