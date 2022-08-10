@@ -52,16 +52,10 @@ SERVICES = {
  * Show/Hide selector.
  *
  * @param {string} selector
- * @param {boolean} visibile
+ * @param {boolean} visible
  */
-function setVisibility(selector, visibile) {
-    if (visibile) {
-        document.querySelector(selector).classList.remove('d-none');
-        document.querySelector(selector).classList.remove('invisible');
-    } else {
-        document.querySelector(selector).classList.add('d-none');
-        document.querySelector(selector).classList.add('invisible');
-    }
+function setVisibility(selector, visible) {
+    document.querySelector(selector).classList.toggle('invisible', !visible);
 }
 
 /**
@@ -73,43 +67,48 @@ function toggleAutomaticSend(automaticsendregion) {
     const {certificateid, automaticsend} =
         automaticsendregion.querySelector(SELECTORS.TOGGLEAUTOMATICSEND).dataset;
     const newstatus = automaticsend === '0';
+    let showhiddenwarning, shownoautosendinfo, pendingPromise;
+
+    // Build list of strings.
     const strings = [
         {'key': 'confirmation', component: 'admin'},
         {'key': 'confirm', component: 'moodle'},
-        {'key': 'cancel', component: 'moodle'}
     ];
     if (newstatus) {
         strings.push({'key': 'enableautomaticsendpopup', component: 'coursecertificate'});
     } else {
         strings.push({'key': 'disableautomaticsend', component: 'coursecertificate'});
     }
-    getStrings(strings).then((s) => {
-        // Show confirm notification.
-        Notification.confirm(s[0], s[3], s[1], s[2], () => {
-            var pendingPromise = new Pending('mod_coursecertificate/manager:toggleAutomaticSend');
-            // Show loading template.
-            setVisibility(SELECTORS.LOADING, true);
-            // Call to webservice.
-            Ajax.call([{methodname: SERVICES.UPDATEAUTOMATICSEND,
-                args: {id: certificateid, automaticsend: newstatus}}])[0]
-            // Reload automatic send alert template.
-            .then((result) => {
-                let {showhiddenwarning, shownoautosendinfo} = result;
-                Templates.render(TEMPLATES.AUTOMATICSENDALERT,
-                    {certificateid: certificateid, automaticsend: newstatus}, '')
-                    .then((html) => {
-                        automaticsendregion.innerHTML = html;
-                        setVisibility(SELECTORS.HIDDENWARNING, showhiddenwarning);
-                        setVisibility(SELECTORS.NOAUTOSENDINFO, shownoautosendinfo);
-                        return pendingPromise.resolve();
-                    })
-                    .fail(Notification.exception);
-                return null;
-            })
-            .fail(Notification.exception);
-        });
-        return null;
-    }).fail(Notification.exception);
+
+    pendingPromise = new Pending('mod_coursecertificate/manager:toggleAutomaticSendgetStrings');
+    getStrings(strings).then(([title, saveLabel, question]) => {
+        pendingPromise.resolve();
+        return Notification.saveCancelPromise(title, question, saveLabel);
+    }).then(() => {
+        pendingPromise = new Pending('mod_coursecertificate/manager:toggleAutomaticSend');
+        // Show loading template.
+        setVisibility(SELECTORS.LOADING, true);
+        // Call to webservice.
+        return Ajax.call([{
+            methodname: SERVICES.UPDATEAUTOMATICSEND,
+            args: {id: certificateid, automaticsend: newstatus}
+        }])[0];
+    }).then((result) => {
+        ({showhiddenwarning, shownoautosendinfo} = result);
+        return Templates.render(TEMPLATES.AUTOMATICSENDALERT,
+            {certificateid: certificateid, automaticsend: newstatus}, '');
+    }).then((html) => {
+        Templates.replaceNodeContents(automaticsendregion, html, '');
+        setVisibility(SELECTORS.HIDDENWARNING, showhiddenwarning);
+        setVisibility(SELECTORS.NOAUTOSENDINFO, shownoautosendinfo);
+        return pendingPromise.resolve();
+    }).catch((e) => {
+        if (e.type === 'modal-save-cancel:cancel') {
+            // Clicked cancel.
+            return;
+        }
+        Notification.exception(e);
+    });
 }
 
 /**
@@ -119,7 +118,7 @@ export function init() {
     const automaticsendregion = document.querySelector(SELECTORS.AUTOMATICSENDREGION);
     if (automaticsendregion) {
         automaticsendregion.addEventListener('click', (e) => {
-            if (e.target && e.target.closest(SELECTORS.TOGGLEAUTOMATICSEND)) {
+            if (e.target.closest(SELECTORS.TOGGLEAUTOMATICSEND)) {
                 e.preventDefault();
                 toggleAutomaticSend(automaticsendregion);
             }

@@ -65,9 +65,6 @@ class view_page implements templatable, renderable {
     /** @var bool */
     private $canviewall;
 
-    /** @var moodle_url $pageurl */
-    protected $pageurl;
-
     /** @var cm_info $cm */
     protected $cm;
 
@@ -88,7 +85,6 @@ class view_page implements templatable, renderable {
 
         $this->perpage = $perpage;
         $this->cm = $cm;
-        $this->pageurl = new moodle_url('/mod/coursecertificate/view.php', ['id' => $id]);
 
         $context = context_module::instance($this->cm->id);
         $this->certificate = $DB->get_record('coursecertificate', ['id' => $this->cm->instance], '*', MUST_EXIST);
@@ -111,9 +107,7 @@ class view_page implements templatable, renderable {
         $completion->set_module_viewed($this->cm);
 
         // Get the current group.
-        if ($groupmode = groups_get_activity_groupmode($this->cm)) {
-            $groupid = groups_get_activity_group($this->cm, true);
-        }
+        $groupid = (int) groups_get_activity_group($this->cm, true);
 
         // View certificate issue PDF if user can not manage, can receive issues and activity template is correct.
         if (!$this->canviewall && $this->canreceiveissues && $this->certificate->template != 0) {
@@ -129,7 +123,7 @@ class view_page implements templatable, renderable {
         if ($this->canviewreport) {
             $this->report = system_report_factory::create(issues::class, $context, '', '', 0, [
                 'templateid' => $this->certificate->template,
-                'groupid' => $groupid ?? 0,
+                'groupid' => $groupid,
             ]);
         }
     }
@@ -141,10 +135,11 @@ class view_page implements templatable, renderable {
      * @return \stdClass|array
      */
     public function export_for_template(\renderer_base $output) {
+        global $PAGE;
         $data = [];
         $data['certificateid'] = $this->certificate->id;
         $data['automaticsend'] = $this->certificate->automaticsend;
-        $data['groupselector'] = groups_print_activity_menu($this->cm, $this->pageurl, true);
+        $data['groupselector'] = groups_print_activity_menu($this->cm, $PAGE->url, true);
         if (isset($this->report)) {
             $data['report'] = $this->report->output();
         }
