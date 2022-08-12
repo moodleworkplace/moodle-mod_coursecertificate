@@ -72,10 +72,8 @@ Feature: Course reset with coursecertificate module
     And I press "Continue"
     When I am on "Course 1" course homepage
     And I follow "Test certificate"
-    And the following should exist in the "generaltable" table:
-      | First name / Surname    | Email address        | Expiry date | Date issued    |
-      | Student Second Archived | student2@example.com | Never       | 2 January 2002 |
-      | Student First Archived  | student1@example.com | Never       | 1 January 2002 |
+    And I should see "Archived" in the "student1@example.com" "table_row"
+    And I should see "Archived" in the "student2@example.com" "table_row"
     And I am on "Course 1" course homepage
     And I navigate to "Reports" in current page administration
     And I click on "Activity completion" "link"

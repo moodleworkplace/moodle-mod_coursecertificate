@@ -67,8 +67,9 @@
 
 {{#js}}
     {{^studentview}}
-    require(['mod_coursecertificate/manager'], function(m) {
-        m.init();
+    require(['tool_certificate/issues-list', 'mod_coursecertificate/manager'], function(issuesList, manager) {
+        issuesList.init();
+        manager.init();
     });
     {{/studentview}}
 {{/js}}

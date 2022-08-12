@@ -112,12 +112,17 @@ function coursecertificate_update_instance(stdClass $data, mod_coursecertificate
 function coursecertificate_delete_instance(int $id): bool {
     global $DB;
 
-    $activity = $DB->get_record('coursecertificate', ['id' => $id]);
-    if (!$activity) {
+    if (!$DB->record_exist('coursecertificate', ['id' => $id])) {
         return false;
     }
 
+    if (!$cm = get_coursemodule_from_instance('coursecertificate', $id)) {
+        return false;
+    }
+    $context = context_module::instance($cm->id);
+
     $DB->delete_records('coursecertificate', ['id' => $id]);
+    $DB->delete_records('reportbuilder_report', ['contextid' => $context->id]);
 
     return true;
 }

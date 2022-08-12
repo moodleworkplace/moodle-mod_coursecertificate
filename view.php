@@ -34,8 +34,12 @@ $perpage = optional_param('perpage', 10, PARAM_INT);
 
 require_course_login($course, true, $cm);
 
-$outputpage = new \mod_coursecertificate\output\view_page($id, $page, $perpage, $course, $cm);
+$PAGE->set_url('/mod/coursecertificate/view.php', ['id' => $id]);
+$PAGE->set_title($course->shortname . ': ' . $PAGE->activityrecord->name);
+$PAGE->set_heading(format_string($course->fullname));
+
 $output = $PAGE->get_renderer('coursecertificate');
+$outputpage = new \mod_coursecertificate\output\view_page($id, $page, $perpage, $course, $cm);
 $data = $outputpage->export_for_template($output);
 
 // Redirect to view issue page if 'studentview' (user can not manage but can receive issues) and issue code is set.
@@ -43,10 +47,6 @@ if ($data['studentview'] && isset($data['issuecode'])) {
     $issueurl = new \moodle_url('/admin/tool/certificate/view.php', ['code' => $data['issuecode']]);
     redirect($issueurl);
 }
-
-$PAGE->set_url('/mod/coursecertificate/view.php', ['id' => $id]);
-$PAGE->set_title($course->shortname . ': ' . $PAGE->activityrecord->name);
-$PAGE->set_heading(format_string($course->fullname));
 
 $context = \context_module::instance($id);
 $PAGE->set_context($context);

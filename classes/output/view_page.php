@@ -32,8 +32,8 @@ use mod_coursecertificate\permission;
 use moodle_url;
 use templatable;
 use renderable;
-use tool_certificate\certificate;
-use tool_certificate\template;
+use core_reportbuilder\system_report_factory;
+use tool_certificate\reportbuilder\local\systemreports\issues;
 
 /**
  * Certificate issues report renderable class.
@@ -50,8 +50,8 @@ class view_page implements templatable, renderable {
     /** @var int $perpage */
     protected $perpage;
 
-    /** @var certificate_issues_table $table */
-    protected $table;
+    /** @var system_report $report */
+    protected $report;
 
     /** @var bool $canmanage */
     protected $canmanage;
@@ -64,9 +64,6 @@ class view_page implements templatable, renderable {
 
     /** @var bool */
     private $canviewall;
-
-    /** @var moodle_url $pageurl */
-    protected $pageurl;
 
     /** @var cm_info $cm */
     protected $cm;
@@ -88,8 +85,6 @@ class view_page implements templatable, renderable {
 
         $this->perpage = $perpage;
         $this->cm = $cm;
-        $this->pageurl = new moodle_url('/mod/coursecertificate/view.php', ['id' => $id,
-            'page' => $page, 'perpage' => $perpage]);
 
         $context = context_module::instance($this->cm->id);
         $this->certificate = $DB->get_record('coursecertificate', ['id' => $this->cm->instance], '*', MUST_EXIST);
@@ -112,9 +107,7 @@ class view_page implements templatable, renderable {
         $completion->set_module_viewed($this->cm);
 
         // Get the current group.
-        if (groups_get_activity_groupmode($this->cm)) {
-            $groupid = groups_get_activity_group($this->cm, true);
-        }
+        $groupid = (int) groups_get_activity_group($this->cm, true);
 
         // View certificate issue PDF if user can not manage, can receive issues and activity template is correct.
         if (!$this->canviewall && $this->canreceiveissues && $this->certificate->template != 0) {
@@ -128,13 +121,10 @@ class view_page implements templatable, renderable {
 
         // Show issues table.
         if ($this->canviewreport) {
-            $this->table = new certificate_issues_table($this->certificate, $this->cm, $groupid ?? null);
-            $this->table->define_baseurl($this->pageurl);
-
-            if ($this->table->is_downloading()) {
-                $this->table->download();
-                exit();
-            }
+            $this->report = system_report_factory::create(issues::class, $context, '', '', 0, [
+                'templateid' => $this->certificate->template,
+                'groupid' => $groupid,
+            ]);
         }
     }
 
@@ -145,11 +135,13 @@ class view_page implements templatable, renderable {
      * @return \stdClass|array
      */
     public function export_for_template(\renderer_base $output) {
+        global $PAGE;
         $data = [];
         $data['certificateid'] = $this->certificate->id;
         $data['automaticsend'] = $this->certificate->automaticsend;
-        if (isset($this->table)) {
-            $data['table'] = $this->render_table($this->table);
+        $data['groupselector'] = groups_print_activity_menu($this->cm, $PAGE->url, true);
+        if (isset($this->report)) {
+            $data['report'] = $this->report->output();
         }
         $data['showautomaticsend'] = $this->canmanage;
         $data['showreport'] = $this->canviewreport;
@@ -160,21 +152,5 @@ class view_page implements templatable, renderable {
         $data['issuecode'] = $this->issuecode;
 
         return $data;
-    }
-
-    /**
-     * Renders a table.
-     *
-     * @param \table_sql $table
-     * @return string HTML
-     */
-    private function render_table(\table_sql $table) {
-        ob_start();
-        groups_print_activity_menu($this->cm, $this->pageurl);
-        $table->out($this->perpage, false);
-        $output = ob_get_contents();
-        ob_end_clean();
-
-        return $output;
     }
 }
