@@ -112,7 +112,7 @@ function coursecertificate_update_instance(stdClass $data, mod_coursecertificate
 function coursecertificate_delete_instance(int $id): bool {
     global $DB;
 
-    if (!$DB->record_exist('coursecertificate', ['id' => $id])) {
+    if (!$DB->record_exists('coursecertificate', ['id' => $id])) {
         return false;
     }
 
