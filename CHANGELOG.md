@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.3 (2022082400)
+### Changed
+- Use system report for certificate issues.
+- Add lock when generating certificate
+
 ## 4.0.2 (2022071200)
 ### Added
 - Course certificates may be archived when a course is reset allowing to receive more than one
