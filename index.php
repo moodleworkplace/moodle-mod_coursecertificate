@@ -78,7 +78,7 @@ foreach ($certificates as $certificate) {
         format_string($certificate->name, true),
         $attributes);
 
-    if ($course->format == 'weeks' or $course->format == 'topics') {
+    if ($course->format == 'weeks' || $course->format == 'topics') {
         $table->data[] = [$certificate->section, $link];
     } else {
         $table->data[] = [$link];
