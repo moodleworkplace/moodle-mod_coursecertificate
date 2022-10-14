@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.0.4+ (2022101400)
+- No changes, released to match the version of tool_certificate
+
 ## 4.0.3 (2022082400)
 ### Changed
 - Use system report for certificate issues.
