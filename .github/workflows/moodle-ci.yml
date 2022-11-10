@@ -65,7 +65,7 @@ jobs:
 
       - name: Install moodle-plugin-ci
         run: |
-          moodle-plugin-ci add-plugin moodleworkplace/moodle-tool_certificate
+          moodle-plugin-ci add-plugin moodleworkplace/moodle-tool_certificate --branch CONTRIB-9132
           moodle-plugin-ci install --plugin ./plugin --db-host=127.0.0.1
         env:
           DB: ${{ matrix.database }}
