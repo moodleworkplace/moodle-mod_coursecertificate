@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.5 - 2022-11-15
+### Changed
+- Added testing on LMS 4.1 (no functional changes)
+
 ## 4.0.4+ (2022101400)
 - No changes, released to match the version of tool_certificate
 
