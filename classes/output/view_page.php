@@ -27,9 +27,9 @@ namespace mod_coursecertificate\output;
 use cm_info;
 use completion_info;
 use context_module;
+use core_reportbuilder\system_report;
 use mod_coursecertificate\helper;
 use mod_coursecertificate\permission;
-use moodle_url;
 use templatable;
 use renderable;
 use core_reportbuilder\system_report_factory;
@@ -110,6 +110,7 @@ class view_page implements templatable, renderable {
         $groupid = (int) groups_get_activity_group($this->cm, true);
 
         // View certificate issue PDF if user can not manage, can receive issues and activity template is correct.
+        // TODO WP-3032 bug - if user can view all and receive at the same time they never receive certificate.
         if (!$this->canviewall && $this->canreceiveissues && $this->certificate->template != 0) {
             // View certificate PDF only if activity has a template.
             // Issue certificate to the user if they don't have one or retrieve the issued certificate.
@@ -150,6 +151,9 @@ class view_page implements templatable, renderable {
         $data['showhiddenwarning'] = $this->certificate->automaticsend && !$this->cm->visible;
         $data['shownoautosendinfo'] = !$this->certificate->automaticsend && $this->cm->visible;
         $data['issuecode'] = $this->issuecode;
+        if ($this->issuecode) {
+            $data['viewurl'] = \tool_certificate\template::view_url($data['issuecode'])->out(false);
+        }
 
         return $data;
     }

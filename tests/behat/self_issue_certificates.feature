@@ -18,19 +18,37 @@ Feature: Self issue certificate for coursecertificate template
       | teacher1 | C1     | editingteacher |
       | student1 | C1     | student        |
     And the following certificate templates exist:
-      | name                         | shared  |
-      | Template 01                  | 1       |
+      | name                         | shared  | numberofpages |
+      | Template 01                  | 1       | 1             |
     And the following "activities" exist:
       | activity          | name           | intro             | course | idnumber           | template    | groupmode  |
       | coursecertificate | My certificate | Certificate intro | C1     | coursecertificate1 | Template 01 | 1          |
 
+  @_switch_window
   Scenario: Get certificate having the activity requirements when accessing the activity
     Then I log in as "student1"
     And I am on "Course 1" course homepage
     And I follow "My certificate"
-    And I press the "back" button in the browser
+    And I switch to the main window
     And I click on ".popover-region-notifications" "css_element"
     And I should see "Your certificate is available!"
+
+  @_switch_window
+  Scenario: View certificate module from Activities block
+    When I log in as "admin"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add the "Activities" block
+    When I log in as "student1"
+    And I am on "Course 1" course homepage
+    And I click on "Course certificates" "link" in the "Activities" "block"
+    And I click on "My certificate" "link" in the "region-main" "region"
+    And I follow "View certificate"
+    # Ensure that at this point there are two windows
+    And I switch to a second window
+    And I switch to the main window
+    And I press the "back" button in the browser
+    And I should see "Course 1" in the "page-header" "region"
+    And I should see "Course certificates" in the "region-main" "region"
 
   Scenario: Teacher should not get certificate when accessing the activity
     And I log in as "teacher1"
@@ -39,6 +57,7 @@ Feature: Self issue certificate for coursecertificate template
     And I click on ".popover-region-notifications" "css_element"
     And I should not see "Your certificate is available!"
 
+  @_switch_window
   Scenario: User can receive new course certificate when they have archived ones
     Given the following certificate issues exist:
       | template    | user      | course | component             | code  | timecreated | archived |
@@ -46,8 +65,10 @@ Feature: Self issue certificate for coursecertificate template
       | Template 01 | student1  | C1     | mod_coursecertificate | code2 | 1041415200  | 1        |
     When I log in as "student1"
     And I am on "Course 1" course homepage
-    And I follow "My certificate"
-    And I press the "back" button in the browser
+    And I click on "My certificate" "link" in the "region-main" "region"
+    # Ensure that at this point there are two windows
+    And I switch to a second window
+    And I switch to the main window
     And I follow "Profile" in the user menu
     And I click on "//a[contains(.,'My certificates') and contains(@href,'tool/certificate')]" "xpath_element"
     And the following should exist in the "generaltable" table:
