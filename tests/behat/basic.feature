@@ -28,6 +28,7 @@ Feature: Basic functionality of course certificate module
       | capability                     | permission | role                 | contextlevel | reference |
       | tool/certificate:issue         | Allow      | certificateissuer    | System       |           |
 
+  @_switch_window
   Scenario: Teacher can create an instance of course certificate module
     And the following certificate templates exist:
       | name                         | shared  |
@@ -62,7 +63,7 @@ Feature: Basic functionality of course certificate module
     And I log in as "student1"
     And I am on "Course 1" course homepage
     And I click on "Your super awesome certificate" "link" in the "region-main" "region"
-    And I press the "back" button in the browser
+    And I switch to the main window
     And I log out
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
@@ -71,6 +72,7 @@ Feature: Basic functionality of course certificate module
       | First name | Status | Expiry date |
       | Student 1  | Valid  | Never       |
 
+  @_switch_window
   Scenario: Teacher can create an instance of course certificate module with expiry date absolute
     And the following certificate templates exist:
       | name                         | shared  |
@@ -90,7 +92,7 @@ Feature: Basic functionality of course certificate module
     And I log in as "student1"
     And I am on "Course 1" course homepage
     And I click on "Your awesome certificate" "link" in the "region-main" "region"
-    And I press the "back" button in the browser
+    And I switch to the main window
     And I log out
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
@@ -99,6 +101,7 @@ Feature: Basic functionality of course certificate module
       | First name | Status | Expiry date            |
       | Student 1  | Valid  | ##tomorrow##%d %B %Y## |
 
+  @_switch_window
   Scenario: Teacher can create an instance of course certificate module with expiry date relative
     And the following certificate templates exist:
       | name                         | shared  |
@@ -117,7 +120,7 @@ Feature: Basic functionality of course certificate module
     And I log in as "student1"
     And I am on "Course 1" course homepage
     And I click on "Your awesome certificate" "link" in the "region-main" "region"
-    And I press the "back" button in the browser
+    And I switch to the main window
     And I log out
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
@@ -251,6 +254,7 @@ Feature: Basic functionality of course certificate module
     And I click on "Certificate 01" "link" in the "region-main" "region"
     And I should see "Nothing to display"
 
+  @_switch_window
   Scenario: Display course certificate after removing current selected template.
     And the following certificate templates exist:
       | name                           | shared  |
@@ -272,7 +276,9 @@ Feature: Basic functionality of course certificate module
     And I log in as "student1"
     And I am on "Course 1" course homepage
     And I click on "Certificate 01" "link" in the "region-main" "region"
+    And I switch to a second window
     Then I should see "The certificate is not available. Please contact the course administrator."
+    And I switch to the main window
     And I log out
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on

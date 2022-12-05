@@ -32,6 +32,11 @@
     }
 }}
 <div data-region="mod_coursecertificate_view">
+    {{#viewurl}}
+        <div class="mdl-align mb-3">
+            <a class="btn btn-primary" href="{{viewurl}}" target="_blank">{{#str}}viewcertificate, tool_certificate{{/str}}</a>
+        </div>
+    {{/viewurl}}
     {{#studentview}}
         {{#notemplateselected}}
             <div class="alert alert-danger mt-3">

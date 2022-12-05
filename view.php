@@ -29,6 +29,7 @@ global $PAGE, $USER, $CFG;
 $id = required_param('id', PARAM_INT);
 $page = optional_param('page', 0, PARAM_INT);
 $perpage = optional_param('perpage', 10, PARAM_INT);
+$download = optional_param('download', false, PARAM_BOOL);
 
 [$course, $cm] = get_course_and_cm_from_cmid($id, 'coursecertificate');
 
@@ -42,10 +43,12 @@ $output = $PAGE->get_renderer('coursecertificate');
 $outputpage = new \mod_coursecertificate\output\view_page($id, $page, $perpage, $course, $cm);
 $data = $outputpage->export_for_template($output);
 
-// Redirect to view issue page if 'studentview' (user can not manage but can receive issues) and issue code is set.
-if ($data['studentview'] && isset($data['issuecode'])) {
-    $issueurl = new \moodle_url('/admin/tool/certificate/view.php', ['code' => $data['issuecode']]);
-    redirect($issueurl);
+if (!empty($data['viewurl']) && $download) {
+    // When we link to the course module for the student, we link with &download=1 parameter
+    // and with target=_blank. In other situations where the links to the view page is displayed
+    // (index page, logs, hardcoded links, etc), we need to make sure that the certificate will open in a
+    // new tab and user can return to where they came from. In this case we display a button on the page.
+    redirect($data['viewurl']);
 }
 
 $context = \context_module::instance($id);

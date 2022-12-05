@@ -22,6 +22,8 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_coursecertificate\permission;
+
 /**
  * Checks if certificate activity supports a specific feature.
  *
@@ -247,4 +249,22 @@ function coursecertificate_reset_course_form_defaults($course) {
     return [
         'archive_certificates' => 1,
     ];
+}
+
+/**
+ * Callback from modinfo allowing to add attributes to individual student link
+ *
+ * @param cm_info $coursemodule the cm_info object for the Appointment instance
+ */
+function mod_coursecertificate_cm_info_dynamic(cm_info $coursemodule) {
+    $canviewissues = permission::can_view_all_issues($coursemodule->course);
+    $canreceive = permission::can_receive_issues(context_course::instance($coursemodule->course));
+    if (!$canviewissues && $canreceive) {
+        // In case when user can only download their own certificate and do nothing else -
+        // take them directly to their certificate (open in a new window).
+        $fullurl = new moodle_url("/mod/coursecertificate/view.php",
+            ['id' => $coursemodule->id, 'download' => 1]);
+        $onclick = "window.open('$fullurl'); return false;";
+        $coursemodule->set_on_click($onclick);
+    }
 }
