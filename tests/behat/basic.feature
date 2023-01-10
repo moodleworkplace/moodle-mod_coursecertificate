@@ -265,7 +265,8 @@ Feature: Basic functionality of course certificate module
       | coursecertificate | Certificate 01 | Certificate intro | C1     | coursecertificate1 | Certificate of participation A |
     When I log in as "admin"
     And I navigate to "Certificates > Manage certificate templates" in site administration
-    And I press "Delete" action in the "Certificate of participation A" report row
+    And I click on "Actions" "icon" in the "Certificate of participation A" "table_row"
+    And I choose "Delete" in the open action menu
     And I click on "Delete" "button" in the "Confirm" "dialogue"
     And I log out
     And I log in as "teacher1"
