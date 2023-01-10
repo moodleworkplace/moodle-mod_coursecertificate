@@ -120,8 +120,8 @@ Feature: View the certificates that have been issued
     And I am on "Course 1" course homepage
     And I follow "My certificate"
     And I should not see "student01@example.com"
-    And "Group 1" "option" should not exist in the "Separate groups" "select"
-    And "Group 2" "option" should exist in the "Separate groups" "select"
+    And the "Separate groups" select box should not contain "Group 1"
+    And the "Separate groups" select box should contain "Group 2"
     And I select "Group 3" from the "Separate groups" singleselect
     And the following should not exist in the "generaltable" table:
       | First name / Surname | Email address         |
@@ -143,8 +143,8 @@ Feature: View the certificates that have been issued
     And the following should not exist in the "generaltable" table:
       | First name / Surname | Email address         |
       | Student 01           | student01@example.com |
-    And "Group 1" "option" should not exist in the "Separate groups" "select"
-    And "Group 2" "option" should exist in the "Separate groups" "select"
+    And the "Separate groups" select box should not contain "Group 1"
+    And the "Separate groups" select box should contain "Group 2"
     And I select "Group 3" from the "Separate groups" singleselect
     And the following should not exist in the "generaltable" table:
       | First name / Surname | Email address         |
