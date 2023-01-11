@@ -8,7 +8,9 @@ services:
 
 variables:
   MOODLE_REPO_WORKPLACE: git@git.in.moodle.com:workplace/workplacedev.git
-  MOODLE_BRANCH_WORKPLACE: master
+  MOODLE_BRANCH_WORKPLACE401R: master
+  MOODLE_BRANCH_WORKPLACE401S: WORKPLACE_401
+  MOODLE_BRANCH_WORKPLACE400: WORKPLACE_400
   MOODLE_REPO_LMS: git@git.in.moodle.com:moodle/moodle.git
   MOODLE_BRANCH_LMS400: MOODLE_400_STABLE
   MOODLE_BRANCH_LMS401: MOODLE_401_STABLE
@@ -25,7 +27,7 @@ variables:
 .setupworkplace: &setupworkplace
   before_script:
     - export MOODLE_REPO=$MOODLE_REPO_WORKPLACE
-    - export MOODLE_BRANCH=$MOODLE_BRANCH_WORKPLACE
+    - export MOODLE_BRANCH=$MOODLE_BRANCH_WORKPLACE401R
     - . prepare-workplace $cibot_sshkey
     - cd $CI_PROJECT_DIR/..
     - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-theme_workplace.git
@@ -79,6 +81,12 @@ behat:
     - . prepare-workplace $cibot_sshkey
     - cd $CI_PROJECT_DIR/..
     - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_certificate.git
+    - |
+      if [ "$INCLUDERB" == "1" ]; then
+        moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_tenant.git --branch $MOODLE_BRANCH
+        moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_wp.git --branch $MOODLE_BRANCH
+        moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_reportbuilder.git --branch $MOODLE_BRANCH
+      fi
     - moodle-plugin-ci install --db-host="$DB_HOST" --no-init -vvv
     - cd moodle
     - php admin/tool/phpunit/cli/init.php
@@ -89,6 +97,27 @@ behat:
     - . check moodle-plugin-ci phpunit --coverage-text --fail-on-warning
     - . check moodle-plugin-ci behat --suite default --profile chrome
     - . check-finish
+
+wp401s:
+  before_script:
+    - export MOODLE_REPO=$MOODLE_REPO_WORKPLACE
+    - export MOODLE_BRANCH=$MOODLE_BRANCH_WORKPLACE401S
+  <<: *scriptshorttest
+  except:
+    - master
+    - tags
+    - /^WORKPLACE_\d+$/
+
+wp400:
+  before_script:
+    - export MOODLE_REPO=$MOODLE_REPO_WORKPLACE
+    - export MOODLE_BRANCH=$MOODLE_BRANCH_WORKPLACE400
+    - export INCLUDERB=1
+  <<: *scriptshorttest
+  except:
+    - master
+    - tags
+    - /^WORKPLACE_\d+$/
 
 lms400:
   before_script:
