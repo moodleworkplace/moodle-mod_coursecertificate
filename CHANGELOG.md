@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+### Added
+- Setting to skip some text filters when generating PDFs
+
 ## 4.1.1 - 2023-01-17
 ### Changed
 - Automated tests fixes

@@ -59,6 +59,9 @@ $string['enableautomaticsendpopup'] = 'All students will automatically receive a
 Students who already meet these access restrictions but haven\'t accessed this activity yet will immediately receive their copy as well.<br/><br/>
 Students who have already accessed this activity will not receive the certificate again.';
 $string['expirydate'] = 'Expiry date';
+$string['filterswarning'] = 'Filters defined in the activity context are only used for the activity title and description.';
+$string['filterswarninglist'] = 'Only filter(s) "{$a->list}" will be used when generating certificate PDF files and only if they are enabled on the <a href="{$a->link}">course level</a>.';
+$string['filterswarningnone'] = 'No filters will be used when generating certificate PDF files.';
 $string['issueddate'] = 'Date issued';
 $string['managetemplates'] = 'Manage certificate templates';
 $string['modulename'] = 'Course certificate';
