@@ -201,6 +201,6 @@ Feature: View the certificates that have been issued
     And I follow "Profile" in the user menu
     And I click on "//a[contains(.,'My certificates') and contains(@href,'tool/certificate')]" "xpath_element"
     And the following should exist in the "generaltable" table:
-      | Certificate | Code  |
-      | Template 01 | code1 |
-      | Template 01 | code2 |
+      | Certificate            | Code  |
+      | Template 01 - Course 1 | code1 |
+      | Template 01 - Course 1 | code2 |

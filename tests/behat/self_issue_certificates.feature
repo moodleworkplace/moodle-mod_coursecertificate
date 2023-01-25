@@ -72,7 +72,7 @@ Feature: Self issue certificate for coursecertificate template
     And I follow "Profile" in the user menu
     And I click on "//a[contains(.,'My certificates') and contains(@href,'tool/certificate')]" "xpath_element"
     And the following should exist in the "generaltable" table:
-      | Certificate | Date issued         |
-      | Template 01 | ##today##%d %B %Y## |
-      | Template 01 | 1 January 2003      |
-      | Template 01 | 1 January 2002      |
+      | Certificate            | Date issued         |
+      | Template 01 - Course 1 | ##today##%d %B %Y## |
+      | Template 01 - Course 1 | 1 January 2003      |
+      | Template 01 - Course 1 | 1 January 2002      |
