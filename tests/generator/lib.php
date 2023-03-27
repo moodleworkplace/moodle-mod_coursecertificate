@@ -68,6 +68,7 @@ class mod_coursecertificate_generator extends testing_module_generator {
     public function create_instance($record = null, array $options = null) {
         $record = (array)$record;
         if (empty($record['template'])) {
+            /** @var tool_certificate_generator $certgenerator */
             $certgenerator = \testing_util::get_data_generator()->get_plugin_generator('tool_certificate');
             $certificate1 = $certgenerator->create_template((object)['name' => 'Certificate 1']);
             $record['template'] = $certificate1->get_id();
