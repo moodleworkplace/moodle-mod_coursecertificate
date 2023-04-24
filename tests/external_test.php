@@ -31,6 +31,8 @@ use tool_certificate_generator;
 /**
  * Unit tests for the webservices.
  *
+ * @runTestsInSeparateProcesses
+ *
  * @package     mod_coursecertificate
  * @category    test
  * @covers      \mod_coursecertificate\external
@@ -108,7 +110,8 @@ class external_test extends advanced_testcase {
      * Test update automaticsend as teacher (no capabilities).
      */
     public function test_update_automaticsend_without_capabilities() {
-        global $DB;
+        global $DB, $CFG;
+        require_once($CFG->libdir . '/externallib.php');
 
         // Create course and user enrolled as 'teacher'.
         $course = $this->getDataGenerator()->create_course();
