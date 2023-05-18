@@ -36,7 +36,6 @@ $string['automaticsenddisabledalert'] = 'Students who meet this activity\'s acce
 $string['automaticsendenabled'] = 'The automatic sending of this certificate is enabled.';
 $string['automaticsendenabled_help'] = 'By leaving this enabled, students will automatically receive a PDF copy of the certificate once they meet this activity\'s access restrictions.<br/><br/>
 By disabling it, students will need to click on the activity link displayed on the course page to receive the certificate, once they meet this activity\'s access restrictions.';
-$string['certificateissues'] = 'Certificate issues';
 $string['certificatesarchived'] = 'Certificates archived';
 $string['certifiedusers'] = 'Certified users';
 $string['chooseatemplate'] = 'Choose a template...';
@@ -80,10 +79,13 @@ $string['pluginname'] = 'Course certificate';
 $string['previewcoursefullname'] = 'Course full name';
 $string['previewcourseshortname'] = 'Course short name';
 $string['privacy:metadata'] = 'The course certificate activity does not store personal data.';
+$string['selecttemplatewarning'] = 'Once this activity issues at least one certificate, this field will be locked and will no longer be editable.';
+$string['taskissuecertificates'] = 'Issue course certificates';
+$string['template'] = 'Template';
+
+// Deprecated since 4.2.
+$string['certificateissues'] = 'Certificate issues';
 $string['revoke'] = 'Revoke';
 $string['revokeissue'] = 'Are you sure you want to revoke this certificate issue from this user?';
 $string['selectdate'] = 'Select date';
-$string['selecttemplatewarning'] = 'Once this activity issues at least one certificate, this field will be locked and will no longer be editable.';
 $string['status'] = 'Status';
-$string['taskissuecertificates'] = 'Issue course certificates';
-$string['template'] = 'Template';
