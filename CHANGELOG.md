@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.2 - 2023-05-30
+### Changed
+- Removed strings: automaticsenddisabledinfo, enableautomaticsend, selecttemplatewarning,
+  taskissuecertificates, template
+- Deprecated strings: certificateissues, revoke, revokeissue, selectdate, status
+
 ## 4.1.3 - 2023-04-25
 ### Added
 - Compatibility with Moodle LMS 4.2
