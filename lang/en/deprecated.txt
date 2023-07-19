@@ -1,0 +1,5 @@
+certificateissues,mod_coursecertificate
+revoke,mod_coursecertificate
+revokeissue,mod_coursecertificate
+selectdate,mod_coursecertificate
+status,mod_coursecertificate

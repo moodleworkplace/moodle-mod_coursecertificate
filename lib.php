@@ -268,3 +268,28 @@ function mod_coursecertificate_cm_info_dynamic(cm_info $coursemodule) {
         $coursemodule->set_on_click($onclick);
     }
 }
+
+/**
+ * Callback allowing to add warning on the filter settings page
+ */
+function mod_coursecertificate_before_http_headers() {
+    global $PAGE, $CFG;
+    if ($PAGE->context->contextlevel == CONTEXT_MODULE &&
+            $PAGE->url->compare(new moodle_url('/filter/manage.php'), URL_MATCH_BASE) &&
+            $PAGE->activityname === 'coursecertificate') {
+        if ($allowedfilters = \tool_certificate\element_helper::get_allowed_filters()) {
+            $link = new moodle_url('/filter/manage.php', ['contextid' => $PAGE->context->get_course_context()->id]);
+            $a = (object)[
+                'link' => $link->out(),
+                'list' => join(', ', $allowedfilters),
+            ];
+            $message = get_string('filterswarninglist', 'mod_coursecertificate', $a);
+        } else {
+            $message = get_string('filterswarningnone', 'mod_coursecertificate');
+        }
+        \core\notification::add(
+            get_string('filterswarning', 'mod_coursecertificate') .
+            '<br>' . $message,
+            \core\output\notification::NOTIFY_WARNING);
+    }
+}

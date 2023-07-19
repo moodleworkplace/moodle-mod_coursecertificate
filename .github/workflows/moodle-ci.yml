@@ -8,7 +8,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:12
+        image: postgres:13
         env:
           POSTGRES_USER: 'postgres'
           POSTGRES_HOST_AUTH_METHOD: 'trust'
@@ -16,7 +16,7 @@ jobs:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 3
       mariadb:
-        image: mariadb:10.5
+        image: mariadb:10
         env:
           MYSQL_USER: 'root'
           MYSQL_ALLOW_EMPTY_PASSWORD: "true"
@@ -32,12 +32,25 @@ jobs:
             moodle-branch: 'MOODLE_400_STABLE'
             database: pgsql
             extensions:
+            civersion: 3
           - php: '8.0'
             moodle-branch: 'MOODLE_400_STABLE'
             database: mariadb
             extensions: xmlrpc-beta
           - php: '7.4'
             moodle-branch: 'MOODLE_401_STABLE'
+            database: pgsql
+            extensions: xmlrpc-beta
+          - php: '8.1'
+            moodle-branch: 'MOODLE_401_STABLE'
+            database: mariadb
+            extensions: xmlrpc-beta
+          - php: '8.0'
+            moodle-branch: 'MOODLE_402_STABLE'
+            database: mariadb
+            extensions: xmlrpc-beta
+          - php: '8.1'
+            moodle-branch: 'MOODLE_402_STABLE'
             database: pgsql
             extensions: xmlrpc-beta
 
@@ -57,7 +70,8 @@ jobs:
 
       - name: Initialise moodle-plugin-ci
         run: |
-          composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^3
+          civersion=$(if [[ "${{ matrix.civersion }}" == "3" ]]; then echo "^3"; else echo "^4"; fi)
+          composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci $civersion
           echo $(cd ci/bin; pwd) >> $GITHUB_PATH
           echo $(cd ci/vendor/bin; pwd) >> $GITHUB_PATH
           sudo locale-gen en_AU.UTF-8
@@ -92,7 +106,8 @@ jobs:
 
       - name: Moodle PHPDoc Checker
         if: ${{ always() }}
-        run: moodle-plugin-ci phpdoc
+        # Skip for ci^3 since it may give different results on the old version and --max-warnings is not supported
+        run: if [[ "${{ matrix.civersion }}" == "3" ]]; then true; else moodle-plugin-ci phpdoc --max-warnings 0; fi
 
       - name: Validating
         if: ${{ always() }}
@@ -116,7 +131,7 @@ jobs:
           moodle-plugin-ci phpunit
           cd moodle
           vendor/bin/phpunit --fail-on-risky --disallow-test-output --testsuite tool_dataprivacy_testsuite --filter metadata_registry_test
-          vendor/bin/phpunit --fail-on-risky --disallow-test-output --testsuite core_testsuite --filter test_all_external_info
+          vendor/bin/phpunit --fail-on-risky --disallow-test-output --filter test_all_external_info
           vendor/bin/phpunit --fail-on-risky --disallow-test-output --testsuite core_privacy_testsuite --filter provider_test
 
       - name: Behat features
