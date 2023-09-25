@@ -60,7 +60,7 @@ class helper_test extends advanced_testcase {
 
         // Create coursecertificate1 module without restrictions.
         $coursecertificate1 = $this->getDataGenerator()->create_module('coursecertificate', ['course' => $course->id,
-            'template' => $certificate1->get_id()]);
+            'template' => $certificate1->get_id(), ]);
         $cm1 = get_fast_modinfo($course)->instances['coursecertificate'][$coursecertificate1->id];
 
         // Check both users are retured.
@@ -78,7 +78,7 @@ class helper_test extends advanced_testcase {
         $futuredate = strtotime('+1year');
         $availabilityvalue = '{"op":"&","c":[{"type":"date","d":">=","t":' . $futuredate . '}],"showc":[true]}';
         $coursecertificate2 = $this->getDataGenerator()->create_module('coursecertificate', ['course' => $course->id,
-                'template' => $certificate1->get_id(), 'availability' => $availabilityvalue]);
+                'template' => $certificate1->get_id(), 'availability' => $availabilityvalue, ]);
         $cm2 = get_fast_modinfo($course)->instances['coursecertificate'][$coursecertificate2->id];
 
         // Check no user is returned.
@@ -96,7 +96,7 @@ class helper_test extends advanced_testcase {
 
         // Create course with completion self enabled.
         $course = $this->getDataGenerator()->create_course(['shortname' => 'C01', 'fullname' => 'Course 01',
-            'enablecompletion' => COMPLETION_ENABLED, 'customfield_f1' => 'some text']);
+            'enablecompletion' => COMPLETION_ENABLED, 'customfield_f1' => 'some text', ]);
         $criteriadata = new \stdClass();
         $criteriadata->id = $course->id;
         $criteriadata->criteria_self = COMPLETION_CRITERIA_TYPE_SELF;
@@ -111,7 +111,7 @@ class helper_test extends advanced_testcase {
         // Set user grade to 10.00.
         $assign = $this->getDataGenerator()->create_module('assign', ['course' => $course->id]);
         $gradeitem2 = \grade_item::fetch(['itemtype' => 'mod', 'itemmodule' => 'assign', 'iteminstance' => $assign->id,
-            'courseid' => $course->id]);
+            'courseid' => $course->id, ]);
         $gradeitem2->update_final_grade($user->id, 10, 'gradebook');
 
         // Complete the course.

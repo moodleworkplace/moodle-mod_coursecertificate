@@ -43,7 +43,7 @@ class external extends \external_api {
     protected static function update_automaticsend_parameters() {
         $params = [
             'id' => new \external_value(PARAM_INT, 'The ID of the certificate', VALUE_REQUIRED),
-            'automaticsend' => new \external_value(PARAM_BOOL, 'The value of automaticsend setting')
+            'automaticsend' => new \external_value(PARAM_BOOL, 'The value of automaticsend setting'),
         ];
         return new \external_function_parameters($params);
     }
