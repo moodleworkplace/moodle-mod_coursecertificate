@@ -27,6 +27,6 @@ defined('MOODLE_INTERNAL') || die;
 $observers = [
     [
         'eventname' => '\tool_certificate\event\template_deleted',
-        'callback' => mod_coursecertificate_observer::class . '::on_template_deleted'
+        'callback' => mod_coursecertificate_observer::class . '::on_template_deleted',
     ],
 ];

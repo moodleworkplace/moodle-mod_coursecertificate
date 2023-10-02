@@ -32,5 +32,5 @@ $functions = [
         'type'         => 'write',
         'capabilities' => 'mod/coursecertificate:addinstance',
         'ajax'         => true,
-    ]
+    ],
 ];

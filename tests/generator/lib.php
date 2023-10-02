@@ -78,7 +78,7 @@ class mod_coursecertificate_generator extends testing_module_generator {
 
         $defaultsettings = [
             'automaticsend' => 0,
-            'expires' => 0
+            'expires' => 0,
         ];
         foreach ($defaultsettings as $name => $value) {
             if (!isset($record[$name])) {

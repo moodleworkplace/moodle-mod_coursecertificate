@@ -96,7 +96,7 @@ class view_page implements templatable, renderable {
         // Trigger the event.
         $event = \mod_coursecertificate\event\course_module_viewed::create([
             'objectid' => $this->certificate->id,
-            'context' => $context
+            'context' => $context,
         ]);
         $event->add_record_snapshot('course', $course);
         $event->add_record_snapshot('coursecertificate', $this->certificate);

@@ -147,7 +147,7 @@ class helper {
                 WHERE component = :component AND courseid = :courseid AND templateid = :templateid
                       AND archived = 0";
         $params = ['component' => 'mod_coursecertificate', 'courseid' => $courseid,
-            'templateid' => $templateid];
+            'templateid' => $templateid, ];
         return [$sql, $params];
     }
 
