@@ -34,6 +34,7 @@ variables:
     - export MOODLE_REPO=$MOODLE_REPO_WORKPLACE
     - export MOODLE_BRANCH=$MOODLE_BRANCH_WORKPLACE403R
     - . prepare-workplace $cibot_sshkey
+    - export PLUGINNAME=$(grep 'plugin->component' $CI_PROJECT_DIR/version.php | awk -F\' '{ print $2; }')
     - cd $CI_PROJECT_DIR/..
     - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-theme_workplace.git
     - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_wp.git
@@ -62,7 +63,7 @@ codecheck:
     - . check moodle-plugin-ci mustache
     - . check moodle-plugin-ci grunt --max-lint-warnings 0
     - . check vendor/bin/phpunit --fail-on-risky --disallow-test-output --testsuite tool_dataprivacy_testsuite --filter metadata_registry_test
-    - . check vendor/bin/phpunit --fail-on-risky --disallow-test-output --filter test_all_external_info
+    - . check vendor/bin/phpunit --fail-on-risky --disallow-test-output --filter "test_all_external_info .*$PLUGINNAME"
     - . check vendor/bin/phpunit --fail-on-risky --disallow-test-output --testsuite core_privacy_testsuite --filter provider_test
     - . check moodle-plugin-ci phpunit --coverage-text --fail-on-warning
     - . check-finish
@@ -73,7 +74,7 @@ behat:
   <<: *setupworkplace
   script:
     - php -S ${IPADDRESS}:8000 -t $CI_PROJECT_DIR/../moodle > /dev/null 2>&1 &
-    - php admin/tool/behat/cli/init.php --add-core-features-to-theme --parallel=3 --optimize-runs=@mod_coursecertificate
+    - php admin/tool/behat/cli/init.php --add-core-features-to-theme --parallel=3 --optimize-runs=@$PLUGINNAME
     - . check-start
     - . check moodle-plugin-ci behat --suite workplace --profile chrome
     - . check-finish
@@ -84,6 +85,7 @@ behat:
 .scriptshorttest: &scriptshorttest
   script:
     - . prepare-workplace $cibot_sshkey
+    - export PLUGINNAME=$(grep 'plugin->component' $CI_PROJECT_DIR/version.php | awk -F\' '{ print $2; }')
     - cd $CI_PROJECT_DIR/..
     - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_certificate.git
     - |
@@ -97,7 +99,7 @@ behat:
     - php admin/tool/phpunit/cli/init.php
     - php admin/tool/phpunit/cli/util.php --buildcomponentconfigs
     - php -S ${IPADDRESS}:8000 -t $CI_PROJECT_DIR/../moodle > /dev/null 2>&1 &
-    - php admin/tool/behat/cli/init.php --add-core-features-to-theme --parallel=3 --optimize-runs=@mod_coursecertificate
+    - php admin/tool/behat/cli/init.php --add-core-features-to-theme --parallel=3 --optimize-runs=@$PLUGINNAME
     - . check-start
     - . check moodle-plugin-ci phpunit --coverage-text --fail-on-warning
     - . check moodle-plugin-ci behat --suite default --profile chrome
