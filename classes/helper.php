@@ -62,13 +62,19 @@ class helper {
         $potentialusers = $DB->get_records_sql($sql, $params);
 
         // Filter only users with access to the activity {@see info_module::filter_user_list}.
-        $info = new \core_availability\info_module($cm);
+        $info = new info_module($cm);
         $filteredusers = $info->filter_user_list($potentialusers);
 
         // Filter only users without 'viewall' capabilities and with access to the activity.
         $users = [];
         foreach ($filteredusers as $filtereduser) {
-            if (info_module::is_user_visible($cm, $filtereduser->id, false)) {
+            $modinfouser = get_fast_modinfo($cm->get_course(), $filtereduser->id);
+            $cmuser = $modinfouser->get_cms()[$cm->id] ?? null;
+            // Property 'cm_info::uservisible' checks if user has access to the activity - it is visible, in the
+            // correct group, user has capability to view it, is available. However, for teachers it
+            // can return true even if they do not satisfy availability criteria,
+            // therefore we need to additionally check property 'cm_info::available'.
+            if ($cmuser && $cmuser->uservisible && $cmuser->available) {
                 $users[] = $filtereduser;
             }
         }

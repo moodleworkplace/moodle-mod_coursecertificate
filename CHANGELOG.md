@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+### Fixed
+- Users who have both student and teacher roles will no longer receive certificates
+  without meeting availability restrictions conditions.
+
 ## 4.3 - 2023-11-09
 ### Added
 - Testing on Workplace 4.3
