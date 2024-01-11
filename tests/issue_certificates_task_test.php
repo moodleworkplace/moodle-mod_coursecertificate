@@ -17,6 +17,7 @@
 namespace mod_coursecertificate;
 
 use advanced_testcase;
+use mod_coursecertificate\task\issue_certificates_task;
 use tool_certificate\certificate;
 use tool_certificate_generator;
 
@@ -79,7 +80,7 @@ class issue_certificates_task_test extends advanced_testcase {
         $mod->automaticsend = 1;
         $DB->update_record('coursecertificate', $mod);
 
-        $task = new \mod_coursecertificate\task\issue_certificates_task();
+        $task = new issue_certificates_task();
         ob_start();
         $task->execute();
         ob_end_clean();
@@ -185,5 +186,106 @@ class issue_certificates_task_test extends advanced_testcase {
             $res[$record->userid] = array_merge($res[$record->userid] ?? [], [$record->archived]);
         }
         $this->assertEquals([$user1->id => [0], $user2->id => [0, 1], $user3->id => [0]], $res);
+    }
+
+    /**
+     * Test issue_certificates_task with a non-existant template.
+     */
+    public function test_issue_certificates_task_invalid_template(): void {
+        global $DB;
+
+        // Create course, certificate template and coursecertificate module.
+        $course = $this->getDataGenerator()->create_course(['shortname' => 'C01']);
+        $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
+        $record = [
+            'course' => $course->id,
+            'template' => $certificate1->get_id(),
+            'automaticsend' => 1,
+        ];
+        $mod = $this->getDataGenerator()->create_module('coursecertificate', $record);
+
+        // Create a user and enrol as student.
+        $user1 = $this->getDataGenerator()->create_and_enrol($course);
+
+        $issues = $DB->get_records('tool_certificate_issues', ['courseid' => $course->id]);
+        $this->assertCount(0, $issues);
+
+        // Issue the certificate to user1.
+        helper::issue_certificate($user1, $mod);
+
+        $task = new issue_certificates_task();
+
+        $coursecertificates = $task->get_coursecertificates();
+
+        $realrecord = array_shift($coursecertificates);
+
+        // Create fake record from the real one.
+        $fakerecord = clone $realrecord;
+        $fakerecord->template = 0; // Non-existent template id.
+
+        $issuecerificatetask = $this->getMockBuilder(issue_certificates_task::class)
+            ->onlyMethods(['get_coursecertificates'])
+            ->getMock();
+
+        // Override get_coursecertificates as if there's 2 record in DB ( real & fake ) records.
+        $issuecerificatetask->method('get_coursecertificates')->willReturn([$fakerecord, $realrecord]);
+
+        ob_start();
+        $issuecerificatetask->execute();
+        ob_end_clean();
+
+        // Check that only the certificate issue with the correct template id has been created.
+        $issues = $DB->get_records('tool_certificate_issues', ['courseid' => $course->id]);
+        $this->assertCount(1, $issues);
+        $this->assertEquals($certificate1->get_id(), reset($issues)->templateid);
+    }
+
+    /**
+     * Test issue_certificates_task with a non-existance course.
+     */
+    public function test_issue_certificates_task_invalid_course(): void {
+        global $DB;
+
+        // Create course, certificate template and coursecertificate module.
+        $course = $this->getDataGenerator()->create_course(['shortname' => 'C01']);
+        $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
+        $record = [
+            'course' => $course->id,
+            'template' => $certificate1->get_id(),
+            'automaticsend' => 1,
+        ];
+        $mod = $this->getDataGenerator()->create_module('coursecertificate', $record);
+
+        // Create a user and enrol as student.
+        $user1 = $this->getDataGenerator()->create_and_enrol($course);
+
+        // Issue the certificate to user1.
+        helper::issue_certificate($user1, $mod);
+
+        $task = new issue_certificates_task();
+
+        $coursecertificates = $task->get_coursecertificates();
+
+        $realrecord = array_shift($coursecertificates);
+
+        // Create fake record from the real one.
+        $fakerecord = clone $realrecord;
+        $fakerecord->id = 0; // Non-existent id.
+
+        $issuecerificatetask = $this->getMockBuilder(issue_certificates_task::class)
+            ->onlyMethods(['get_coursecertificates'])
+            ->getMock();
+
+        // Override get_coursecertificates as if there's 2 record in DB ( real & fake ) records.
+        $issuecerificatetask->method('get_coursecertificates')->willReturn([$fakerecord, $realrecord]);
+
+        ob_start();
+        $issuecerificatetask->execute();
+        ob_end_clean();
+
+        // Check that only the certificate issue with the correct module id has been created.
+        $issues = $DB->get_records('tool_certificate_issues', ['courseid' => $course->id]);
+        $this->assertCount(1, $issues);
+        $this->assertEquals($certificate1->get_id(), reset($issues)->templateid);
     }
 }
