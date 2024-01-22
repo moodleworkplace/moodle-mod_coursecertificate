@@ -51,22 +51,32 @@ class issue_certificates_task extends \core\task\scheduled_task {
     public function execute() {
         global $DB;
 
-        // Get all the coursecertificates with automatic send enabled.
-        $sql = "SELECT c.*
-                FROM {coursecertificate} c
-                JOIN {tool_certificate_templates} ct
-                ON c.template = ct.id
-                WHERE c.automaticsend = 1";
-        $coursecertificates = $DB->get_records_sql($sql);
+        $coursecertificates = $this->get_coursecertificates();
         foreach ($coursecertificates as $coursecertificate) {
-            [$course, $cm] = get_course_and_cm_from_instance($coursecertificate->id, 'coursecertificate',
-                $coursecertificate->course);
+
+            $templaterecord = $DB->get_record(
+                \tool_certificate\persistent\template::TABLE,
+                ['id' => $coursecertificate->template]
+            );
+            if (!$templaterecord) {
+                // Skip coursecertificate template not found anymore.
+                continue;
+            }
+
+            try {
+                [$course, $cm] = get_course_and_cm_from_instance($coursecertificate->id, 'coursecertificate',
+                    $coursecertificate->course);
+            } catch (\moodle_exception $e) {
+                // Skip if $cm or $course not found anymore in DB.
+                continue;
+            }
+
             if (!$cm->visible) {
                 // Skip coursecertificate modules not visible.
                 continue;
             }
 
-            $template = \tool_certificate\template::instance($coursecertificate->template);
+            $template = \tool_certificate\template::instance(0, $templaterecord);
 
             // Get all the users with requirements that had not been issued.
             $users = helper::get_users_to_issue($coursecertificate, $cm);
@@ -78,5 +88,20 @@ class issue_certificates_task extends \core\task\scheduled_task {
                 }
             }
         }
+    }
+
+    /**
+     * Get all the coursecertificates with automatic send enabled.
+     *
+     * @return array
+     */
+    public function get_coursecertificates(): array {
+        global $DB;
+        $sql = "SELECT c.*
+                FROM {coursecertificate} c
+                JOIN {tool_certificate_templates} ct
+                ON c.template = ct.id
+                WHERE c.automaticsend = 1";
+        return $DB->get_records_sql($sql);
     }
 }
