@@ -65,7 +65,7 @@ $string['modulename_help'] = 'The course certificate module provides an opportun
  such as full name, course, etc. <br/><br/> Users will be able to download a PDF copy of the certificate themselves by accessing this
  activity, and there are options to send a PDF copy to them by email automatically.<br/><br/>If the template used on this activity contains
  a QR code, users will be able to scan it to validate their certificates.';
-$string['modulename_link'] = 'mod/certificate/view';
+$string['modulename_link'] = 'mod/coursecertificate/view';
 $string['modulenameplural'] = 'Course certificates';
 $string['notemplateselected'] = 'The selected template can’t be found. Please go to the activity settings and select a new one.';
 $string['notemplateselecteduser'] = 'The certificate is not available. Please contact the course administrator.';
