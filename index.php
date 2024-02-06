@@ -36,7 +36,7 @@ $event = \mod_coursecertificate\event\course_module_instance_list_viewed::create
 $event->add_record_snapshot('course', $course);
 $event->trigger();
 
-$PAGE->set_url('/mod/certificate/index.php', ['id' => $id]);
+$PAGE->set_url('/mod/coursecertificate/index.php', ['id' => $id]);
 $PAGE->set_title(format_string($course->fullname));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($coursecontext);
