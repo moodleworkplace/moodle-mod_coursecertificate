@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.3.3 - 2024-02-13
+### Fixed
+- Race condition if the template was deleted in the middle of the process of issuing certificates
+- Link to the module documentation from the 'Add activity' menu
+
 ## 4.3.2 - 2023-12-28
 ### Fixed
 - Users who have both student and teacher roles will no longer receive certificates
