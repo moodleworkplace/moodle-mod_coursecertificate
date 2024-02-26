@@ -65,7 +65,7 @@ class restore_test extends restore_date_testcase {
      *
      * @return tool_certificate_generator
      */
-    protected function get_certificate_generator() : tool_certificate_generator {
+    protected function get_certificate_generator(): tool_certificate_generator {
         return $this->getDataGenerator()->get_plugin_generator('tool_certificate');
     }
 
