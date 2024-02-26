@@ -39,7 +39,8 @@ class mobile {
      * @return array       HTML, javascript and otherdata
      */
     public static function mobile_certificate_view(array $args): array {
-        global $OUTPUT, $DB, $PAGE;
+        global $OUTPUT, $DB, $PAGE, $CFG;
+        require_once($CFG->libdir . '/externallib.php');
 
         $args = (object) $args;
         [$course, $cm] = get_course_and_cm_from_cmid((int) $args->cmid, 'coursecertificate');
