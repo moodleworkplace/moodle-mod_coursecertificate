@@ -74,7 +74,7 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         }
         $templateoptions = ['' => get_string('chooseatemplate', 'coursecertificate')] + $templates;
         $manageurl = new \moodle_url('/admin/tool/certificate/manage_templates.php');
-        $elements = [$mform->createElement('select', 'template', get_string('template', 'coursecertificate'), $templateoptions)];
+        $elements = [$mform->createElement('autocomplete', 'template', get_string('template', 'coursecertificate'), $templateoptions)];
         // Adding "Manage templates" link if user has capabilities to manage templates.
         if ($canmanagetemplates && !empty($templates)) {
             $elements[] = $mform->createElement('static', 'managetemplates', '',
