@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+### Fixed
+- Coding style fixes to comply with moodle-plugin-ci 4.4.0
+
 ## 4.3.3 - 2024-02-13
 ### Fixed
 - Race condition if the template was deleted in the middle of the process of issuing certificates
