@@ -57,7 +57,7 @@ class generator_test extends advanced_testcase {
 
         // Create an instance specifying the template by name.
         $mod = $this->getDataGenerator()->create_module('coursecertificate', ['course' => $course->id,
-            'template' => $certificate1->get_name()]);
+            'template' => $certificate1->get_name(), ]);
         $this->assertEquals(2, $DB->count_records('coursecertificate', ['course' => $course->id]));
         $this->assertTrue($DB->record_exists('coursecertificate', ['course' => $course->id, 'id' => $mod->id]));
         $this->assertEquals($certificate1->get_id(), $DB->get_field('coursecertificate', 'template', ['id' => $mod->id]));

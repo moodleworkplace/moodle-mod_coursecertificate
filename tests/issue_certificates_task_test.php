@@ -66,7 +66,7 @@ class issue_certificates_task_test extends advanced_testcase {
             'course' => $course->id,
             'template' => $certificate1->get_id(),
             'expirydatetype' => certificate::DATE_EXPIRATION_ABSOLUTE,
-            'expirydateoffset' => $expirydate
+            'expirydateoffset' => $expirydate,
         ];
         $mod = $this->getDataGenerator()->create_module('coursecertificate', $record);
         $this->assertTrue($DB->record_exists('coursecertificate', ['course' => $course->id, 'id' => $mod->id]));
@@ -85,7 +85,7 @@ class issue_certificates_task_test extends advanced_testcase {
         ob_end_clean();
 
         $issues = $DB->get_records('tool_certificate_issues', ['templateid' => $certificate1->get_id(),
-            'courseid' => $course->id]);
+            'courseid' => $course->id, ]);
 
         // Check certificate issue was created for the user.
         $issue = reset($issues);
@@ -129,7 +129,7 @@ class issue_certificates_task_test extends advanced_testcase {
 
         // Check no issues were created.
         $issues = $DB->get_records('tool_certificate_issues', ['templateid' => $certificate1->get_id(),
-            'courseid' => $course->id]);
+            'courseid' => $course->id, ]);
         $this->assertEmpty($issues);
     }
 
@@ -145,7 +145,7 @@ class issue_certificates_task_test extends advanced_testcase {
         $record = [
             'course' => $course->id,
             'template' => $certificate1->get_id(),
-            'automaticsend' => 1
+            'automaticsend' => 1,
         ];
         $mod = $this->getDataGenerator()->create_module('coursecertificate', $record);
 

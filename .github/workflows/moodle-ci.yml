@@ -53,6 +53,10 @@ jobs:
             moodle-branch: 'MOODLE_402_STABLE'
             database: pgsql
             extensions: xmlrpc-beta
+          - php: '8.2'
+            moodle-branch: 'MOODLE_403_STABLE'
+            database: pgsql
+            extensions: xmlrpc-beta
 
     steps:
       - name: Check out repository code

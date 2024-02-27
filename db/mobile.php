@@ -30,7 +30,7 @@ $addons = [
             'coursecertificate' => [
                 'displaydata' => [
                     'title' => 'pluginname',
-                    'icon' => $CFG->wwwroot . '/mod/coursecertificate/pix/icon.svg',
+                    'icon' => $CFG->wwwroot . '/mod/coursecertificate/pix/monologo.svg',
                     'class' => '',
                 ],
 

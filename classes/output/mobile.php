@@ -96,7 +96,7 @@ class mobile {
             'issues' => array_values($issues),
             'showissue' => $certificatedata['studentview'],
             'fileurl' => $fileurl,
-            'currenttimestamp' => time()
+            'currenttimestamp' => time(),
         ];
 
         return [
@@ -154,7 +154,7 @@ class mobile {
             $allparticipants = (object) [
                 'id' => 0,
                 'name' => get_string('allparticipants'),
-                'selected' => $selectedgroup == 0
+                'selected' => $selectedgroup == 0,
             ];
             $groups[] = $allparticipants;
         }

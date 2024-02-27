@@ -146,7 +146,7 @@ class restore_test extends restore_date_testcase {
 
         // Check new issue is not generated.
         $newissue = $DB->get_record('tool_certificate_issues', ['courseid' => $newcourseid, 'userid' => $user->id,
-            'templateid' => $certificate1->get_id()], '*', IGNORE_MISSING);
+            'templateid' => $certificate1->get_id(), ], '*', IGNORE_MISSING);
         $this->assertEmpty($newissue);
     }
 
@@ -188,7 +188,7 @@ class restore_test extends restore_date_testcase {
 
         // Check new issue is generated.
         $newissue = $DB->get_record('tool_certificate_issues', ['courseid' => $newcourseid, 'userid' => $user->id,
-            'templateid' => $certificate1->get_id()], '*', IGNORE_MISSING);
+            'templateid' => $certificate1->get_id(), ], '*', IGNORE_MISSING);
         $this->assertEquals($issue->data, $newissue->data);
 
         $files = $fs->get_area_files(context_system::instance()->id, 'tool_certificate', 'issues',

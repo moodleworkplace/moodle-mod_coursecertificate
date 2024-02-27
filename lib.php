@@ -220,7 +220,7 @@ function coursecertificate_reset_userdata($data) {
         $status[] = [
             'component' => get_string('modulenameplural', 'mod_coursecertificate'),
             'item' => get_string('certificatesarchived', 'mod_coursecertificate'),
-            'error' => false
+            'error' => false,
         ];
 
     }

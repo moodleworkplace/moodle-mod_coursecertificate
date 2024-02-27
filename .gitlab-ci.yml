@@ -1,4 +1,4 @@
-image: moodlehq/moodle-workplace-plugin-ci:8.0
+image: moodlehq/moodle-workplace-plugin-ci:8.0-ci4.1.5
 
 services:
   - postgres:13
@@ -8,13 +8,17 @@ services:
 
 variables:
   MOODLE_REPO_WORKPLACE: git@git.in.moodle.com:workplace/workplacedev.git
-  MOODLE_BRANCH_WORKPLACE401R: master
+  MOODLE_BRANCH_WORKPLACE403R: WORKPLACE_ROLLING_403
+  MOODLE_BRANCH_WORKPLACE402R: WORKPLACE_ROLLING_402
+  MOODLE_BRANCH_WORKPLACE402S: WORKPLACE_402
+  MOODLE_BRANCH_WORKPLACE401R: WORKPLACE_ROLLING_401
   MOODLE_BRANCH_WORKPLACE401S: WORKPLACE_401
   MOODLE_BRANCH_WORKPLACE400: WORKPLACE_400
   MOODLE_REPO_LMS: git@git.in.moodle.com:moodle/moodle.git
   MOODLE_BRANCH_LMS400: MOODLE_400_STABLE
   MOODLE_BRANCH_LMS401: MOODLE_401_STABLE
   MOODLE_BRANCH_LMS402: MOODLE_402_STABLE
+  MOODLE_BRANCH_LMS403: MOODLE_403_STABLE
   MOODLE_BEHAT_WDHOST: "http://selenium-standalone-chrome:4444/wd/hub"
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: ""
@@ -28,7 +32,7 @@ variables:
 .setupworkplace: &setupworkplace
   before_script:
     - export MOODLE_REPO=$MOODLE_REPO_WORKPLACE
-    - export MOODLE_BRANCH=$MOODLE_BRANCH_WORKPLACE401R
+    - export MOODLE_BRANCH=$MOODLE_BRANCH_WORKPLACE403R
     - . prepare-workplace $cibot_sshkey
     - cd $CI_PROJECT_DIR/..
     - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-theme_workplace.git
@@ -99,6 +103,36 @@ behat:
     - . check moodle-plugin-ci behat --suite default --profile chrome
     - . check-finish
 
+wp402r:
+  before_script:
+    - export MOODLE_REPO=$MOODLE_REPO_WORKPLACE
+    - export MOODLE_BRANCH=$MOODLE_BRANCH_WORKPLACE402R
+  <<: *scriptshorttest
+  except:
+    - master
+    - tags
+    - /^WORKPLACE_\d+$/
+
+wp402s:
+  before_script:
+    - export MOODLE_REPO=$MOODLE_REPO_WORKPLACE
+    - export MOODLE_BRANCH=$MOODLE_BRANCH_WORKPLACE402S
+  <<: *scriptshorttest
+  except:
+    - master
+    - tags
+    - /^WORKPLACE_\d+$/
+
+wp401r:
+  before_script:
+    - export MOODLE_REPO=$MOODLE_REPO_WORKPLACE
+    - export MOODLE_BRANCH=$MOODLE_BRANCH_WORKPLACE401R
+  <<: *scriptshorttest
+  except:
+    - master
+    - tags
+    - /^WORKPLACE_\d+$/
+
 wp401s:
   before_script:
     - export MOODLE_REPO=$MOODLE_REPO_WORKPLACE
@@ -142,6 +176,15 @@ lms402:
   before_script:
     - export MOODLE_REPO=$MOODLE_REPO_LMS
     - export MOODLE_BRANCH=$MOODLE_BRANCH_LMS402
+  <<: *scriptshorttest
+  except:
+    - master
+    - tags
+
+lms403:
+  before_script:
+    - export MOODLE_REPO=$MOODLE_REPO_LMS
+    - export MOODLE_BRANCH=$MOODLE_BRANCH_LMS403
   <<: *scriptshorttest
   except:
     - master
