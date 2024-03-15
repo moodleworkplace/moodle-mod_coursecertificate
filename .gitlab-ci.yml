@@ -42,6 +42,10 @@ variables:
     - moodle-plugin-ci install --db-host="$DB_HOST" --no-init -vvv
     - cd moodle
 
+.setupfaildumps: &setupfaildumps
+  - mkdir ${CI_PROJECT_DIR}/faildumps
+  - moodle-plugin-ci add-config "\$CFG->behat_faildump_path = '${CI_PROJECT_DIR}/faildumps';"
+
 codecheck:
   <<: *setupworkplace
   script:
@@ -73,11 +77,18 @@ codecheck:
 behat:
   <<: *setupworkplace
   script:
+    - *setupfaildumps
     - php -S ${IPADDRESS}:8000 -t $CI_PROJECT_DIR/../moodle > /dev/null 2>&1 &
     - php admin/tool/behat/cli/init.php --add-core-features-to-theme --parallel=3 --optimize-runs=@$PLUGINNAME
     - . check-start
     - . check moodle-plugin-ci behat --suite workplace --profile chrome
     - . check-finish
+  artifacts: &artifacts
+    name: "faildumps"
+    expire_in: 1 week
+    when: on_failure
+    paths:
+      - ${CI_PROJECT_DIR}/faildumps/
   except:
     - master
     - tags
@@ -96,6 +107,7 @@ behat:
       fi
     - moodle-plugin-ci install --db-host="$DB_HOST" --no-init -vvv
     - cd moodle
+    - *setupfaildumps
     - php admin/tool/phpunit/cli/init.php
     - php admin/tool/phpunit/cli/util.php --buildcomponentconfigs
     - php -S ${IPADDRESS}:8000 -t $CI_PROJECT_DIR/../moodle > /dev/null 2>&1 &
@@ -104,6 +116,7 @@ behat:
     - . check moodle-plugin-ci phpunit --coverage-text --fail-on-warning
     - . check moodle-plugin-ci behat --suite default --profile chrome
     - . check-finish
+  artifacts: *artifacts
 
 wp403s:
   before_script:
