@@ -107,4 +107,24 @@ class behat_mod_coursecertificate extends behat_base {
             );
         }
     }
+
+    /**
+     * Opens the activity chooser and opens the activity/resource form page. Sections 0 and 1 are also allowed on frontpage.
+     *
+     * @Given I add a new instance of coursecertificate module to course :coursefullname section :sectionnum
+     * @param string $coursefullname
+     * @param int $section
+     */
+    public function i_add_a_new_instance_of_coursecertificate_module_to_course_section($coursefullname, $section) {
+        // Note, this step duplicates `behat_course::i_add_to_course_section` because mod_coursecertificate
+        // still supports Moodle 4.0 where it is not available.
+        $this->execute('behat_navigation::i_am_on_course_homepage_with_editing_mode_set_to',
+            [$coursefullname, 'on']);
+        $addurl = new moodle_url('/course/modedit.php', [
+            'add' => 'coursecertificate',
+            'course' => $this->get_course_id($coursefullname),
+            'section' => intval($section),
+        ]);
+        $this->execute('behat_general::i_visit', [$addurl]);
+    }
 }
