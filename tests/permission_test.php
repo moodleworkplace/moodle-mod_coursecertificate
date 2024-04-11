@@ -30,7 +30,7 @@ use tool_certificate_generator;
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class permission_test extends advanced_testcase {
+final class permission_test extends advanced_testcase {
     /**
      * Set up
      */
@@ -49,7 +49,7 @@ class permission_test extends advanced_testcase {
     /**
      * Test can_view_report.
      */
-    public function test_can_view_report() {
+    public function test_can_view_report(): void {
         $course = $this->getDataGenerator()->create_course();
         $user = $this->getDataGenerator()->create_and_enrol($course);
         $this->setUser($user);
@@ -67,7 +67,7 @@ class permission_test extends advanced_testcase {
     /**
      * Test can_verify_issues.
      */
-    public function test_can_verify_issues() {
+    public function test_can_verify_issues(): void {
         $course = $this->getDataGenerator()->create_course();
         $user = $this->getDataGenerator()->create_and_enrol($course);
         $this->setUser($user);
@@ -80,7 +80,7 @@ class permission_test extends advanced_testcase {
     /**
      * Test can_revoke_issues.
      */
-    public function test_can_revoke_issues() {
+    public function test_can_revoke_issues(): void {
         $course = $this->getDataGenerator()->create_course();
         $user = $this->getDataGenerator()->create_and_enrol($course);
         $this->setUser($user);
@@ -103,7 +103,7 @@ class permission_test extends advanced_testcase {
     /**
      * Test can_view_all_issues
      */
-    public function test_can_view_all_issues() {
+    public function test_can_view_all_issues(): void {
         $course = $this->getDataGenerator()->create_course();
         $user = $this->getDataGenerator()->create_and_enrol($course);
         $this->setUser($user);
@@ -126,7 +126,7 @@ class permission_test extends advanced_testcase {
     /**
      * Test can_receive_issues.
      */
-    public function test_can_receive_issues() {
+    public function test_can_receive_issues(): void {
         $course = $this->getDataGenerator()->create_course();
         $user = $this->getDataGenerator()->create_user();
         $this->setUser($user);
@@ -148,7 +148,7 @@ class permission_test extends advanced_testcase {
     /**
      * Test can_view_group_in_context.
      */
-    public function test_can_view_group_in_context() {
+    public function test_can_view_group_in_context(): void {
         // Create course, certificate template and coursecertificate module.
         $course = $this->getDataGenerator()->create_course();
         $template1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate Course 1']);

@@ -51,7 +51,7 @@ require_once($CFG->libdir . "/phpunit/classes/restore_date_testcase.php");
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class restore_test extends restore_date_testcase {
+final class restore_test extends restore_date_testcase {
     /**
      * Set up
      */
@@ -122,7 +122,7 @@ class restore_test extends restore_date_testcase {
     /**
      * Test restore with existing template and existing issue with same code
      */
-    public function test_restore_without_issues() {
+    public function test_restore_without_issues(): void {
         global $DB;
 
         // Create course and coursecertificate module.
@@ -153,7 +153,7 @@ class restore_test extends restore_date_testcase {
     /**
      * Test restore with existing template and non-existing issue with same code.
      */
-    public function test_restore_with_issues() {
+    public function test_restore_with_issues(): void {
         global $DB;
 
         // Create course and coursecertificate module.

@@ -29,7 +29,7 @@ use tool_certificate_generator;
  * @copyright  2021 Marina Glancy
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class tool_brickfield_area_test extends \advanced_testcase {
+final class tool_brickfield_area_test extends \advanced_testcase {
 
     /**
      * Skip the test if this is not a Workplace installation
@@ -48,7 +48,7 @@ class tool_brickfield_area_test extends \advanced_testcase {
     /**
      * Tests for the function manager::get_all_areas()
      */
-    public function test_get_areas() {
+    public function test_get_areas(): void {
         $this->skip_if_not_workplace();
         $this->resetAfterTest();
         $areas = manager::get_all_areas();
@@ -93,7 +93,7 @@ class tool_brickfield_area_test extends \advanced_testcase {
     /**
      * Test for the areas choice intro and choice options
      */
-    public function test_intro() {
+    public function test_intro(): void {
         $this->skip_if_not_workplace();
         $this->resetAfterTest();
         [$cm1, $cm2] = $this->create_modules();
@@ -127,7 +127,7 @@ class tool_brickfield_area_test extends \advanced_testcase {
     /**
      * Test for the areas choice intro and choice options
      */
-    public function test_name() {
+    public function test_name(): void {
         $this->skip_if_not_workplace();
         $this->resetAfterTest();
         [$cm1, $cm2] = $this->create_modules();

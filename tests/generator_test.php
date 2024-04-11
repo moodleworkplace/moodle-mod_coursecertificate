@@ -27,7 +27,7 @@ use tool_certificate_generator;
  * @copyright  2020 Marina Glancy
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class generator_test extends advanced_testcase {
+final class generator_test extends advanced_testcase {
 
     /**
      * Get certificate generator
@@ -40,7 +40,7 @@ class generator_test extends advanced_testcase {
     /**
      * Test create instance of module
      */
-    public function test_create_instance() {
+    public function test_create_instance(): void {
         global $DB;
         $this->resetAfterTest();
         $this->setAdminUser();

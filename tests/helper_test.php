@@ -28,7 +28,7 @@ use tool_certificate_generator;
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class helper_test extends advanced_testcase {
+final class helper_test extends advanced_testcase {
     /**
      * Set up
      */
@@ -47,7 +47,7 @@ class helper_test extends advanced_testcase {
     /**
      * Test get users who meet access restrictions and had not been issued.
      */
-    public function test_get_users_to_issue() {
+    public function test_get_users_to_issue(): void {
         // Create course.
         $course = $this->getDataGenerator()->create_course();
 
@@ -145,7 +145,7 @@ class helper_test extends advanced_testcase {
     /**
      * Test get course issue data.
      */
-    public function test_get_issue_data() {
+    public function test_get_issue_data(): void {
         // Create a course customfield.
         $catid = $this->getDataGenerator()->create_custom_field_category([])->get('id');
         $field = $this->getDataGenerator()->create_custom_field(['categoryid' => $catid, 'type' => 'text', 'shortname' => 'f1']);
@@ -187,7 +187,7 @@ class helper_test extends advanced_testcase {
         $this->assertEquals('10.00', $issuedata['coursegrade']);
     }
 
-    public function test_get_user_certificate() {
+    public function test_get_user_certificate(): void {
         $this->resetAfterTest();
 
         // Create course, certificate template and coursecertificate module.
@@ -214,7 +214,7 @@ class helper_test extends advanced_testcase {
         $this->assertNull(helper::get_user_certificate($user1->id, $course->id, $template2->get_id()));
     }
 
-    public function test_get_user_certificate_race_condition() {
+    public function test_get_user_certificate_race_condition(): void {
         $this->resetAfterTest();
 
         // Create course, certificate template and coursecertificate module.
@@ -239,7 +239,7 @@ class helper_test extends advanced_testcase {
         $this->assertEquals($id2, $cert->id);
     }
 
-    public function test_issue_certificate() {
+    public function test_issue_certificate(): void {
         $this->resetAfterTest();
 
         // Create course, certificate template and coursecertificate module.

@@ -39,7 +39,7 @@ use tool_certificate_generator;
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class external_test extends advanced_testcase {
+final class external_test extends advanced_testcase {
     /**
      * Set up
      */
@@ -58,7 +58,7 @@ class external_test extends advanced_testcase {
     /**
      * Test update automaticsend as editingteacher.
      */
-    public function test_update_automaticsend() {
+    public function test_update_automaticsend(): void {
         global $DB;
 
         // Create course and user enrolled as 'editingteacher'.
@@ -109,7 +109,7 @@ class external_test extends advanced_testcase {
     /**
      * Test update automaticsend as teacher (no capabilities).
      */
-    public function test_update_automaticsend_without_capabilities() {
+    public function test_update_automaticsend_without_capabilities(): void {
         global $DB, $CFG;
         require_once($CFG->libdir . '/externallib.php');
 
