@@ -273,6 +273,10 @@ function mod_coursecertificate_cm_info_dynamic(cm_info $coursemodule) {
  * Callback allowing to add warning on the filter settings page
  */
 function mod_coursecertificate_before_http_headers() {
+    // This is an implementation of a legacy callback that will only be called in older Moodle versions.
+    // It will not be called in Moodle versions that contain the hook core\hook\output\before_http_headers,
+    // instead, the callback mod_coursecertificate\local\hooks\output\before_http_headers::callback will be executed.
+
     global $PAGE, $CFG;
     if ($PAGE->context->contextlevel == CONTEXT_MODULE &&
             $PAGE->url->compare(new moodle_url('/filter/manage.php'), URL_MATCH_BASE) &&
