@@ -30,7 +30,7 @@ use tool_certificate_generator;
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class issue_certificates_task_test extends advanced_testcase {
+final class issue_certificates_task_test extends advanced_testcase {
     /**
      * Set up
      */
@@ -51,7 +51,7 @@ class issue_certificates_task_test extends advanced_testcase {
     /**
      * Test issue_certificates_task with automaticsend setting enabled.
      */
-    public function test_issue_certificates_task_automaticsend_enabled() {
+    public function test_issue_certificates_task_automaticsend_enabled(): void {
         global $DB;
 
         // Create a course customfield.
@@ -106,7 +106,7 @@ class issue_certificates_task_test extends advanced_testcase {
     /**
      * Test issue_certificates_task with automaticsend setting disabled.
      */
-    public function test_issue_certificates_task_automaticsend_disabled() {
+    public function test_issue_certificates_task_automaticsend_disabled(): void {
         global $DB;
 
         // Create course, certificate template and coursecertificate module.
@@ -137,7 +137,7 @@ class issue_certificates_task_test extends advanced_testcase {
     /**
      * Test issue_certificates_task with automaticsend setting enabled.
      */
-    public function test_issue_certificates_task_automaticsend_after_reset() {
+    public function test_issue_certificates_task_automaticsend_after_reset(): void {
         global $DB;
 
         // Create course, certificate template and coursecertificate module.

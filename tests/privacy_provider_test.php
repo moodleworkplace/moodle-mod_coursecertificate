@@ -37,12 +37,12 @@ use mod_coursecertificate\privacy\provider;
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class privacy_provider_test extends provider_testcase {
+final class privacy_provider_test extends provider_testcase {
 
     /**
      * Test for provider::get_reason().
      */
-    public function test_get_reason() {
+    public function test_get_reason(): void {
         $this->assertEquals('privacy:metadata', provider::get_reason());
     }
 }

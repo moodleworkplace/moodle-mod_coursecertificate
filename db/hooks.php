@@ -15,21 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Hook callbacks for Course certificate
  *
- * @package     mod_coursecertificate
- * @copyright   2020 Mikel Martín <mikel@moodle.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_coursecertificate
+ * @copyright  2024 Marina Glancy
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component    = 'mod_coursecertificate';
-$plugin->release      = '4.3.3+';
-$plugin->version      = 2024021300;
-$plugin->requires     = 2022041900.00;
-$plugin->maturity     = MATURITY_STABLE;
-$plugin->supported    = [400, 404];
-$plugin->dependencies = [
-    'tool_certificate' => 2023122800,
+$callbacks = [
+
+    [
+        'hook' => core\hook\output\before_http_headers::class,
+        'callback' => 'mod_coursecertificate\local\hooks\output\before_http_headers::callback',
+        'priority' => 0,
+    ],
 ];
