@@ -32,6 +32,12 @@ class before_http_headers {
      */
     public static function callback(\core\hook\output\before_http_headers $hook): void {
         global $PAGE, $CFG;
+
+        if (during_initial_install() || isset($CFG->upgraderunning)) {
+            // Do nothing during installation or upgrade.
+            return;
+        }
+
         if ($PAGE->context->contextlevel == CONTEXT_MODULE &&
                 $PAGE->url->compare(new \moodle_url('/filter/manage.php'), URL_MATCH_BASE) &&
                 $PAGE->activityname === 'coursecertificate') {
