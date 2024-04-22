@@ -58,7 +58,7 @@ jobs:
             database: pgsql
             extensions: xmlrpc-beta
           - php: '8.3'
-            moodle-branch: 'main' # TODO WPOS-92 replace with MOODLE_404_STABLE when it is created
+            moodle-branch: 'MOODLE_404_STABLE'
             database: pgsql
             extensions: xmlrpc-beta
 
