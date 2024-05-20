@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.4 - 2024-05-21
+### Added
+- Changed the icon to be more consistent with activity icons in 4.4
+
 ## 4.3.4 - 2024-04-23
 ### Added
 - Compatibility with Moodle 4.4, added to the testing matrix
