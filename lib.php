@@ -69,10 +69,10 @@ function coursecertificate_supports(string $feature) {
  * number of the instance.
  *
  * @param stdClass $data An object from the form.
- * @param mod_coursecertificate_mod_form $mform The form.
+ * @param mod_coursecertificate_mod_form|null $mform The form.
  * @return int The id of the newly inserted record.
  */
-function coursecertificate_add_instance(stdClass $data, mod_coursecertificate_mod_form $mform = null): int {
+function coursecertificate_add_instance(stdClass $data, ?mod_coursecertificate_mod_form $mform = null): int {
     global $DB;
 
     $data->timecreated = time();
@@ -93,10 +93,10 @@ function coursecertificate_add_instance(stdClass $data, mod_coursecertificate_mo
  * this function will update an existing instance with new data.
  *
  * @param stdClass $data An object from the form in mod_form.php.
- * @param mod_coursecertificate_mod_form $mform The form.
+ * @param mod_coursecertificate_mod_form|null $mform The form.
  * @return bool True if successful, false otherwise.
  */
-function coursecertificate_update_instance(stdClass $data, mod_coursecertificate_mod_form $mform = null): bool {
+function coursecertificate_update_instance(stdClass $data, ?mod_coursecertificate_mod_form $mform = null): bool {
     global $DB;
 
     $data->timemodified = time();

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+### Fixed
+- fixed implicit nullable parameter declaration deprecated in PHP 8.4
+  (new coding style check)
+
 ## 4.4 - 2024-05-21
 ### Added
 - Changed the icon to be more consistent with activity icons in 4.4
