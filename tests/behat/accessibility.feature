@@ -41,4 +41,4 @@ Feature: Test accessibility for the course certificate module
       | First name / Surname | Email address         |
       | Student 01           | student01@example.com |
       | Student 02           | student02@example.com |
-    Then the page should meet accessibility standards
+    Then the page should meet "wcag131, wcag134, wcag141, wcag143, wcag21aa, wcag21a, wcag412" accessibility standards
