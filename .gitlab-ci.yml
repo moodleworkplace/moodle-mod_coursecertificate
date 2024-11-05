@@ -9,6 +9,7 @@ services:
 variables:
   MOODLE_REPO_WORKPLACE: git@git.in.moodle.com:workplace/workplacedev.git
   MOODLE_BRANCH_WORKPLACE405R: WORKPLACE_ROLLING_405
+  MOODLE_BRANCH_WORKPLACE405S: WORKPLACE_405
   MOODLE_BRANCH_WORKPLACE404R: WORKPLACE_ROLLING_404
   MOODLE_BRANCH_WORKPLACE404S: WORKPLACE_404
   MOODLE_BRANCH_WORKPLACE403R: WORKPLACE_ROLLING_403
@@ -123,6 +124,17 @@ behat:
     - . check moodle-plugin-ci behat --suite default --profile chrome
     - . check-finish
   artifacts: *artifacts
+
+wp405s:
+  image: moodlehq/moodle-workplace-plugin-ci:8.1
+  before_script:
+    - export MOODLE_REPO=$MOODLE_REPO_WORKPLACE
+    - export MOODLE_BRANCH=$MOODLE_BRANCH_WORKPLACE405S
+  <<: *scriptshorttest
+  except:
+    - master
+    - tags
+    - /^WORKPLACE_(ROLLING_)?\d+$/
 
 wp404r:
   image: moodlehq/moodle-workplace-plugin-ci:8.1
