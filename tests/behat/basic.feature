@@ -198,7 +198,7 @@ Feature: Basic functionality of course certificate module
     And I click on "Your awesome certificate" "link" in the "region-main" "region"
     Then I should see "Student 1"
     And I open course or activity settings page
-    And the "Template" "select" should be disabled
+    And the "Template" "field" should be disabled
 
   Scenario: Teacher can revoke a certificate
     And the following certificate templates exist:
