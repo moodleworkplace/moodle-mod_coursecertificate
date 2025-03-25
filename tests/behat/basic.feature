@@ -37,7 +37,9 @@ Feature: Basic functionality of course certificate module
     When I log in as "teacher1"
     Then I add a new instance of coursecertificate module to course "Course 1" section "1"
     And "Manage certificate templates" "link" should not exist
-    And I click on "Template" "select"
+    And I set the field "Template" to "Cer"
+    And I wait until the page is ready
+    And I press key "Enter" in the "Template" field
     And I should not see "Certificate of completion"
     And I click on "Expiry date type" "select"
     And I should see "Select date"
