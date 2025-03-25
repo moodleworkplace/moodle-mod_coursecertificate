@@ -1,5 +1,17 @@
 # Changelog
 
+## 4.5.3 - 2025-03-18
+### Fixed
+- behat tests checking that certificate opens in a new window failing with selenium/standalone-chrome:4
+
+## 4.4.4 - 2024-10-08
+### Added
+- Compatibility with Moodle 4.5; Updates to version testing matrices
+
+## 4.4.3 - 2024-09-03
+### Changed
+- Only changes to automatic testing scripts
+
 ## 4.4.2 - 2024-08-13
 ### Fixed
 - Failing behat tests because of incorrect table headers

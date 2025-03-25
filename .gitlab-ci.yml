@@ -8,6 +8,8 @@ services:
 
 variables:
   MOODLE_REPO_WORKPLACE: git@git.in.moodle.com:workplace/workplacedev.git
+  MOODLE_BRANCH_WORKPLACE405R: WORKPLACE_ROLLING_405
+  MOODLE_BRANCH_WORKPLACE405S: WORKPLACE_405
   MOODLE_BRANCH_WORKPLACE404R: WORKPLACE_ROLLING_404
   MOODLE_BRANCH_WORKPLACE404S: WORKPLACE_404
   MOODLE_BRANCH_WORKPLACE403R: WORKPLACE_ROLLING_403
@@ -21,6 +23,7 @@ variables:
   MOODLE_BRANCH_LMS402: MOODLE_402_STABLE
   MOODLE_BRANCH_LMS403: MOODLE_403_STABLE
   MOODLE_BRANCH_LMS404: MOODLE_404_STABLE
+  MOODLE_BRANCH_LMS405: MOODLE_405_STABLE
   MOODLE_BEHAT_WDHOST: "http://selenium-standalone-chrome:4444/wd/hub"
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: ""
@@ -34,7 +37,7 @@ variables:
 .setupworkplace: &setupworkplace
   before_script:
     - export MOODLE_REPO=$MOODLE_REPO_WORKPLACE
-    - export MOODLE_BRANCH=$MOODLE_BRANCH_WORKPLACE404R
+    - export MOODLE_BRANCH=$MOODLE_BRANCH_WORKPLACE405R
     - . prepare-workplace $cibot_sshkey
     - export PLUGINNAME=$(grep 'plugin->component' $CI_PROJECT_DIR/version.php | awk -F\' '{ print $2; }')
     - cd $CI_PROJECT_DIR/..
@@ -122,6 +125,28 @@ behat:
     - . check-finish
   artifacts: *artifacts
 
+wp405s:
+  image: moodlehq/moodle-workplace-plugin-ci:8.1
+  before_script:
+    - export MOODLE_REPO=$MOODLE_REPO_WORKPLACE
+    - export MOODLE_BRANCH=$MOODLE_BRANCH_WORKPLACE405S
+  <<: *scriptshorttest
+  except:
+    - master
+    - tags
+    - /^WORKPLACE_(ROLLING_)?\d+$/
+
+wp404r:
+  image: moodlehq/moodle-workplace-plugin-ci:8.1
+  before_script:
+    - export MOODLE_REPO=$MOODLE_REPO_WORKPLACE
+    - export MOODLE_BRANCH=$MOODLE_BRANCH_WORKPLACE404R
+  <<: *scriptshorttest
+  except:
+    - master
+    - tags
+    - /^WORKPLACE_(ROLLING_)?\d+$/
+
 wp404s:
   image: moodlehq/moodle-workplace-plugin-ci:8.1
   before_script:
@@ -131,7 +156,7 @@ wp404s:
   except:
     - master
     - tags
-    - /^WORKPLACE_\d+$/
+    - /^WORKPLACE_(ROLLING_)?\d+$/
 
 wp403r:
   before_script:
@@ -141,7 +166,7 @@ wp403r:
   except:
     - master
     - tags
-    - /^WORKPLACE_\d+$/
+    - /^WORKPLACE_(ROLLING_)?\d+$/
 
 wp403s:
   before_script:
@@ -151,7 +176,7 @@ wp403s:
   except:
     - master
     - tags
-    - /^WORKPLACE_\d+$/
+    - /^WORKPLACE_(ROLLING_)?\d+$/
 
 wp402s:
   before_script:
@@ -161,7 +186,7 @@ wp402s:
   except:
     - master
     - tags
-    - /^WORKPLACE_\d+$/
+    - /^WORKPLACE_(ROLLING_)?\d+$/
 
 wp401s:
   before_script:
@@ -171,7 +196,7 @@ wp401s:
   except:
     - master
     - tags
-    - /^WORKPLACE_\d+$/
+    - /^WORKPLACE_(ROLLING_)?\d+$/
 
 wp400:
   before_script:
@@ -182,7 +207,7 @@ wp400:
   except:
     - master
     - tags
-    - /^WORKPLACE_\d+$/
+    - /^WORKPLACE_(ROLLING_)?\d+$/
 
 lms400:
   before_script:
@@ -225,6 +250,16 @@ lms404:
   before_script:
     - export MOODLE_REPO=$MOODLE_REPO_LMS
     - export MOODLE_BRANCH=$MOODLE_BRANCH_LMS404
+  <<: *scriptshorttest
+  except:
+    - master
+    - tags
+
+lms405:
+  image: moodlehq/moodle-workplace-plugin-ci:8.1
+  before_script:
+    - export MOODLE_REPO=$MOODLE_REPO_LMS
+    - export MOODLE_BRANCH=$MOODLE_BRANCH_LMS405
   <<: *scriptshorttest
   except:
     - master

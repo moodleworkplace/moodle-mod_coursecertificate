@@ -56,6 +56,7 @@ final class restore_test extends restore_date_testcase {
      * Set up
      */
     public function setUp(): void {
+        parent::setUp();
         $this->resetAfterTest();
         $this->setAdminUser();
     }
