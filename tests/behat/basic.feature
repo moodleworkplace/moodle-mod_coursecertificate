@@ -37,10 +37,8 @@ Feature: Basic functionality of course certificate module
     When I log in as "teacher1"
     Then I add a new instance of coursecertificate module to course "Course 1" section "1"
     And "Manage certificate templates" "link" should not exist
-    And I set the field "Template" to "Cer"
-    And I wait until the page is ready
-    And I press key "Enter" in the "Template" field
-    And I should not see "Certificate of completion"
+    And I expand the "Template" autocomplete
+    And I should not see "Certificate of completion" in the list of options for the "Template" autocomplete
     And I click on "Expiry date type" "select"
     And I should see "Select date"
     And I should see "After"
@@ -198,7 +196,7 @@ Feature: Basic functionality of course certificate module
     And I click on "Your awesome certificate" "link" in the "region-main" "region"
     Then I should see "Student 1"
     And I open course or activity settings page
-    And the "Template" "field" should be disabled
+    And I should see only "Certificate of participation" in the list of options for the "Template" autocomplete
 
   Scenario: Teacher can revoke a certificate
     And the following certificate templates exist:
