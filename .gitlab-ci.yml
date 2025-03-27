@@ -72,7 +72,7 @@ behat:
   script:
     - *setupfaildumps
     - php -S ${IPADDRESS}:8000 -t $CI_PROJECT_DIR/../moodle > /dev/null 2>&1 &
-    - php admin/tool/behat/cli/init.php --add-core-features-to-theme --parallel=3 --optimize-runs=@$PLUGINNAME
+    - php admin/tool/behat/cli/init.php --add-core-features-to-theme --parallel=3 --optimize-runs=@$PLUGINNAME --scss-deprecations
     - . check-start
     - . check moodle-plugin-ci behat --suite workplace --profile chrome
     - . check-finish
@@ -103,7 +103,7 @@ behat:
     - php admin/tool/phpunit/cli/init.php
     - php admin/tool/phpunit/cli/util.php --buildcomponentconfigs
     - php -S ${IPADDRESS}:8000 -t $CI_PROJECT_DIR/../moodle > /dev/null 2>&1 &
-    - php admin/tool/behat/cli/init.php --add-core-features-to-theme --parallel=3 --optimize-runs=@$PLUGINNAME
+    - php admin/tool/behat/cli/init.php --add-core-features-to-theme --parallel=3 --optimize-runs=@$PLUGINNAME --scss-deprecations
     - . check-start
     - . check moodle-plugin-ci phpunit --coverage-text --fail-on-warning
     - . check moodle-plugin-ci behat --suite default --profile chrome
