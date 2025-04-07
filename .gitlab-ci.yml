@@ -29,9 +29,9 @@ variables:
     - . prepare-workplace $cibot_sshkey
     - export PLUGINNAME=$(grep 'plugin->component' $CI_PROJECT_DIR/version.php | awk -F\' '{ print $2; }')
     - cd $CI_PROJECT_DIR/..
-    - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-theme_workplace.git
-    - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_wp.git
-    - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_certificate.git
+    - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-theme_workplace.git --branch WP-5363
+    - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_wp.git --branch WP-5363
+    - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_certificate.git --branch WP-5363
     - moodle-plugin-ci install --db-host="$DB_HOST" --no-init -vvv
     - cd moodle
 
