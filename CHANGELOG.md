@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 4.5.4 - 2025-04-15
 ### Fixed
 - Changed branch name in the testing matrix since the required branch of tool_certificate is no longer the default one
 

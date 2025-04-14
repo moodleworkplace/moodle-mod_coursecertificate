@@ -41,8 +41,8 @@ variables:
     - . prepare-workplace $cibot_sshkey
     - export PLUGINNAME=$(grep 'plugin->component' $CI_PROJECT_DIR/version.php | awk -F\' '{ print $2; }')
     - cd $CI_PROJECT_DIR/..
-    - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-theme_workplace.git
-    - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_wp.git
+    - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-theme_workplace.git --branch $MOODLE_BRANCH
+    - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_wp.git --branch $MOODLE_BRANCH
     - moodle-plugin-ci add-plugin --clone git@git.in.moodle.com:workplace/moodle-tool_certificate.git --branch MOODLE_400_STABLE
     - moodle-plugin-ci install --db-host="$DB_HOST" --no-init -vvv
     - cd moodle
@@ -58,7 +58,7 @@ codecheck:
     - php admin/tool/phpunit/cli/init.php
     - php admin/tool/phpunit/cli/util.php --buildcomponentconfigs
     - . check-start
-    - . check version_number
+    - . check version_number 20250413
     - . check no_workplace_licenses
     - . check this_plugin_is_part_of "the mod_coursecertificate plugin for Moodle - http://moodle.org/" --nowplicensecomment
     - . check language_file_sorting
