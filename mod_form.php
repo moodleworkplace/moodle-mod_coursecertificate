@@ -66,17 +66,23 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
 
         // Adding the template selector.
         if ($hasissues) {
-            // If coursecertificate has issues, just add the current template to the selector.
             $templates = $this->get_current_template();
+            $templateoptions = ['' => get_string('chooseatemplate', 'coursecertificate')] + $templates;
+
+            $elements = [$mform->createElement('select', 'template',
+                get_string('template', 'coursecertificate'), $templateoptions)];
+            $mform->setType('template', PARAM_INT);
+            $mform->freeze('template'); // Desativa edição do campo
         } else {
-            // Get all available templates for the user.
+            $elements = [$mform->createElement('autocomplete', 'template',
+                get_string('template', 'coursecertificate'), [],
+                ['ajax' => 'mod_coursecertificate/form_template_options'])];
             $templates = $this->get_template_select();
+            $mform->setType('template', PARAM_INT);
         }
-        $templateoptions = ['' => get_string('chooseatemplate', 'coursecertificate')] + $templates;
-        $manageurl = new \moodle_url('/admin/tool/certificate/manage_templates.php');
-        $elements = [$mform->createElement('autocomplete', 'template',
-            get_string('template', 'coursecertificate'), $templateoptions)];
+
         // Adding "Manage templates" link if user has capabilities to manage templates.
+        $manageurl = new \moodle_url('/admin/tool/certificate/manage_templates.php');
         if ($canmanagetemplates && !empty($templates)) {
             $elements[] = $mform->createElement('static', 'managetemplates', '',
                 $OUTPUT->action_link($manageurl, get_string('managetemplates', 'coursecertificate')));

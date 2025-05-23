@@ -33,4 +33,12 @@ $functions = [
         'capabilities' => 'mod/coursecertificate:addinstance',
         'ajax'         => true,
     ],
+    'mod_coursecertificate_form_template_options' => [
+        'classname' => mod_coursecertificate\form\form_template_options::class,
+        'methodname'  => 'get_options',
+        'description' => 'Retorna opções para o autocomplete.',
+        'type'        => 'read',
+        'ajax'        => true,
+        'loginrequired' => true,
+    ],
 ];

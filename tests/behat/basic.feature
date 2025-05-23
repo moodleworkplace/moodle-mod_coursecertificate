@@ -38,7 +38,6 @@ Feature: Basic functionality of course certificate module
     Then I add a new instance of coursecertificate module to course "Course 1" section "1"
     And "Manage certificate templates" "link" should not exist
     And I expand the "Template" autocomplete
-    And I open the autocomplete suggestions list for the "Template" autocomplete
     And I should see "Certificate of participation" in the list of options for the "Template" autocomplete
     And I set the field "Template" to "Certificate of completion"
     And I wait until the page is ready
