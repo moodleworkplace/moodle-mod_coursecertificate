@@ -31,5 +31,5 @@ $plugin->requires     = 2022041900.00;
 $plugin->maturity     = MATURITY_STABLE;
 $plugin->supported    = [400, 405];
 $plugin->dependencies = [
-    'tool_certificate' => 2025031800,
+    'tool_certificate' => 2025041400,
 ];
