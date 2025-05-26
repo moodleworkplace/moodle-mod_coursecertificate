@@ -63,19 +63,16 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
         $this->standard_intro_elements();
-
+        $templates = $this->get_current_template();
+        $templateoptions = $templates;
         // Adding the template selector.
         if ($hasissues) {
-            $templates = $this->get_current_template();
-            $templateoptions = ['' => get_string('chooseatemplate', 'coursecertificate')] + $templates;
-
             $elements = [$mform->createElement('select', 'template',
                 get_string('template', 'coursecertificate'), $templateoptions)];
             $mform->setType('template', PARAM_INT);
-            $mform->freeze('template'); // Desativa edição do campo
         } else {
             $elements = [$mform->createElement('autocomplete', 'template',
-                get_string('template', 'coursecertificate'), [],
+                get_string('template', 'coursecertificate'), $templateoptions,
                 ['ajax' => 'mod_coursecertificate/form_template_options'])];
             $templates = $this->get_template_select();
             $mform->setType('template', PARAM_INT);
