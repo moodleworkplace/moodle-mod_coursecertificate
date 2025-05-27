@@ -73,7 +73,8 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         } else {
             $elements = [$mform->createElement('autocomplete', 'template',
                 get_string('template', 'coursecertificate'), $templateoptions,
-                ['ajax' => 'mod_coursecertificate/form_template_options'])];
+                ['ajax' => 'mod_coursecertificate/form_template_options',
+                    'data-course'=>$this->current->course])];
             $templates = $this->get_template_select();
             $mform->setType('template', PARAM_INT);
         }

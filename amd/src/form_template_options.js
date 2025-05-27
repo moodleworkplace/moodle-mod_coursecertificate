@@ -28,10 +28,14 @@ define(['core/ajax'], function(Ajax) {
          */
         transport: function(selector, query, callback, failure) {
             // Chama o serviço mod_coursecertificate_form_template_options via AJAX
+            var element = document.querySelector(selector);
+            // Recupera o valor do atributo data-course
+            var courseid = element ? element.getAttribute('data-course') : null;
             Ajax.call([{
                 methodname: 'mod_coursecertificate_form_template_options',
                 args: {
-                    search: query
+                    search: query,
+                    courseid:courseid
                 },
                 done: function(response) {
                     // Chama o callback com os dados retornados

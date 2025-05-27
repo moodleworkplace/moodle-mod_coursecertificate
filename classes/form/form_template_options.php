@@ -20,11 +20,9 @@ class form_template_options extends \external_api {
      * @param array $options Parâmetros adicionais.
      * @return array
      */
-    public static function get_options($search) {
-        global $COURSE;
-
+    public static function get_options($courseid,$search) {
         // Obter o contexto do curso
-        $context = \context_course::instance($COURSE->id);
+        $context = \context_course::instance($courseid);
         $result = [];
 
         // Buscar templates de certificados visíveis
@@ -56,6 +54,7 @@ class form_template_options extends \external_api {
      */
     public static function get_options_parameters() {
         return new external_function_parameters([
+            'courseid' => new external_value(PARAM_INT, 'ID do curso'),
             'search' => new external_value(PARAM_RAW, 'Termo de busca', VALUE_DEFAULT,null),
         ]);
     }
