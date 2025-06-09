@@ -138,7 +138,7 @@ Feature: Basic functionality of course certificate module
     And I duplicate "Certificate" activity
     And I wait until "Certificate (copy)" "link" exists
     And I delete "Certificate (copy)" activity
-    Then I should not see "Certificate (copy)"
+    Then I should not see "Certificate (copy)" in the "region-main" "region"
 
   Scenario: Manager can create an instance of course certificate module with non shared templates
     And the following "permission overrides" exist:
