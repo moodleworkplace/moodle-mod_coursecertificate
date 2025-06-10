@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.1 - 2025-06-10
+### Added
+- Improved CI automation
+
 ## 5.0 - 2025-04-14
 ### Added
 - Added support for Moodle 5.0
