@@ -22,6 +22,7 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core\{clock, di};
 use mod_coursecertificate\permission;
 
 /**
@@ -75,7 +76,7 @@ function coursecertificate_supports(string $feature) {
 function coursecertificate_add_instance(stdClass $data, ?mod_coursecertificate_mod_form $mform = null): int {
     global $DB;
 
-    $data->timecreated = time();
+    $data->timecreated = di::get(clock::class)->time();
     $cmid = $data->coursemodule;
 
     $data->id = $DB->insert_record('coursecertificate', $data);
@@ -99,7 +100,7 @@ function coursecertificate_add_instance(stdClass $data, ?mod_coursecertificate_m
 function coursecertificate_update_instance(stdClass $data, ?mod_coursecertificate_mod_form $mform = null): bool {
     global $DB;
 
-    $data->timemodified = time();
+    $data->timemodified = di::get(clock::class)->time();
     $data->id = $data->instance;
 
     return $DB->update_record('coursecertificate', $data);

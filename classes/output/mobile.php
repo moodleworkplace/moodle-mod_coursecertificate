@@ -97,7 +97,7 @@ class mobile {
             'issues' => array_values($issues),
             'showissue' => $certificatedata['studentview'],
             'fileurl' => $fileurl,
-            'currenttimestamp' => time(),
+            'currenttimestamp' => \core\di::get(\core\clock::class)->time(),
         ];
 
         return [
