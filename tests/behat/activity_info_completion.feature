@@ -29,7 +29,7 @@ Feature: Completion in the course certificate activity
     Given I log in as "teacher1"
     And I am on "Course 1" course homepage
     When I follow "Certificate 1"
-    Then the manual completion button for "Certificate 1" course certificate should be disabled
+    Then the manual completion button for "Certificate 1" should be disabled
     And the manual completion button for "Certificate 1" course certificate should be displayed "1" times
 
   Scenario: Viewing a course certificate activity with automatic completion as a teacher
@@ -39,4 +39,4 @@ Feature: Completion in the course certificate activity
     Given I log in as "teacher1"
     And I am on "Course 1" course homepage
     When I follow "Certificate 2"
-    Then "Certificate 2" course certificate should have the "View" completion condition
+    Then "Certificate 2" should have the "View" completion condition
