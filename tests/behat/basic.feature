@@ -35,7 +35,8 @@ Feature: Basic functionality of course certificate module
       | Certificate of participation | 1       |
       | Certificate of completion    | 0       |
     When I log in as "teacher1"
-    Then I add a new instance of coursecertificate module to course "Course 1" section "1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a "coursecertificate" activity to course "Course 1" section "1"
     And "Manage certificate templates" "link" should not exist
     And I click on "Template" "select"
     And I should not see "Certificate of completion"
@@ -53,7 +54,7 @@ Feature: Basic functionality of course certificate module
     And I press "Enable"
     And I press "Confirm"
     And I should see "The automatic sending of this certificate is enabled"
-    And I open course or activity settings page
+    And I navigate to "Settings" in current page administration
     And I set the following fields to these values:
       | Name      | Your super awesome certificate     |
     And I press "Save and display"
@@ -77,7 +78,8 @@ Feature: Basic functionality of course certificate module
       | name                         | shared  |
       | Certificate of participation | 1       |
     When I log in as "teacher1"
-    And I add a new instance of coursecertificate module to course "Course 1" section "1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a "coursecertificate" activity to course "Course 1" section "1"
     And I set the following fields to these values:
       | Name              | Your awesome certificate     |
       | Template          | Certificate of participation |
@@ -105,7 +107,8 @@ Feature: Basic functionality of course certificate module
       | name                         | shared  |
       | Certificate of participation | 1       |
     When I log in as "teacher1"
-    And I add a new instance of coursecertificate module to course "Course 1" section "1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a "coursecertificate" activity to course "Course 1" section "1"
     And I set the following fields to these values:
       | Name              | Your awesome certificate     |
       | Template          | Certificate of participation |
@@ -149,7 +152,8 @@ Feature: Basic functionality of course certificate module
       | Certificate of participation | 1       |
       | Certificate of completion    | 0       |
     When I log in as "manager1"
-    And I add a new instance of coursecertificate module to course "Course 1" section "1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a "coursecertificate" activity to course "Course 1" section "1"
     Then "Manage certificate templates" "link" should exist
     And I set the following fields to these values:
       | Name     | Your awesome certificate  |
@@ -164,7 +168,8 @@ Feature: Basic functionality of course certificate module
       | name                         | shared  |
       | Certificate of completion    | 0       |
     When I log in as "teacher1"
-    And I add a new instance of coursecertificate module to course "Course 1" section "1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a "coursecertificate" activity to course "Course 1" section "1"
     Then I should see "There are no available templates. Please contact the site administrator."
     And I press "Save and display"
     And I should see "You must supply a value here."
@@ -174,7 +179,8 @@ Feature: Basic functionality of course certificate module
       | capability                      | permission | role                 | contextlevel | reference |
       | tool/certificate:manage         | Allow      | certificateissuer    | System       |           |
     When I log in as "manager1"
-    And I add a new instance of coursecertificate module to course "Course 1" section "1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a "coursecertificate" activity to course "Course 1" section "1"
     Then I should see "There are no available templates. Please go to certificate template management page and create a new one."
     And I press "Save and display"
     And I should see "You must supply a value here."
@@ -188,14 +194,15 @@ Feature: Basic functionality of course certificate module
       | template                      | user      | course | component             |
       | Certificate of participation  | student1  | C1     | mod_coursecertificate |
     When I log in as "teacher1"
-    And I add a new instance of coursecertificate module to course "Course 1" section "1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a "coursecertificate" activity to course "Course 1" section "1"
     And I set the following fields to these values:
       | Name     | Your awesome certificate     |
       | Template | Certificate of participation |
     And I press "Save and return to course"
     And I click on "Your awesome certificate" "link" in the "region-main" "region"
     Then I should see "Student 1"
-    And I open course or activity settings page
+    And I navigate to "Settings" in current page administration
     And the "Template" "select" should be disabled
 
   Scenario: Teacher can revoke a certificate
@@ -206,7 +213,8 @@ Feature: Basic functionality of course certificate module
       | template                      | user      | course | component             |
       | Certificate of participation  | student1  | C1     | mod_coursecertificate |
     When I log in as "teacher1"
-    And I add a new instance of coursecertificate module to course "Course 1" section "1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a "coursecertificate" activity to course "Course 1" section "1"
     And I set the following fields to these values:
       | Name     | Your awesome certificate     |
       | Template | Certificate of participation |
@@ -276,7 +284,7 @@ Feature: Basic functionality of course certificate module
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I click on "Certificate 01" "link" in the "region-main" "region"
-    And I open course or activity settings page
+    And I navigate to "Settings" in current page administration
     And I set the following fields to these values:
       | Template  | Certificate of participation B |
     And I press "Save and display"
