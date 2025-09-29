@@ -234,18 +234,15 @@ Feature: Basic functionality of course certificate module
     Then I should see "This is my block"
 
   Scenario: Display information about all coursecertificate activities
-    And the following certificate templates exist:
+    Given the following certificate templates exist:
       | name                         | shared  |
       | Certificate of participation | 1       |
     And the following "activities" exist:
       | activity          | name           | intro             | course | idnumber           | template                     |
       | coursecertificate | Certificate 01 | Certificate intro | C1     | coursecertificate1 | Certificate of participation |
       | coursecertificate | Certificate 02 | Certificate intro | C1     | coursecertificate1 | Certificate of participation |
-    When I log in as "teacher1"
-    And I am on "Course 1" course homepage with editing mode on
-    And I add the "Activities" block
-    And I click on "Course certificates" "link" in the "Activities" "block"
-    And I should see "Certificate 01"
+    When I am on the "Course 1" "mod_coursecertificate > Index" page logged in as "teacher1"
+    Then I should see "Certificate 01"
     And I should see "Certificate 02"
     And I click on "Certificate 01" "link" in the "region-main" "region"
     And I should see "Nothing to display"
@@ -261,8 +258,7 @@ Feature: Basic functionality of course certificate module
       | coursecertificate | Certificate 01 | Certificate intro | C1     | coursecertificate1 | Certificate of participation A |
     When I log in as "admin"
     And I navigate to "Certificates > Manage certificate templates" in site administration
-    And I click on "Actions" "icon" in the "Certificate of participation A" "table_row"
-    And I choose "Delete" in the open action menu
+    And I press "Delete" action in the "Certificate of participation A" report row
     And I click on "Delete" "button" in the "Confirm" "dialogue"
     And I log out
     And I log in as "teacher1"

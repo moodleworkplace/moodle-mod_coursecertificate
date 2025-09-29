@@ -34,13 +34,8 @@ Feature: Self issue certificate for coursecertificate template
     And I should see "Your certificate is available!"
 
   @_switch_window
-  Scenario: View certificate module from Activities block
-    When I log in as "admin"
-    And I am on "Course 1" course homepage with editing mode on
-    And I add the "Activities" block
-    When I log in as "student1"
-    And I am on "Course 1" course homepage
-    And I click on "Course certificates" "link" in the "Activities" "block"
+  Scenario: View certificate module from index page
+    When I am on the "Course 1" "mod_coursecertificate > Index" page logged in as "student1"
     And I click on "My certificate" "link" in the "region-main" "region"
     And I follow "View certificate"
     Then I can see a certificate in a new window
