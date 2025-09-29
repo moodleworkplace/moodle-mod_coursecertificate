@@ -116,6 +116,7 @@ Feature: View the certificates that have been issued
       | Student 03 | student03@example.com |
 
   Scenario: View the issued certificates list as non-editing teacher and separate/visible groups
+    Given I change window size to "large"
     And I log in as "teacher2"
     And I am on "Course 1" course homepage
     And I follow "My certificate"
