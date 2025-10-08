@@ -26,10 +26,10 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component    = 'mod_coursecertificate';
 $plugin->release      = '5.0.3';
-$plugin->version      = 2025100700;
+$plugin->version      = 2025100800;
 $plugin->requires     = 2025041400.00;
 $plugin->maturity     = MATURITY_STABLE;
 $plugin->supported    = [500, 501];
 $plugin->dependencies = [
-    'tool_certificate' => 2025100700,
+    'tool_certificate' => 2025100800,
 ];
