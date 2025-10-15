@@ -9,6 +9,7 @@ Feature: Basic functionality of course certificate module
       | username | firstname | lastname | email                |
       | teacher1 | Teacher   | 1        | teacher1@example.com |
       | student1 | Student   | 1        | student1@example.com |
+      | student2 | Student   | 2        | student2@example.com |
       | manager1 | Manager   | 1        | manager1@example.com |
     And the following "courses" exist:
       | fullname | shortname | format |
@@ -18,6 +19,7 @@ Feature: Basic functionality of course certificate module
       | teacher1 | C1     | editingteacher |
       | manager1 | C1     | editingteacher |
       | student1 | C1     | student        |
+      | student2 | C1     | student        |
     And the following "roles" exist:
       | shortname            | name                       | archetype |
       | certificateissuer    | Certificate issuer         |           |
@@ -223,6 +225,29 @@ Feature: Basic functionality of course certificate module
     And I press "Revoke" action in the "Student 1" report row
     And I click on "Revoke" "button" in the "Confirm" "dialogue"
     And I should see "Nothing to display"
+
+  Scenario: Teacher can renew certificates
+    When the following certificate templates exist:
+      | name                         | shared  |
+      | Certificate of participation | 1       |
+    And the following certificate issues exist:
+      | template                      | user      | course | component             |
+      | Certificate of participation  | student1  | C1     | mod_coursecertificate |
+      | Certificate of participation  | student2  | C1     | mod_coursecertificate |
+    # TODO: remove admin and use teacher1 when https://moodle.atlassian.net/browse/WPOS-176 is fixed
+    And I log in as "admin"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a "coursecertificate" activity to course "Course 1" section "1"
+    And I set the following fields to these values:
+      | Name     | Your awesome certificate     |
+      | Template | Certificate of participation |
+    And I press "Save and return to course"
+    And I click on "Your awesome certificate" "link" in the "region-main" "region"
+    And I click on "input[name='report-select-row[]']" "css_element" in the "student1" "table_row"
+    And I click on "input[name='report-select-row[]']" "css_element" in the "student2" "table_row"
+    And I set the field "With selected users..." to "Regenerate issued certificates"
+    And I click on "Regenerate" "button" in the "Regenerate all issued certificates" "dialogue"
+    And I should see "The issued certificates are being regenerated"
 
   Scenario: Teacher can manage blocks in the module page
     And the following certificate templates exist:
