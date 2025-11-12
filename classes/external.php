@@ -58,8 +58,10 @@ class external extends \external_api {
     public static function update_automaticsend(int $id, bool $automaticsend) {
         global $DB;
 
-        $params = self::validate_parameters(self::update_automaticsend_parameters(),
-            ['id' => $id, 'automaticsend' => $automaticsend]);
+        $params = self::validate_parameters(
+            self::update_automaticsend_parameters(),
+            ['id' => $id, 'automaticsend' => $automaticsend]
+        );
 
         $certificate = $DB->get_record('coursecertificate', ['id' => $params['id']], '*', MUST_EXIST);
         $cm = get_coursemodule_from_instance('coursecertificate', $certificate->id);

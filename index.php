@@ -22,8 +22,8 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require(__DIR__.'/../../config.php');
-require_once(__DIR__.'/lib.php');
+require(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/lib.php');
 
 $id = required_param('id', PARAM_INT);
 
@@ -76,7 +76,8 @@ foreach ($certificates as $certificate) {
     $link = html_writer::link(
         new moodle_url('/mod/coursecertificate/view.php', ['id' => $certificate->coursemodule]),
         format_string($certificate->name, true),
-        $attributes);
+        $attributes
+    );
 
     if ($course->format == 'weeks' || $course->format == 'topics') {
         $table->data[] = [$certificate->section, $link];

@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/mod/coursecertificate/backup/moodle2/restore_coursecertificate_stepslib.php');
+require_once($CFG->dirroot . '/mod/coursecertificate/backup/moodle2/restore_coursecertificate_stepslib.php');
 
 /**
  * The class provides a complete restore of mod_coursecertificate.
@@ -34,7 +34,6 @@ require_once($CFG->dirroot.'/mod/coursecertificate/backup/moodle2/restore_course
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_coursecertificate_activity_task extends restore_activity_task {
-
     /**
      * Defines particular settings that this activity can have.
      */
@@ -50,8 +49,8 @@ class restore_coursecertificate_activity_task extends restore_activity_task {
     protected function define_my_steps(): void {
         $this->add_step(new restore_coursecertificate_activity_structure_step(
             'coursecertificate_structure',
-            'coursecertificate.xml')
-        );
+            'coursecertificate.xml'
+        ));
     }
 
     /**

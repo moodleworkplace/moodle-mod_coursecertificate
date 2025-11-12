@@ -42,8 +42,7 @@ use tool_certificate\reportbuilder\local\systemreports\issues;
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class view_page implements templatable, renderable {
-
+class view_page implements renderable, templatable {
     /** @var \stdClass $certificate */
     protected $certificate;
 

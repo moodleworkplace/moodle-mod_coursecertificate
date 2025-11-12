@@ -26,7 +26,6 @@ require_once(__DIR__ . '/../../../../lib/behat/behat_deprecated_base.php');
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class behat_mod_coursecertificate_deprecated extends behat_deprecated_base {
-
     /**
      * Opens the activity chooser and opens the activity/resource form page. Sections 0 and 1 are also allowed on frontpage.
      *

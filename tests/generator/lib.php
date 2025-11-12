@@ -23,7 +23,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_coursecertificate_generator extends testing_module_generator {
-
     /**
      * @var int keep track of how many chapters have been created.
      */
@@ -88,5 +87,4 @@ class mod_coursecertificate_generator extends testing_module_generator {
 
         return parent::create_instance($record, (array)$options);
     }
-
 }

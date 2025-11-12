@@ -30,7 +30,6 @@ use tool_certificate_generator;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class tool_brickfield_area_test extends \advanced_testcase {
-
     /**
      * Skip the test if this is not a Workplace installation
      *
@@ -79,13 +78,17 @@ final class tool_brickfield_area_test extends \advanced_testcase {
         $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
 
         // Create coursecertificate module.
-        $choice1 = $this->getDataGenerator()->create_module('coursecertificate',
-            ['course' => $course->id, 'template' => $certificate1->get_id(), 'visible' => 0]);
+        $choice1 = $this->getDataGenerator()->create_module(
+            'coursecertificate',
+            ['course' => $course->id, 'template' => $certificate1->get_id(), 'visible' => 0]
+        );
 
-        list($course1, $cm1) = get_course_and_cm_from_instance($choice1->id, 'coursecertificate');
-        $choice2 = $this->getDataGenerator()->create_module('coursecertificate',
-            ['course' => $course->id, 'template' => $certificate1->get_id(), 'visible' => 0]);
-        list($course2, $cm2) = get_course_and_cm_from_instance($choice2->id, 'coursecertificate');
+        [$course1, $cm1] = get_course_and_cm_from_instance($choice1->id, 'coursecertificate');
+        $choice2 = $this->getDataGenerator()->create_module(
+            'coursecertificate',
+            ['course' => $course->id, 'template' => $certificate1->get_id(), 'visible' => 0]
+        );
+        [$course2, $cm2] = get_course_and_cm_from_instance($choice2->id, 'coursecertificate');
 
         return [$cm1, $cm2];
     }
@@ -121,7 +124,6 @@ final class tool_brickfield_area_test extends \advanced_testcase {
         $relevantresultsrs = $intro->find_relevant_areas($event);
         $relevantresults = self::array_from_recordset($relevantresultsrs);
         $this->assertEquals([$results[0]], $relevantresults);
-
     }
 
     /**

@@ -28,7 +28,6 @@ use tool_certificate_generator;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class generator_test extends advanced_testcase {
-
     /**
      * Get certificate generator
      * @return tool_certificate_generator
@@ -49,8 +48,10 @@ final class generator_test extends advanced_testcase {
         $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
 
         $this->assertFalse($DB->record_exists('coursecertificate', ['course' => $course->id]));
-        $mod = $this->getDataGenerator()->create_module('coursecertificate',
-            ['course' => $course->id, 'template' => $certificate1->get_id()]);
+        $mod = $this->getDataGenerator()->create_module(
+            'coursecertificate',
+            ['course' => $course->id, 'template' => $certificate1->get_id()]
+        );
         $this->assertEquals(1, $DB->count_records('coursecertificate', ['course' => $course->id]));
         $this->assertTrue($DB->record_exists('coursecertificate', ['course' => $course->id, 'id' => $mod->id]));
         $this->assertEquals($certificate1->get_id(), $DB->get_field('coursecertificate', 'template', ['id' => $mod->id]));

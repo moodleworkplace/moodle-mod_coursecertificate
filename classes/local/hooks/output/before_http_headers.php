@@ -24,7 +24,6 @@ namespace mod_coursecertificate\local\hooks\output;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class before_http_headers {
-
     /**
      * Callback allowing to add warning on the filter settings page
      *
@@ -38,9 +37,11 @@ class before_http_headers {
             return;
         }
 
-        if ($PAGE->context->contextlevel == CONTEXT_MODULE &&
+        if (
+            $PAGE->context->contextlevel == CONTEXT_MODULE &&
                 $PAGE->url->compare(new \moodle_url('/filter/manage.php'), URL_MATCH_BASE) &&
-                $PAGE->activityname === 'coursecertificate') {
+                $PAGE->activityname === 'coursecertificate'
+        ) {
             if ($allowedfilters = \tool_certificate\element_helper::get_allowed_filters()) {
                 $link = new \moodle_url('/filter/manage.php', ['contextid' => $PAGE->context->get_course_context()->id]);
                 $a = (object)[
@@ -54,7 +55,8 @@ class before_http_headers {
             \core\notification::add(
                 get_string('filterswarning', 'mod_coursecertificate') .
                 '<br>' . $message,
-                \core\output\notification::NOTIFY_WARNING);
+                \core\output\notification::NOTIFY_WARNING
+            );
         }
     }
 }

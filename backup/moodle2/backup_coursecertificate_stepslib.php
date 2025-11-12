@@ -31,7 +31,6 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class backup_coursecertificate_activity_structure_step extends backup_activity_structure_step {
-
     /**
      * Defines the structure of the resulting xml file.
      *
@@ -50,8 +49,11 @@ class backup_coursecertificate_activity_structure_step extends backup_activity_s
 
         // Issues.
         $issues = new backup_nested_element('issues');
-        $issue = new backup_nested_element('issue', ['id'],
-            ['userid', 'templateid', 'code', 'emailed', 'timecreated', 'expires', 'data', 'component', 'courseid']);
+        $issue = new backup_nested_element(
+            'issue',
+            ['id'],
+            ['userid', 'templateid', 'code', 'emailed', 'timecreated', 'expires', 'data', 'component', 'courseid']
+        );
 
         // Build the tree.
         $coursecertificate->add_child($issues);

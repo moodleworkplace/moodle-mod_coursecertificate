@@ -55,8 +55,10 @@ final class observer_test extends advanced_testcase {
         $course = $this->getDataGenerator()->create_course(['shortname' => 'C01', 'customfield_f1' => 'some text']);
 
         $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
-        $mod = $this->getDataGenerator()->create_module('coursecertificate',
-            ['course' => $course->id, 'template' => $certificate1->get_id()]);
+        $mod = $this->getDataGenerator()->create_module(
+            'coursecertificate',
+            ['course' => $course->id, 'template' => $certificate1->get_id()]
+        );
         $this->assertTrue($DB->record_exists('coursecertificate', ['course' => $course->id, 'id' => $mod->id]));
         // Sanity check.
         $this->assertEquals($certificate1->get_id(), $mod->template);

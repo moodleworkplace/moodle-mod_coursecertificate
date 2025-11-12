@@ -40,7 +40,7 @@ use mod_coursecertificate\permission;
  * @return mixed True if module supports feature, false if not, null if doesn't know
  */
 function coursecertificate_supports(string $feature) {
-    switch($feature) {
+    switch ($feature) {
         case FEATURE_GROUPS:
             return true;
         case FEATURE_GROUPINGS:
@@ -159,15 +159,34 @@ function mod_coursecertificate_tool_certificate_fields() {
     $gradestring = get_string('gradenoun');
 
     // TODO: the only currently supported field types are text/textarea (numeric will fallback to text).
-    $handler->ensure_field_exists('courseid', 'numeric',
-        get_string('courseinternalid', 'mod_coursecertificate'), false, 1);
-    $handler->ensure_field_exists('courseshortname', 'text', get_string('shortnamecourse'),
-        true, get_string('previewcourseshortname', 'mod_coursecertificate'));
-    $handler->ensure_field_exists('coursefullname', 'text', get_string('fullnamecourse'),
-        true, get_string('previewcoursefullname', 'mod_coursecertificate'));
-    $handler->ensure_field_exists('courseurl', 'text',
+    $handler->ensure_field_exists(
+        'courseid',
+        'numeric',
+        get_string('courseinternalid', 'mod_coursecertificate'),
+        false,
+        1
+    );
+    $handler->ensure_field_exists(
+        'courseshortname',
+        'text',
+        get_string('shortnamecourse'),
+        true,
+        get_string('previewcourseshortname', 'mod_coursecertificate')
+    );
+    $handler->ensure_field_exists(
+        'coursefullname',
+        'text',
+        get_string('fullnamecourse'),
+        true,
+        get_string('previewcoursefullname', 'mod_coursecertificate')
+    );
+    $handler->ensure_field_exists(
+        'courseurl',
+        'text',
         get_string('courseurl', 'mod_coursecertificate'),
-        true, $CFG->wwwroot . '/course/view.php?id=1');
+        true,
+        $CFG->wwwroot . '/course/view.php?id=1'
+    );
     $handler->ensure_field_exists(
         'coursecompletiondate',
         'text',
@@ -213,9 +232,11 @@ function coursecertificate_reset_userdata($data) {
         // instances of mod_coursecertificate in this course).
         $certificates = get_coursemodules_in_course('coursecertificate', $data->courseid, 'm.template');
         foreach ($certificates as $certificate) {
-            $DB->execute('UPDATE {tool_certificate_issues} SET archived = 1
+            $DB->execute(
+                'UPDATE {tool_certificate_issues} SET archived = 1
                              WHERE courseid = ? AND templateid = ? AND component = ? AND archived = 0',
-                [$data->courseid, $certificate->template, 'mod_coursecertificate']);
+                [$data->courseid, $certificate->template, 'mod_coursecertificate']
+            );
         }
 
         $status[] = [
@@ -223,7 +244,6 @@ function coursecertificate_reset_userdata($data) {
             'item' => get_string('certificatesarchived', 'mod_coursecertificate'),
             'error' => false,
         ];
-
     }
 
     return $status;
@@ -263,8 +283,10 @@ function mod_coursecertificate_cm_info_dynamic(cm_info $coursemodule) {
     if (!$canviewissues && $canreceive) {
         // In case when user can only download their own certificate and do nothing else -
         // take them directly to their certificate (open in a new window).
-        $fullurl = new moodle_url("/mod/coursecertificate/view.php",
-            ['id' => $coursemodule->id, 'download' => 1]);
+        $fullurl = new moodle_url(
+            "/mod/coursecertificate/view.php",
+            ['id' => $coursemodule->id, 'download' => 1]
+        );
         $onclick = "window.open('$fullurl'); return false;";
         $coursemodule->set_on_click($onclick);
     }
@@ -279,9 +301,11 @@ function mod_coursecertificate_before_http_headers() {
     // instead, the callback mod_coursecertificate\local\hooks\output\before_http_headers::callback will be executed.
 
     global $PAGE, $CFG;
-    if ($PAGE->context->contextlevel == CONTEXT_MODULE &&
+    if (
+        $PAGE->context->contextlevel == CONTEXT_MODULE &&
             $PAGE->url->compare(new moodle_url('/filter/manage.php'), URL_MATCH_BASE) &&
-            $PAGE->activityname === 'coursecertificate') {
+            $PAGE->activityname === 'coursecertificate'
+    ) {
         if ($allowedfilters = \tool_certificate\element_helper::get_allowed_filters()) {
             $link = new moodle_url('/filter/manage.php', ['contextid' => $PAGE->context->get_course_context()->id]);
             $a = (object)[
@@ -295,6 +319,7 @@ function mod_coursecertificate_before_http_headers() {
         \core\notification::add(
             get_string('filterswarning', 'mod_coursecertificate') .
             '<br>' . $message,
-            \core\output\notification::NOTIFY_WARNING);
+            \core\output\notification::NOTIFY_WARNING
+        );
     }
 }

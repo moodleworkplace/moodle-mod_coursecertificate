@@ -83,9 +83,14 @@ final class restore_test extends restore_date_testcase {
 
         // Do backup with default settings.
         set_config('backup_general_users', 1, 'backup');
-        $bc = new backup_controller(backup::TYPE_1COURSE, $course->id,
-            backup::FORMAT_MOODLE, backup::INTERACTIVE_NO, backup::MODE_GENERAL,
-            $USER->id);
+        $bc = new backup_controller(
+            backup::TYPE_1COURSE,
+            $course->id,
+            backup::FORMAT_MOODLE,
+            backup::INTERACTIVE_NO,
+            backup::MODE_GENERAL,
+            $USER->id
+        );
         $bc->execute_plan();
         $results = $bc->get_results();
         $file = $results['backup_destination'];
@@ -105,10 +110,18 @@ final class restore_test extends restore_date_testcase {
         global $USER;
         // Do restore to new course with default settings.
         $newcourseid = restore_dbops::create_new_course(
-            $course->fullname, $course->shortname . '_2', $course->category);
-        $rc = new restore_controller('test-restore-course', $newcourseid,
-            backup::INTERACTIVE_NO, backup::MODE_GENERAL, $USER->id,
-            backup::TARGET_NEW_COURSE);
+            $course->fullname,
+            $course->shortname . '_2',
+            $course->category
+        );
+        $rc = new restore_controller(
+            'test-restore-course',
+            $newcourseid,
+            backup::INTERACTIVE_NO,
+            backup::MODE_GENERAL,
+            $USER->id,
+            backup::TARGET_NEW_COURSE
+        );
 
         $newdate = $this->restorestartdate;
 
@@ -128,8 +141,10 @@ final class restore_test extends restore_date_testcase {
 
         // Create course and coursecertificate module.
         $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
-        [$course, $coursecertificate] = $this->create_course_and_module('coursecertificate',
-            ['template' => $certificate1->get_id()]);
+        [$course, $coursecertificate] = $this->create_course_and_module(
+            'coursecertificate',
+            ['template' => $certificate1->get_id()]
+        );
 
         // Create user with 'student' role and issue a certificate.
         $user = $this->getDataGenerator()->create_and_enrol($course);
@@ -159,8 +174,10 @@ final class restore_test extends restore_date_testcase {
 
         // Create course and coursecertificate module.
         $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
-        [$course, $coursecertificate] = $this->create_course_and_module('coursecertificate',
-            ['template' => $certificate1->get_id()]);
+        [$course, $coursecertificate] = $this->create_course_and_module(
+            'coursecertificate',
+            ['template' => $certificate1->get_id()]
+        );
 
         // Create user with 'student' role and issue a certificate.
         $user = $this->getDataGenerator()->create_and_enrol($course);
@@ -168,8 +185,14 @@ final class restore_test extends restore_date_testcase {
         $issue = $DB->get_record('tool_certificate_issues', ['id' => $issueid]);
 
         $fs = get_file_storage();
-        $files = $fs->get_area_files(context_system::instance()->id, 'tool_certificate', 'issues',
-            $issue->id, 'itemid', false);
+        $files = $fs->get_area_files(
+            context_system::instance()->id,
+            'tool_certificate',
+            'issues',
+            $issue->id,
+            'itemid',
+            false
+        );
         $issuefile = reset($files);
 
         // Do backup.
@@ -192,8 +215,14 @@ final class restore_test extends restore_date_testcase {
             'templateid' => $certificate1->get_id(), ], '*', IGNORE_MISSING);
         $this->assertEquals($issue->data, $newissue->data);
 
-        $files = $fs->get_area_files(context_system::instance()->id, 'tool_certificate', 'issues',
-            $newissue->id, 'itemid', false);
+        $files = $fs->get_area_files(
+            context_system::instance()->id,
+            'tool_certificate',
+            'issues',
+            $newissue->id,
+            'itemid',
+            false
+        );
         $newissuefile = reset($files);
         $this->assertEquals($issuefile->get_contenthash(), $newissuefile->get_contenthash());
     }
