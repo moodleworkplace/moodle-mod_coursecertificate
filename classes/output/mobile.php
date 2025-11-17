@@ -31,7 +31,6 @@ use tool_certificate\template;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mobile {
-
     /**
      * Returns the coursecertificate view for the mobile app.
      *
@@ -48,15 +47,20 @@ class mobile {
         $output = $PAGE->get_renderer('coursecertificate');
 
         // Capabilities check.
-        require_course_login($args->courseid , false , $cm, true, true);
+        require_course_login($args->courseid, false, $cm, true, true);
 
         // Get certificate information.
         $viewpage = new view_page($cm->instance, 0, 0, $course, $cm);
         $certificatedata = $viewpage->export_for_template($output);
         $certificate = $DB->get_record('coursecertificate', ['id' => $certificatedata['certificateid']], '*', MUST_EXIST);
         $certificate->name = format_string($certificate->name);
-        [$certificate->intro, $certificate->introformat] = external_format_text($certificate->intro,
-            $certificate->introformat, $context->id, 'mod_coursecertificate', 'intro');
+        [$certificate->intro, $certificate->introformat] = external_format_text(
+            $certificate->intro,
+            $certificate->introformat,
+            $context->id,
+            'mod_coursecertificate',
+            'intro'
+        );
 
         // Handle groups.
         $groups = [];
@@ -68,8 +72,15 @@ class mobile {
         // If 'showreport' (user can see report), get issues information.
         $issues = [];
         if ($certificatedata['showreport']) {
-            $issuesrecords = certificate::get_issues_for_course($certificate->template, $certificate->course,
-                'mod_coursecertificate', $groupmode, $groupid, 0, 0 );
+            $issuesrecords = certificate::get_issues_for_course(
+                $certificate->template,
+                $certificate->course,
+                'mod_coursecertificate',
+                $groupmode,
+                $groupid,
+                0,
+                0
+            );
             foreach ($issuesrecords as $issuerecord) {
                 $issue = new issue($issuerecord);
                 $issues[] = (object) $issue->export_for_template($output);

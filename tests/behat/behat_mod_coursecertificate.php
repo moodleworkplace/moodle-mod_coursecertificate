@@ -29,7 +29,6 @@ require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class behat_mod_coursecertificate extends behat_base {
-
     /**
      * Convert page names to URLs for steps like 'When I am on the "[identifier]" "[page type]" page'.
      *
@@ -55,10 +54,12 @@ class behat_mod_coursecertificate extends behat_base {
      * @param string $activityname The activity name.
      * @param int $times The number of appearances.
      */
-    public function the_manual_completion_button_for_activity_coursecertificate_should_be_displayed_times(string $activityname,
-                                                                                                          int $times): void {
+    public function the_manual_completion_button_for_activity_coursecertificate_should_be_displayed_times(
+        string $activityname,
+        int $times
+    ): void {
         $selector = "div[data-activityname='$activityname'] button";
-        $count = count($this->find_all('css',  $selector));
+        $count = count($this->find_all('css', $selector));
         if ($count != $times) {
             // The button appears a different number of times.
             throw new ExpectationException(

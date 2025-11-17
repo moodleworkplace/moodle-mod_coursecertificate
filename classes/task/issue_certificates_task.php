@@ -53,7 +53,6 @@ class issue_certificates_task extends \core\task\scheduled_task {
 
         $coursecertificates = $this->get_coursecertificates();
         foreach ($coursecertificates as $coursecertificate) {
-
             $templaterecord = $DB->get_record(
                 \tool_certificate\persistent\template::TABLE,
                 ['id' => $coursecertificate->template]
@@ -64,8 +63,11 @@ class issue_certificates_task extends \core\task\scheduled_task {
             }
 
             try {
-                [$course, $cm] = get_course_and_cm_from_instance($coursecertificate->id, 'coursecertificate',
-                    $coursecertificate->course);
+                [$course, $cm] = get_course_and_cm_from_instance(
+                    $coursecertificate->id,
+                    'coursecertificate',
+                    $coursecertificate->course
+                );
             } catch (\moodle_exception $e) {
                 // Skip if $cm or $course not found anymore in DB.
                 continue;

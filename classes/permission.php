@@ -109,8 +109,13 @@ class permission {
      */
     private static function can_view_group_in_context(\context_module $context, int $groupid = 0): bool {
         global $USER;
-        $cm = get_coursemodule_from_id('coursecertificate', $context->instanceid,
-            $context->get_course_context()->instanceid, false, MUST_EXIST);
+        $cm = get_coursemodule_from_id(
+            'coursecertificate',
+            $context->instanceid,
+            $context->get_course_context()->instanceid,
+            false,
+            MUST_EXIST
+        );
         $grouppermission = true;
 
         if ($groupmode = groups_get_activity_groupmode($cm)) {

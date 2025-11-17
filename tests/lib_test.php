@@ -27,7 +27,6 @@ use core\notification;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class lib_test extends \advanced_testcase {
-
     /**
      * Set up
      */
@@ -70,8 +69,10 @@ final class lib_test extends \advanced_testcase {
         mod_coursecertificate_before_http_headers();
 
         $x = notification::fetch();
-        $this->assertMatchesRegularExpression('/Only filter\(s\) "multilang" will be used/',
-            $x[0]->get_message());
+        $this->assertMatchesRegularExpression(
+            '/Only filter\(s\) "multilang" will be used/',
+            $x[0]->get_message()
+        );
 
         // Now remove all filters from allowed, call callback. The notification will say that no filters will be used.
         set_config('allowfilters', '', 'tool_certificate');
@@ -79,7 +80,9 @@ final class lib_test extends \advanced_testcase {
         mod_coursecertificate_before_http_headers();
 
         $x = notification::fetch();
-        $this->assertMatchesRegularExpression('/No filters will be used/',
-            $x[0]->get_message());
+        $this->assertMatchesRegularExpression(
+            '/No filters will be used/',
+            $x[0]->get_message()
+        );
     }
 }

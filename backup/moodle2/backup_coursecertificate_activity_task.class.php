@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/mod/coursecertificate/backup/moodle2/backup_coursecertificate_stepslib.php');
+require_once($CFG->dirroot . '/mod/coursecertificate/backup/moodle2/backup_coursecertificate_stepslib.php');
 
 /**
  * The class provides all the settings and steps to perform one complete backup of mod_coursecertificate.
@@ -35,7 +35,6 @@ require_once($CFG->dirroot.'/mod/coursecertificate/backup/moodle2/backup_coursec
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class backup_coursecertificate_activity_task extends backup_activity_task {
-
     /**
      * Defines particular settings for the plugin.
      */
@@ -49,8 +48,8 @@ class backup_coursecertificate_activity_task extends backup_activity_task {
     protected function define_my_steps() {
         $this->add_step(new backup_coursecertificate_activity_structure_step(
             'coursecertificate_structure',
-            'coursecertificate.xml')
-        );
+            'coursecertificate.xml'
+        ));
     }
 
     /**
@@ -65,11 +64,11 @@ class backup_coursecertificate_activity_task extends backup_activity_task {
         $base = preg_quote($CFG->wwwroot, "/");
 
         // Link to the list of choices.
-        $search = "/(".$base."\/mod\/coursecertificate\/index.php\?id\=)([0-9]+)/";
+        $search = "/(" . $base . "\/mod\/coursecertificate\/index.php\?id\=)([0-9]+)/";
         $content = preg_replace($search, '$@COURSECERTIFICATEINDEX*$2@$', $content);
 
         // Link to choice view by moduleid.
-        $search = "/(".$base."\/mod\/coursecertificate\/view.php\?id\=)([0-9]+)/";
+        $search = "/(" . $base . "\/mod\/coursecertificate\/view.php\?id\=)([0-9]+)/";
         $content = preg_replace($search, '$@COURSECERTIFICATEVIEWBYID*$2@$', $content);
 
         return $content;

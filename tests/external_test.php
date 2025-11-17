@@ -71,8 +71,10 @@ final class external_test extends advanced_testcase {
         $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
 
         // Create coursecertificate module.
-        $mod = $this->getDataGenerator()->create_module('coursecertificate',
-            ['course' => $course->id, 'template' => $certificate1->get_id(), 'visible' => 0]);
+        $mod = $this->getDataGenerator()->create_module(
+            'coursecertificate',
+            ['course' => $course->id, 'template' => $certificate1->get_id(), 'visible' => 0]
+        );
 
         // Sanity check.
         $this->assertTrue($DB->record_exists('coursecertificate', ['course' => $course->id, 'id' => $mod->id]));
@@ -123,8 +125,10 @@ final class external_test extends advanced_testcase {
         $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
 
         // Create coursecertificate module.
-        $mod = $this->getDataGenerator()->create_module('coursecertificate',
-            ['course' => $course->id, 'template' => $certificate1->get_id()]);
+        $mod = $this->getDataGenerator()->create_module(
+            'coursecertificate',
+            ['course' => $course->id, 'template' => $certificate1->get_id()]
+        );
 
         // Sanity check.
         $this->assertTrue($DB->record_exists('coursecertificate', ['course' => $course->id, 'id' => $mod->id]));

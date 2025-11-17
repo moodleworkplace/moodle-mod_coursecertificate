@@ -26,7 +26,7 @@ use tool_certificate\certificate;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/course/moodleform_mod.php');
+require_once($CFG->dirroot . '/course/moodleform_mod.php');
 
 /**
  * Module instance settings form.
@@ -36,7 +36,6 @@ require_once($CFG->dirroot.'/course/moodleform_mod.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_coursecertificate_mod_form extends moodleform_mod {
-
     /**
      * Defines forms elements
      */
@@ -77,11 +76,20 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
         $elements = [$mform->createElement('select', 'template', get_string('template', 'coursecertificate'), $templateoptions)];
         // Adding "Manage templates" link if user has capabilities to manage templates.
         if ($canmanagetemplates && !empty($templates)) {
-            $elements[] = $mform->createElement('static', 'managetemplates', '',
-                $OUTPUT->action_link($manageurl, get_string('managetemplates', 'coursecertificate')));
+            $elements[] = $mform->createElement(
+                'static',
+                'managetemplates',
+                '',
+                $OUTPUT->action_link($manageurl, get_string('managetemplates', 'coursecertificate'))
+            );
         }
-        $mform->addGroup($elements, 'template_group', get_string('template', 'coursecertificate'),
-            \html_writer::div('', 'w-100'), false);
+        $mform->addGroup(
+            $elements,
+            'template_group',
+            get_string('template', 'coursecertificate'),
+            \html_writer::div('', 'w-100'),
+            false
+        );
 
         if (empty($templates)) {
             // Adding warning text if there are not templates available.
@@ -217,8 +225,13 @@ class mod_coursecertificate_mod_form extends moodleform_mod {
 
         if ($instance = $this->get_instance()) {
             $certificate = $certificate = $DB->get_record('coursecertificate', ['id' => $instance], '*', MUST_EXIST);
-            $courseissues = certificate::count_issues_for_course($certificate->template, $certificate->course,
-                'mod_coursecertificate', null, null);
+            $courseissues = certificate::count_issues_for_course(
+                $certificate->template,
+                $certificate->course,
+                'mod_coursecertificate',
+                null,
+                null
+            );
             if ($courseissues > 0) {
                 return  "1";
             }

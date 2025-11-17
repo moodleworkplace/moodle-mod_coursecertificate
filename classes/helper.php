@@ -53,8 +53,10 @@ class helper {
 
         $context = \context_course::instance($coursecertificate->course);
         // Get users already issued subquery.
-        [$usersissuedsql, $usersissuedparams] = self::get_users_issued_select($coursecertificate->course,
-            $coursecertificate->template);
+        [$usersissuedsql, $usersissuedparams] = self::get_users_issued_select(
+            $coursecertificate->course,
+            $coursecertificate->template
+        );
         // Get users enrolled with receive capabilities subquery.
         [$enrolledsql, $enrolledparams] = get_enrolled_sql($context, 'mod/coursecertificate:receive', 0, true);
         $sql  = "SELECT eu.id FROM ($enrolledsql) eu WHERE eu.id NOT IN ($usersissuedsql)";
@@ -116,8 +118,12 @@ class helper {
      * @param template|null $template template, if known (for performance reasons when called in a loop)
      * @return int id of the certificate issue or 0 if user already had an issued certificate
      */
-    public static function issue_certificate(\stdClass $user, \stdClass $coursecertificate,
-                                             ?\stdClass $course = null, ?template $template = null): int {
+    public static function issue_certificate(
+        \stdClass $user,
+        \stdClass $coursecertificate,
+        ?\stdClass $course = null,
+        ?template $template = null
+    ): int {
         $lockfactory = \core\lock\lock_config::get_lock_factory('mod_coursecertificate_issue');
         $lock = $lockfactory->get_lock("i_{$user->id}_{$coursecertificate->template}_{$coursecertificate->course}", MINSECS);
         if (!$lock) {
@@ -168,8 +174,11 @@ class helper {
         global $DB;
 
         // Get user course completion date.
-        $result = $DB->get_field('course_completions', 'timecompleted',
-            ['course' => $course->id, 'userid' => $user->id]);
+        $result = $DB->get_field(
+            'course_completions',
+            'timecompleted',
+            ['course' => $course->id, 'userid' => $user->id]
+        );
         $completiondate = $result ? userdate($result, get_string('strftimedatefullshort')) : '';
 
         // Get user course grade.

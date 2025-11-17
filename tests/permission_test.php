@@ -157,14 +157,20 @@ final class permission_test extends advanced_testcase {
             'course' => $course,
             'template' => $template1->get_id(),
         ];
-        $modnogroups = $this->getDataGenerator()->create_module('coursecertificate',
-            array_merge($record, ['groupmode' => NOGROUPS]));
+        $modnogroups = $this->getDataGenerator()->create_module(
+            'coursecertificate',
+            array_merge($record, ['groupmode' => NOGROUPS])
+        );
         $contextmodnogroups = \context_module::instance($modnogroups->cmid);
-        $modseparate = $this->getDataGenerator()->create_module('coursecertificate',
-            array_merge($record, ['groupmode' => SEPARATEGROUPS]));
+        $modseparate = $this->getDataGenerator()->create_module(
+            'coursecertificate',
+            array_merge($record, ['groupmode' => SEPARATEGROUPS])
+        );
         $contextmodseparate = \context_module::instance($modseparate->cmid);
-        $modvisiblegroups = $this->getDataGenerator()->create_module('coursecertificate',
-            array_merge($record, ['groupmode' => VISIBLEGROUPS]));
+        $modvisiblegroups = $this->getDataGenerator()->create_module(
+            'coursecertificate',
+            array_merge($record, ['groupmode' => VISIBLEGROUPS])
+        );
         $contextmodvisiblegroups = \context_module::instance($modvisiblegroups->cmid);
 
         $user1 = $this->getDataGenerator()->create_and_enrol($course, 'student');

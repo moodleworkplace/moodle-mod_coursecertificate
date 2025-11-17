@@ -113,8 +113,10 @@ final class issue_certificates_task_test extends advanced_testcase {
         // Create course, certificate template and coursecertificate module.
         $course = $this->getDataGenerator()->create_course();
         $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
-        $mod = $this->getDataGenerator()->create_module('coursecertificate',
-            ['course' => $course->id, 'template' => $certificate1->get_id()]);
+        $mod = $this->getDataGenerator()->create_module(
+            'coursecertificate',
+            ['course' => $course->id, 'template' => $certificate1->get_id()]
+        );
 
         // Create user with 'student' role.
         $this->getDataGenerator()->create_and_enrol($course);
@@ -168,9 +170,11 @@ final class issue_certificates_task_test extends advanced_testcase {
         ob_end_clean();
 
         // There should be two new issues.
-        $newissues = $DB->get_records_select('tool_certificate_issues',
+        $newissues = $DB->get_records_select(
+            'tool_certificate_issues',
             'templateid = :templateid and courseid = :courseid and id > :lastissueid',
-            ['templateid' => $certificate1->get_id(), 'courseid' => $course->id, 'lastissueid' => $lastissueid]);
+            ['templateid' => $certificate1->get_id(), 'courseid' => $course->id, 'lastissueid' => $lastissueid]
+        );
         $this->assertCount(2, $newissues);
 
         // Now each student has one active certificate and user2 has two certificates - one active and one archived.

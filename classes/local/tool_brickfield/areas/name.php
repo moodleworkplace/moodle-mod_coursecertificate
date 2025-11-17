@@ -26,7 +26,6 @@ use tool_brickfield\local\areas\module_area_base;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class name extends module_area_base {
-
     /**
      * Get table name.
      *

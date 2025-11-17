@@ -33,7 +33,6 @@ function xmldb_coursecertificate_upgrade($oldversion) {
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2020072201) {
-
         // Define index automaticsend (not unique) to be added to coursecertificate.
         $table = new xmldb_table('coursecertificate');
         $index = new xmldb_index('automaticsend', XMLDB_INDEX_NOTUNIQUE, ['automaticsend']);
@@ -48,7 +47,6 @@ function xmldb_coursecertificate_upgrade($oldversion) {
     }
 
     if ($oldversion < 2022020200) {
-
         $table = new xmldb_table('coursecertificate');
 
         // Rename field expires on table coursecertificate to expirydateoffset.
