@@ -45,7 +45,7 @@ class backup_coursecertificate_activity_structure_step extends backup_activity_s
 
         // Course certificate.
         $coursecertificate = new backup_nested_element('coursecertificate', ['id'], ['name', 'timecreated', 'timemodified', 'intro',
-            'introformat', 'template', 'automaticsend', 'expires', ]);
+            'introformat', 'template', 'automaticsend', 'expirydatetype', 'expirydateoffset', ]);
 
         // Issues.
         $issues = new backup_nested_element('issues');

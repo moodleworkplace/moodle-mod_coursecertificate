@@ -31,6 +31,7 @@ use context_system;
 use restore_controller;
 use restore_date_testcase;
 use restore_dbops;
+use tool_certificate\certificate;
 use tool_certificate_generator;
 use stdClass;
 
@@ -225,5 +226,68 @@ final class restore_test extends restore_date_testcase {
         );
         $newissuefile = reset($files);
         $this->assertEquals($issuefile->get_contenthash(), $newissuefile->get_contenthash());
+    }
+
+    /**
+     * Test restore course certificate expiring information
+     *
+     * @param int $expirydatetype the expiry date type
+     * @param int $expirydateoffset the expiry date offset
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider_restore_expire_data')]
+    public function test_restore_expire_data(int $expirydatetype, int $expirydateoffset): void {
+        global $DB;
+
+        // Create course and coursecertificate module.
+        $certificate1 = $this->get_certificate_generator()->create_template((object)['name' => 'Certificate 1']);
+        [$course, $coursecertificate] = $this->create_course_and_module(
+            'coursecertificate',
+            [
+                'template' => $certificate1->get_id(),
+                'expirydatetype' => $expirydatetype,
+                'expirydateoffset' => $expirydateoffset,
+            ]
+        );
+
+        // Create user with 'student' role and issue a certificate.
+        $user = $this->getDataGenerator()->create_and_enrol($course);
+        $issueid = $certificate1->issue_certificate($user->id, null, [], 'mod_coursecertificate', $course->id);
+        $DB->get_record('tool_certificate_issues', ['id' => $issueid]);
+
+        // Do backup and restore.
+        $newcourseid = $this->backup_and_restore($course);
+        $newcoursecertificate = $DB->get_record('coursecertificate', ['course' => $newcourseid]);
+
+        // Check new coursecertificate data.
+        $this->assertFieldsNotRolledForward($coursecertificate, $newcoursecertificate, ['timecreated', 'timemodified']);
+        $this->assertEquals($coursecertificate->name, $newcoursecertificate->name);
+        $this->assertEquals($coursecertificate->automaticsend, $newcoursecertificate->automaticsend);
+        $this->assertEquals($coursecertificate->expirydatetype, $newcoursecertificate->expirydatetype);
+        $this->assertEquals($coursecertificate->expirydateoffset, $newcoursecertificate->expirydateoffset);
+
+        // Check new issue is not generated.
+        $newissue = $DB->get_record('tool_certificate_issues', ['courseid' => $newcourseid, 'userid' => $user->id,
+            'templateid' => $certificate1->get_id(), ], '*', IGNORE_MISSING);
+        $this->assertEmpty($newissue);
+    }
+
+    /**
+     * Data provider for test_restore_expire_data.
+     *
+     * @return \Generator the testing scenarios
+     */
+    public static function provider_restore_expire_data(): \Generator {
+        yield 'Never' => [
+            'expirydatetype' => certificate::DATE_EXPIRATION_NEVER,
+            'expirydateoffset' => 0,
+        ];
+        yield 'Select date' => [
+            'expirydatetype' => certificate::DATE_EXPIRATION_ABSOLUTE,
+            'expirydateoffset' => \core\di::get(\core\clock::class)->time() + 7 * DAYSECS,
+        ];
+        yield 'After' => [
+            'expirydatetype' => certificate::DATE_EXPIRATION_AFTER,
+            'expirydateoffset' => 20 * DAYSECS,
+        ];
     }
 }
