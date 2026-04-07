@@ -118,7 +118,7 @@ class mobile {
                     'html' => $OUTPUT->render_from_template('mod_coursecertificate/mobile_view_page', $data),
                 ],
             ],
-            'javascript' => '',
+            'javascript' => 'this.CoreCourseProvider.checkModuleCompletion(this.courseId, this.module.completiondata);',
             'otherdata' => [
                 'group' => $groupid,
             ],
