@@ -16,8 +16,6 @@
 
 // NOTE: no MOODLE_INTERNAL test here, this file may be required by behat before including /config.php.
 
-use Behat\Mink\Exception\ExpectationException;
-
 require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
 
 /**
@@ -43,29 +41,6 @@ class behat_mod_coursecertificate extends behat_base {
                 return new moodle_url('/mod/coursecertificate/index.php', ['id' => $this->get_course_id($identifier)]);
             default:
                 throw new Exception("Unrecognised page type '{$type}'");
-        }
-    }
-
-    /**
-     * Check that the manual completion button for the activity exists a number of times.
-     *
-     * @Given the manual completion button for :activityname course certificate should be displayed :times times
-     *
-     * @param string $activityname The activity name.
-     * @param int $times The number of appearances.
-     */
-    public function the_manual_completion_button_for_activity_coursecertificate_should_be_displayed_times(
-        string $activityname,
-        int $times
-    ): void {
-        $selector = "div[data-activityname='$activityname'] button";
-        $count = count($this->find_all('css', $selector));
-        if ($count != $times) {
-            // The button appears a different number of times.
-            throw new ExpectationException(
-                "The manual completion button for '{$activityname}' exists '{$count}' times",
-                $this->getSession()
-            );
         }
     }
 }

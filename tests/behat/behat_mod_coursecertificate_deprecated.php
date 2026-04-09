@@ -16,6 +16,8 @@
 
 // NOTE: no MOODLE_INTERNAL test here, this file may be required by behat before including /config.php.
 
+use Behat\Mink\Exception\ExpectationException;
+
 require_once(__DIR__ . '/../../../../lib/behat/behat_deprecated_base.php');
 
 /**
@@ -30,8 +32,10 @@ class behat_mod_coursecertificate_deprecated extends behat_deprecated_base {
      * Opens the activity chooser and opens the activity/resource form page. Sections 0 and 1 are also allowed on frontpage.
      *
      * @Given I add a new instance of coursecertificate module to course :coursefullname section :sectionnum
+     *
      * @param string $coursefullname
      * @param int $sectionnum
+     *
      * @deprecated Since Workplace 5.1
      */
     public function i_add_a_new_instance_of_coursecertificate_module_to_course_section(
@@ -48,8 +52,10 @@ class behat_mod_coursecertificate_deprecated extends behat_deprecated_base {
     /**
      * Check that the manual completion button for the activity is disabled.
      *
-     * @Given /^the manual completion button for "(?P<activityname>(?:[^"]|\\")*)" course certificate should be disabled$/
-     * @param string $activityname The activity name.
+     * @Then /^the manual completion button for "(?P<activityname>(?:[^"]|\\")*)" course certificate should be disabled$/
+     *
+     * @param string $activityname
+     *
      * @deprecated Since Workplace 5.1
      */
     public function the_manual_completion_button_for_activity_coursecertificate_should_be_disabled(string $activityname): void {
@@ -64,7 +70,8 @@ class behat_mod_coursecertificate_deprecated extends behat_deprecated_base {
      * Check that the activity has the given automatic completion condition.
      *
      * phpcs:ignore
-     * @Given /^"(?P<activityname>(?:[^"]|\\")*)" course certificate should have the "(?P<conditionname>(?:[^"]|\\")*)" completion condition$/
+     * @Then /^"(?P<activityname>(?:[^"]|\\")*)" course certificate should have the "(?P<conditionname>(?:[^"]|\\")*)" completion condition$/
+     *
      * @param string $activityname The activity name.
      * @param string $conditionname The automatic condition name.
      * @deprecated Since Workplace 5.1
@@ -84,6 +91,7 @@ class behat_mod_coursecertificate_deprecated extends behat_deprecated_base {
      * Step to open current course or activity settings page (language string changed between 3.11 and 4.0)
      *
      * @When /^I open course or activity settings page$/
+     *
      * @deprecated Since Workplace 5.1
      */
     public function i_open_course_or_activity_settings_page(): void {
@@ -92,5 +100,31 @@ class behat_mod_coursecertificate_deprecated extends behat_deprecated_base {
             [behat_navigation::class, 'i_navigate_to_in_current_page_administration'],
             [get_string('settings')],
         );
+    }
+
+    /**
+     * Check that the manual completion button for the activity exists a number of times.
+     *
+     * @Then the manual completion button for :activityname course certificate should be displayed :times times
+     *
+     * @param string $activityname
+     * @param int $times
+     *
+     * @deprecated Since Workplace 5.2
+     */
+    public function the_manual_completion_button_for_activity_coursecertificate_should_be_displayed_times(
+        string $activityname,
+        int $times,
+    ): void {
+        $this->deprecated_message('behat_completion::the_manual_completion_button_for_activity_should_exist');
+        $selector = "div[data-activityname='$activityname'] button";
+        $count = count($this->find_all('css', $selector));
+        if ($count != $times) {
+            // The button appears a different number of times.
+            throw new ExpectationException(
+                "The manual completion button for '{$activityname}' exists '{$count}' times",
+                $this->getSession()
+            );
+        }
     }
 }
