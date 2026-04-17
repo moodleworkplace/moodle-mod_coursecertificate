@@ -3,6 +3,10 @@
 ## Unreleased
 ### Added
 - Added support for Moodle 5.2
+### Fixed
+- Fixed activity completion when certificate is viewed in mobile app
+### Deprecated
+- Deprecated Behat step for counting completion buttons
 
 ## 5.0.4 - 2025-12-09
 ### Added
