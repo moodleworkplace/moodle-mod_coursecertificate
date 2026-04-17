@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+### Added
+- Added support for Moodle 5.2
+
 ## 5.0.4 - 2025-12-09
 ### Added
 - Added bulk certificate regeneration
