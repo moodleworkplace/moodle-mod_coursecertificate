@@ -234,8 +234,7 @@ Feature: Basic functionality of course certificate module
       | template                      | user      | course | component             |
       | Certificate of participation  | student1  | C1     | mod_coursecertificate |
       | Certificate of participation  | student2  | C1     | mod_coursecertificate |
-    # TODO: remove admin and use teacher1 when https://moodle.atlassian.net/browse/WPOS-176 is fixed
-    And I log in as "admin"
+    And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I add a "coursecertificate" activity to course "Course 1" section "1"
     And I set the following fields to these values:

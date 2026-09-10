@@ -145,6 +145,9 @@ class view_page implements renderable, templatable {
         }
         $data['showautomaticsend'] = $this->canmanage;
         $data['showreport'] = $this->canviewreport;
+        $data['canregenerate'] = $this->certificate->template != 0
+            && \tool_certificate\template::instance((int) $this->certificate->template)
+            ->can_issue_to_anybody(context_module::instance($this->cm->id)->get_course_context());
         $data['notemplateselected'] = $this->certificate->template == 0;
         $data['studentview'] = !$this->canviewall && $this->canreceiveissues;
         $data['showhiddenwarning'] = $this->certificate->automaticsend && !$this->cm->visible;

@@ -28,4 +28,6 @@
     {{{groupselector}}}
     {{{report}}}
 </div>
-{{> tool_certificate/bulk_action_selector}}
+{{#canregenerate}}
+    {{> tool_certificate/bulk_action_selector}}
+{{/canregenerate}}
