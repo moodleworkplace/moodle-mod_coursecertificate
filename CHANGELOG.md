@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+### Fixed
+- Certificate regeneration for course teachers
+
 ## 5.0.9 - 2026-08-11
 ### Changed
 - Internal CI updates only
