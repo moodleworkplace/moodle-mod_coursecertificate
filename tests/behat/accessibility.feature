@@ -29,9 +29,6 @@ Feature: Test accessibility for the course certificate module
     And the following "activities" exist:
       | activity          | name           | intro             | course | idnumber           | template    |
       | coursecertificate | My certificate | Certificate intro | C1     | coursecertificate1 | Template 01 |
-    # This setting is not related to the component, but makes the accessibility test fail. MDL-81241
-    And the following config values are set as admin:
-      | supportavailability | 0 |
 
   Scenario: View the issued certificates list
     And I log in as "teacher1"
