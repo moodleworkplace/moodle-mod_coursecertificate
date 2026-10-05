@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 5.0.11 - 2026-10-06
 ### Fixed
 - We fixed rendering of a help icon
 
