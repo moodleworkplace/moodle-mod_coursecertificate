@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+### Fixed
+- We fixed rendering of a help icon
+
 ## 5.0.10 - 2026-09-15
 ### Fixed
 - Certificate regeneration for course teachers
