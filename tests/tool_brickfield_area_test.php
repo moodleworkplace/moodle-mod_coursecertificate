@@ -20,6 +20,8 @@ use core_component;
 use tool_brickfield\manager;
 use tool_certificate_generator;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\mod_coursecertificate\local\tool_brickfield\areas\intro::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\mod_coursecertificate\local\tool_brickfield\areas\name::class)]
 /**
  * Test for accessibility tool support (Workplace only)
  *

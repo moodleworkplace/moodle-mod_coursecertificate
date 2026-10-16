@@ -24,9 +24,10 @@
 
 namespace mod_coursecertificate;
 
-defined('MOODLE_INTERNAL') || die;
-
-require_once($CFG->dirroot . '/lib/externallib.php');
+use core_external\external_api;
+use core_external\external_function_parameters;
+use core_external\external_single_structure;
+use core_external\external_value;
 
 /**
  * The external class for the Coursecertificate module.
@@ -35,17 +36,17 @@ require_once($CFG->dirroot . '/lib/externallib.php');
  * @copyright   2020 Mikel Martín <mikel@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class external extends \external_api {
+class external extends external_api {
     /**
      * Returns the structure of parameters for update_automaticsend function.
-     * @return \external_function_parameters
+     * @return external_function_parameters
      */
     protected static function update_automaticsend_parameters() {
         $params = [
-            'id' => new \external_value(PARAM_INT, 'The ID of the certificate', VALUE_REQUIRED),
-            'automaticsend' => new \external_value(PARAM_BOOL, 'The value of automaticsend setting'),
+            'id' => new external_value(PARAM_INT, 'The ID of the certificate', VALUE_REQUIRED),
+            'automaticsend' => new external_value(PARAM_BOOL, 'The value of automaticsend setting'),
         ];
-        return new \external_function_parameters($params);
+        return new external_function_parameters($params);
     }
 
     /**
@@ -87,12 +88,12 @@ class external extends \external_api {
     /**
      * Describes the return function of update_certificate_automaticsend
      *
-     * @return \external_single_structure
+     * @return external_single_structure
      */
     public static function update_automaticsend_returns() {
-        return new \external_single_structure([
-            'showhiddenwarning' => new \external_value(PARAM_BOOL, 'Desc'),
-            'shownoautosendinfo' => new \external_value(PARAM_BOOL, 'Desc'),
+        return new external_single_structure([
+            'showhiddenwarning' => new external_value(PARAM_BOOL, 'Desc'),
+            'shownoautosendinfo' => new external_value(PARAM_BOOL, 'Desc'),
         ]);
     }
 }

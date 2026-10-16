@@ -28,6 +28,8 @@ namespace mod_coursecertificate;
 use advanced_testcase;
 use tool_certificate_generator;
 
+#[\PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses]
+#[\PHPUnit\Framework\Attributes\CoversClass(\mod_coursecertificate\external::class)]
 /**
  * Unit tests for the webservices.
  *
@@ -113,8 +115,7 @@ final class external_test extends advanced_testcase {
      * Test update automaticsend as teacher (no capabilities).
      */
     public function test_update_automaticsend_without_capabilities(): void {
-        global $DB, $CFG;
-        require_once($CFG->libdir . '/externallib.php');
+        global $DB;
 
         // Create course and user enrolled as 'teacher'.
         $course = $this->getDataGenerator()->create_course();

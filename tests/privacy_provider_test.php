@@ -28,6 +28,7 @@ namespace mod_coursecertificate;
 use core_privacy\tests\provider_testcase;
 use mod_coursecertificate\privacy\provider;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\mod_coursecertificate\privacy\provider::class)]
 /**
  * Privacy provider tests class.
  *

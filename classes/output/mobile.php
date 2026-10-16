@@ -38,8 +38,7 @@ class mobile {
      * @return array       HTML, javascript and otherdata
      */
     public static function mobile_certificate_view(array $args): array {
-        global $OUTPUT, $DB, $PAGE, $CFG;
-        require_once($CFG->libdir . '/externallib.php');
+        global $OUTPUT, $DB, $PAGE;
 
         $args = (object) $args;
         [$course, $cm] = get_course_and_cm_from_cmid((int) $args->cmid, 'coursecertificate');
@@ -54,10 +53,10 @@ class mobile {
         $certificatedata = $viewpage->export_for_template($output);
         $certificate = $DB->get_record('coursecertificate', ['id' => $certificatedata['certificateid']], '*', MUST_EXIST);
         $certificate->name = format_string($certificate->name);
-        [$certificate->intro, $certificate->introformat] = external_format_text(
+        [$certificate->intro, $certificate->introformat] = \core_external\util::format_text(
             $certificate->intro,
             $certificate->introformat,
-            $context->id,
+            $context,
             'mod_coursecertificate',
             'intro'
         );

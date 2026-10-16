@@ -18,6 +18,8 @@ namespace mod_coursecertificate;
 
 use core\notification;
 
+#[\PHPUnit\Framework\Attributes\CoversFunction('coursecertificate_delete_instance')]
+#[\PHPUnit\Framework\Attributes\CoversFunction('mod_coursecertificate_before_http_headers')]
 /**
  * Unit test for the lib functions.
  *
@@ -25,6 +27,8 @@ use core\notification;
  * @category    test
  * @copyright   2022 Ruslan Kabalin
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers      ::coursecertificate_delete_instance
+ * @covers      ::mod_coursecertificate_before_http_headers
  */
 final class lib_test extends \advanced_testcase {
     /**
@@ -37,22 +41,23 @@ final class lib_test extends \advanced_testcase {
 
     /**
      * Test deleting coursecertificate instance.
-     *
-     * @covers ::coursecertificate_delete_instance
      */
     public function test_delete_instance(): void {
+        global $CFG;
         $course = $this->getDataGenerator()->create_course();
         $certinstance = $this->getDataGenerator()->create_module('coursecertificate', ['course' => $course->id]);
         $cm = get_coursemodule_from_instance('coursecertificate', $certinstance->id);
 
         // Must not throw.
-        course_delete_module($cm->id);
+        if ($CFG->branch >= 502) {
+            \core_courseformat\formatactions::cm($course->id)->delete($cm->id);
+        } else {
+            course_delete_module($cm->id);
+        }
     }
 
     /**
      * Test for callback before_http_headers
-     *
-     * @covers ::mod_coursecertificate_before_http_headers()
      */
     public function test_mod_coursecertificate_before_http_headers(): void {
         global $PAGE;

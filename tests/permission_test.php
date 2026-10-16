@@ -21,6 +21,7 @@ use context_course;
 use context_system;
 use tool_certificate_generator;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\mod_coursecertificate\permission::class)]
 /**
  * Unit tests for permission class.
  *

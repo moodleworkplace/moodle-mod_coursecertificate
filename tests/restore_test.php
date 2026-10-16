@@ -40,6 +40,10 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->libdir . "/phpunit/classes/restore_date_testcase.php");
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\backup_coursecertificate_activity_task::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\backup_coursecertificate_activity_structure_step::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\restore_coursecertificate_activity_task::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\restore_coursecertificate_activity_structure_step::class)]
 /**
  * Unit tests for restore.
  *

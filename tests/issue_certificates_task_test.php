@@ -21,6 +21,7 @@ use mod_coursecertificate\task\issue_certificates_task;
 use tool_certificate\certificate;
 use tool_certificate_generator;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\mod_coursecertificate\task\issue_certificates_task::class)]
 /**
  * Unit test for the task.
  *

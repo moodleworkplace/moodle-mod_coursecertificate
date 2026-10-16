@@ -19,6 +19,7 @@ namespace mod_coursecertificate;
 use advanced_testcase;
 use tool_certificate_generator;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\mod_coursecertificate_observer::class)]
 /**
  * Unit tests for observer class.
  *
